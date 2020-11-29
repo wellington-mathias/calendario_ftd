@@ -1,0 +1,24 @@
+<Files read.php>
+     <LimitExcept GET POST>
+        Order Allow,Deny
+        Deny from all
+    </LimitExcept>
+</Files>
+<Files update.php>
+     <LimitExcept POST>
+        Order Allow,Deny
+        Deny from all
+    </LimitExcept>
+</Files>
+<Files create.php>
+     <LimitExcept PUT>
+        Order Allow,Deny
+        Deny from all
+    </LimitExcept>
+</Files>
+<Files delete.php>
+     <LimitExcept DELETE>
+        Order Allow,Deny
+        Deny from all
+    </LimitExcept>
+</Files>
