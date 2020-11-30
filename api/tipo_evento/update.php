@@ -13,39 +13,32 @@ if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "POST") {
 
 // include database and object files
 include_once '../config/database.php';
-include_once '../objects/evento.php';
+include_once '../objects/tipo_evento.php';
 
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
 
 // prepare evento object
-$evento = new Evento($db);
+$evento = new TipoEvento($db);
 
 // get data to be updated
 $data = json_decode(file_get_contents("php://input"));
 
-$data_incomplete = !(empty($data->id) && empty($data->tipo_evento->id) && empty($data->dt_inicio) && empty($data->dt_fim) && empty($data->titulo) && empty($data->dia_letivo));
+$data_incomplete = !(empty($data->id) && empty($data->descricao));
 
 if($data_incomplete) {
     // set response code - 400 bad request
     http_response_code(400);
   
     // tell the user
-    echo json_encode(array("message" => "Unable to update evento. Data is incomplete."));
+    echo json_encode(array("message" => "Unable to update tipo de evento. Data is incomplete."));
 } else {
     // set ID property to be edited
     $evento->id = $data->id;
     
     // set property values
-    $evento->tipo_evento_id = $data->tipo_evento->id;
-    $evento->dt_inicio = $data->dt_inicio;
-    $evento->dt_fim = $data->dt_fim;
-    $evento->titulo = $data->titulo;
     $evento->descricao = $data->descricao;
-    $evento->uf = $data->uf;
-    $evento->dia_letivo = $data->dia_letivo;
-    $evento->dt_alteracao = date('Y-m-d H:i:s');
     
     // update the evento
     if (!$evento->update()) {
@@ -53,13 +46,13 @@ if($data_incomplete) {
         http_response_code(503);
     
         // tell the user
-        echo json_encode(array("message" => "Unable to update evento."));
+        echo json_encode(array("message" => "Unable to update o tipo de evento."));
     } else {
         // set response code - 200 ok
         http_response_code(200);
     
         // tell the user
-        echo json_encode(array("message" => "Evento was updated."));
+        echo json_encode(array("message" => "Tipo de Evento was updated."));
     }
 }
 ?>
