@@ -25,7 +25,7 @@ $evento = new Evento($db);
 // get data to be updated
 $data = json_decode(file_get_contents("php://input"));
 
-$data_incomplete = !(empty($data->id) && empty($data->tipo_evento->id) && empty($data->dt_inicio) && empty($data->dt_fim) && empty($data->titulo) && empty($data->dia_letivo));
+$data_incomplete = empty($data->id) && empty($data->tipo_evento->id) && empty($data->dt_inicio) && empty($data->dt_fim) && empty($data->titulo) && empty($data->dia_letivo);
 
 if($data_incomplete) {
     // set response code - 400 bad request

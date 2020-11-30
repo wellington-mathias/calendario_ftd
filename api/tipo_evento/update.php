@@ -25,7 +25,8 @@ $evento = new TipoEvento($db);
 // get data to be updated
 $data = json_decode(file_get_contents("php://input"));
 
-$data_incomplete = !(empty($data->id) && empty($data->descricao));
+// make sure data is not empty
+$data_incomplete = empty($data->id) && empty($data->descricao);
 
 if($data_incomplete) {
     // set response code - 400 bad request
