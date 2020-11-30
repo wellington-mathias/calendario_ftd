@@ -58,11 +58,13 @@ class Evento {
 
 
         // execute query
-        if(!$stmt->execute()){
+        if (!$stmt->execute()) {
             return false;
-        }
+        } else {
+            $this->id = $this->conn->lastInsertId();
 
-        return true;
+            return true;
+        }
     }
     
     // read all eventos
