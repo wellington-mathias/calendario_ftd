@@ -30,7 +30,7 @@ if(empty($data->id)) {
     http_response_code(400);
     
     // tell the user
-    echo json_encode(array("message" => "Unable to delete evento. No id informed    ."));
+    echo json_encode(array("message" => "Unable to delete evento. No id informed."));
 } else {
     // set evento id to be deleted
     $evento->id = $data->id;
