@@ -94,8 +94,7 @@ class Evento {
     }
 
     // update method
-    function update(){
-    
+    function update() {
         // update query
         $query = "UPDATE eventos
                     SET
@@ -134,6 +133,28 @@ class Evento {
         $stmt->bindParam(":id", $this->id);
 
         // execute the query
+        if(!$stmt->execute()) {
+            return false;
+        }
+    
+        return true;
+    }
+
+    // delete the product
+    function delete() {
+        // delete query
+        $query = "DELETE FROM eventos WHERE id = ?";
+    
+        // prepare query
+        $stmt = $this->conn->prepare($query);
+    
+        // sanitize
+        $this->id = htmlspecialchars(strip_tags($this->id));
+    
+        // bind id of record to delete
+        $stmt->bindParam(1, $this->id);
+    
+        // execute query
         if(!$stmt->execute()) {
             return false;
         }
