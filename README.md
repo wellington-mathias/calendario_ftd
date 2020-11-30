@@ -6,7 +6,6 @@ Configuração:
   - Executar script "sql/calendario_ftd.sql" para criar as tabelas
   - adicionar diretório "api" na raiz do projeto.
 
-
 Obs.: Para acessar as operações da API é necessário enviar o HTTP Method correto de acordo com o padrão REST.
   - PUT para executar o CREATE
   - POST para UPDATE
