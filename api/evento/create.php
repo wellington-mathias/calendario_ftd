@@ -54,7 +54,11 @@ if($data_incomplete) {
         http_response_code(201);
   
         // tell the user
-        echo json_encode(array("message" => "evento was created."));
+        echo json_encode(
+            array (
+                "id" => $evento->id,
+                "message" => "Evento was created.")
+        );
     }
 }
 ?>
