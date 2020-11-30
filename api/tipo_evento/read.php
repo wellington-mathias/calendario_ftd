@@ -96,7 +96,7 @@ function readOne() {
             http_response_code(404);
         
             // tell the user evento does not exist
-            echo json_encode(array("message" => "evento does not exist."));
+            echo json_encode(array("message" => "tipo de evento does not exist."));
         } else {
             $tipo_evento_item=array(
                 "id" => $tipo_evento->id,
