@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 30-Nov-2020 às 01:24
+-- Tempo de geração: 03-Dez-2020 às 19:00
 -- Versão do servidor: 5.7.31
 -- versão do PHP: 7.4.9
 
@@ -42,19 +42,14 @@ CREATE TABLE IF NOT EXISTS `eventos` (
   PRIMARY KEY (`id`),
   KEY `tipo_evento` (`tipo_evento`),
   KEY `dt_criacao` (`dt_criacao`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `eventos`
 --
 
 INSERT INTO `eventos` (`id`, `tipo_evento`, `dt_inicio`, `dt_fim`, `titulo`, `descricao`, `uf`, `dia_letivo`, `dt_criacao`, `dt_alteracao`) VALUES
-(1, 1, '2020-12-25', '2020-12-25', 'Natal', NULL, NULL, 0, '2020-11-28 22:34:14', '2020-11-29 09:27:43'),
-(2, 1, '2020-11-20', '2020-11-20', 'Dia da Consciência Negra', NULL, 'SP', 0, '2020-11-28 22:34:14', NULL),
-(3, 1, '2020-04-24', '2020-04-24', 'Dia do Samurai', NULL, 'SP', 1, '2020-11-28 22:34:14', NULL),
-(4, 2, '2020-11-23', '2020-11-27', 'Semana da Língua Portuguesa', 'Semana de simulados sobre língua portuguesa', 'RJ', 1, '2020-11-28 22:38:33', '2020-11-28 22:39:40'),
-(5, 1, '2020-01-01', '2020-01-01', 'Confraternização Universal', '', NULL, 0, '2020-11-29 04:02:05', NULL),
-(6, 1, '2020-11-02', '2020-11-02', 'Dia de Finados', '', NULL, 0, '2020-11-29 06:31:12', '2020-11-29 09:33:15');
+(1, 1, '2020-12-25', '2020-12-25', 'Natal', NULL, NULL, 0, '2020-11-28 22:34:14', '2020-11-29 09:27:43');
 
 -- --------------------------------------------------------
 
@@ -67,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `tipo_eventos` (
   `id` tinyint(10) NOT NULL AUTO_INCREMENT,
   `descricao` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `tipo_eventos`
@@ -75,8 +70,53 @@ CREATE TABLE IF NOT EXISTS `tipo_eventos` (
 
 INSERT INTO `tipo_eventos` (`id`, `descricao`) VALUES
 (1, 'FERIADO'),
-(2, 'SIMULADO'),
-(3, 'PROVA');
+(2, 'SIMULADO');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `tipo_usuarios`
+--
+
+DROP TABLE IF EXISTS `tipo_usuarios`;
+CREATE TABLE IF NOT EXISTS `tipo_usuarios` (
+  `id` tinyint(10) NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `tipo_usuarios`
+--
+
+INSERT INTO `tipo_usuarios` (`id`, `descricao`) VALUES
+(1, 'ADMINISTRADOR');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `usuarios`
+--
+
+DROP TABLE IF EXISTS `usuarios`;
+CREATE TABLE IF NOT EXISTS `usuarios` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `tipo_usuario` int(11) NOT NULL,
+  `nome` varchar(60) NOT NULL,
+  `chave` varchar(255) NOT NULL,
+  `senha` varchar(255) NOT NULL,
+  `dt_criacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `dt_alteracao` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `chave` (`chave`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `usuarios`
+--
+
+INSERT INTO `usuarios` (`id`, `tipo_usuario`, `nome`, `chave`, `senha`, `dt_criacao`, `dt_alteracao`) VALUES
+(1, 1, 'admin', '$2y$10$QAUFIvz8Hvp2CX8b9kkwq.Ovm0vFbdInNl/bye13nwSW5jybRkDJG', '$2y$10$QAUFIvz8Hvp2CX8b9kkwq.Ovm0vFbdInNl/bye13nwSW5jybRkDJG', '2020-12-03 16:26:05', NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
