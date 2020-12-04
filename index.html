@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Calendario</title>
+</head>
+
+<body>
+	<link rel="stylesheet" href="css/master.css" media="screen" type="text/css">
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/TweenMax.min.js"></script>
+	<script type="text/javascript" src="js/action_ajax.js"></script>
+	
+
+	<script type="text/javascript" src="js/html2canvas-min.js"></script>
+	<script type="text/javascript" src="js/jspdf.js"></script>
+	<script type="text/javascript" src="js/init.js"></script>
+	<!--script src="capa_config_auto.js"></script>
+	<script src="capa.js"></script>
+	<script type="text/javascript">
+		_capa.load(false, '');
+	</script-->
+
+	<div id="stage">
+		<div id="abertura" class="page">
+			<div class="container">
+				<p class="bemvindo">
+					Seja bem-vindo, <strong>Fulano de Tal</strong>!
+				</p>
+				<p>Nesta ferramenta você poderá gerar um calendário anual com os eventos do FTD Sistema de Ensino, os
+					eventos de sua instituição de ensino e nossa sugestão de uso da coleção FTD Sistema de Ensino para o
+					Ensino Médio.</p>
+				<p>Responda às perguntas à seguir para que possamos gerar o melhor calendário sugerido para o ano letivo
+					de sua instituição de ensino.</p>
+				<div class="iniciar">Iniciar</div>
+			</div>
+		</div>
+
+		<div id="dadosGestor" class="page">
+			<div class="container">
+				<p class="bemvindo">
+					Preencha as informações a seguir:
+				</p>
+
+				<form class="formInstituicao">
+					<ul>
+						<li>
+							<label>Nome da instituição:</label>
+							<input type="text" class="txt nomeInstituicao" name="nomeInstituicao" value="" placeholder="Nome da escola">
+						</li>
+						<li>
+							<label>Email:</label>
+							<input type="text" class="txt emailProfessor" name="emailProfessor" value="" placeholder="Email">
+						</li>
+						<li>
+							<label>Logo:</label>
+							<input type="file" id="img" name="logo" accept="image/*" oninput="generateImage(this)" >
+						</li>
+						<li>
+							<label>Início do ano letivo:</label>
+							<input type="text" class="data" name="inicioAnoDia" value="11" placeholder="dia" maxlength="2" >
+							<input type="text" class="data" name="inicioAnoMes" value="1" placeholder="mes" maxlength="2" >
+						</li>
+						<li>
+							<label>Início do recesso escolar:</label>
+							<input type="text" class="data" name="inicioRecessoDia" value="25" placeholder="dia" maxlength="2" >
+							<input type="text" class="data" name="inicioRecessoMes" value="6" placeholder="mes" maxlength="2" >
+						</li>
+						<li>
+							<label>Fim do recesso escolar:</label>
+							<input type="text" class="data" name="fimRecessoDia" value="12" placeholder="dia" maxlength="2" >
+							<input type="text" class="data" name="fimRecessoMes" value="7" placeholder="mes" maxlength="2" >
+						</li>
+						<li>
+							<label>Fim do ano letivo:</label>
+							<input type="text" class="data" name="fimAnoDia" value="17" placeholder="dia" maxlength="2" >
+							<input type="text" class="data" name="fimAnoMes" value="12" placeholder="mes" maxlength="2" >
+						</li>
+						<li>
+							<label>UF:</label>
+							<select name="uf" id="uf">
+								<option value="AC">AC</option>
+								<option value="AL">AL</option>
+								<option value="AP">AP</option>
+								<option value="AM">AM</option>
+								<option value="BA">BA</option>
+								<option value="CE">CE</option>
+								<option value="DF">DF</option>
+								<option value="ES">ES</option>
+								<option value="GO">GO</option>
+								<option value="MA">MA</option>
+								<option value="MT">MT</option>
+								<option value="MS">MS</option>
+								<option value="MG">MG</option>
+								<option value="PA">PA</option>
+								<option value="PB">PB</option>
+								<option value="PR">PR</option>
+								<option value="PE">PE</option>
+								<option value="PI">PI</option>
+								<option value="RJ">RJ</option>
+								<option value="RN">RN</option>
+								<option value="RS">RS</option>
+								<option value="RO">RO</option>
+								<option value="RR">RR</option>
+								<option value="SC">SC</option>
+								<option value="SP" selected>SP</option>
+								<option value="SE">SE</option>
+								<option value="TO">TO</option>
+							</select>
+						</li>
+						<p>Não se preocupe! Sempre que precisar você pode voltar a esta ferramenta e gerar um novo
+							calendário com novas informações.</p>
+						<div class="iniciar">continuar</div>
+
+					</ul>
+				</form>
+			</div>
+		</div>
+
+		<div id="calendario" class="page">
+			<div class="copyMes">
+				<div class="contMes">
+					<div class="tableheader dias ">
+						<div></div>
+					</div>
+					<div class="dias semana">
+						<div><strong>Domingo</strong><strong>D</strong></div>
+						<div><strong>Segunda</strong><strong>S</strong></div>
+						<div><strong>Terça</strong><strong>T</strong></div>
+						<div><strong>Quarta</strong><strong>Q</strong></div>
+						<div><strong>Quinta</strong><strong>Q</strong></div>
+						<div><strong>Sexta</strong><strong>S</strong></div>
+						<div><strong>Sabado</strong><strong>S</strong></div>
+					</div>
+					<div class="dias numDias">
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+				</div>
+				<div class="infoMes"></div>
+			</div>
+
+			<div class="ano"></div>
+			<div class="setaEsq"></div>
+			<div class="setaDir"></div>
+			<div class="btsTopo">
+				<div id="logoEscola" class="off">LOGO</div>
+				<div class="tituloEscola"></div>
+				<div class="btGerarCalendario">Gerar Calendario</div>
+				<div class="btEditar">Editar informações</div>
+			</div>
+
+		</div>
+
+		<div id="pagePrint" class="page">
+			<div class="cont"></div>
+			<div id="cont2"></div>
+		</div>
+
+		<div class="novoEvento">
+			<div class="contEvt">
+				<ul class="contForm">
+					<li>
+						<label>Data:</label>
+						<div class="adicionar" >
+							<p>início: <span class="dIni"></span> - Final: <span class="dFim"></span></p>
+						</div>
+						<div class="editar" >
+							<p>início: <input type="text" value="" class="dtInicio" ></p>
+							<p>Final: <input type="text" value="" class="dtFim" ></p>
+						</div>
+					</li>
+					<li>
+						<label>Titulo do evento</label>
+						<input type="text" class="tituloEvt" name="tituloEvt" id="">
+					</li>
+					<li>
+						<label>Descricao</label>
+						<textarea name="descEvt" cols="30" rows="10"></textarea>
+					</li>
+					<li>
+						<label>Haverá aula</label>
+						<input name="dia_letivo" type="radio" data-value="1" /> sim
+						<input name="dia_letivo" type="radio" data-value="0" /> não
+					</li>
+
+					<li>
+						<button class="btExcluir">Excluir</button>
+						<button class="btEvento">Salvar</button>
+					</li>
+				</ul>
+				<button class="btCancelar">x</button>
+			</div>
+		</div>
+		
+	<div id="configCalendario" class="page">
+		<div class="container">
+			<div class="bemvindo">Escolha uma das opções abaixo para gerar o calendário:</div>
+			<strong>Igualitária (adoção total do material)</strong>
+			<ol>
+				<li>
+					Adoção de 12 capítulos por ano (anos regulares):
+					<p>1º ano → C1 a C12</p>
+					<p>2º ano → C13 a C24</p>
+					<p>3º ano → C25 a C36</p>
+				</li>
+				<li>
+					Adoção de 18 capítulos por ano (3 séries em 2 anos):
+					<p>1º ano → C1 a C18 </p>
+					<p>2º ano → C19 a C36</p>
+				</li>
+			</ol>
+			<strong>Personalizada (adoção parcial do material)</strong>
+			<ol start=3>
+				<li>
+					Adoção de capítulos avulsos
+					<p>sem sugestão de para distribuição dos capítulo</p>
+				</li>
+			</ol>
+			<label for="">Quantidade de meses por página:</label>
+			<select name="meses" id="mesesPage">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="4">4</option>
+				<option value="6">6</option>
+				<option value="12">12</option>
+			</select>
+
+			<div class="gerar">gerar</div>
+		</div>
+	</div>
+	</div>
+
+
+	<div style="display:none">
+		<!-- loading -->
+	</div>
+
+<div id="loading" class="hide">
+	<div class="sprite">Gerando PDF</div>
+	<div class="ponteiro"></div>
+</div>
+</body>
+
+</html>
