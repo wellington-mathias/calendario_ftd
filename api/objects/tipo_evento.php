@@ -16,7 +16,7 @@ class TipoEvento {
    // create method
    function create() {
         // query to insert record
-        $query = "INSERT INTO tipo_eventos
+        $query = "INSERT INTO evento_tipo
                     SET
                         descricao = :descricao";
 
@@ -43,7 +43,7 @@ class TipoEvento {
         $query = "SELECT
                     te.id,
                     te.descricao
-                FROM tipo_eventos te
+                FROM evento_tipo te
                 ORDER BY te.id DESC";
 
         // prepare query statement
@@ -61,7 +61,7 @@ class TipoEvento {
         $query = "SELECT
                     e.id,
                     e.descricao
-                FROM tipo_eventos e
+                FROM evento_tipo e
                 WHERE e.id = ?
                 LIMIT 0,1";
     
@@ -89,7 +89,7 @@ class TipoEvento {
     // update method
     function update() {
         // update query
-        $query = "UPDATE tipo_eventos
+        $query = "UPDATE evento_tipo
                     SET
                         descricao = :descricao
                     WHERE id = :id";
@@ -116,7 +116,7 @@ class TipoEvento {
     // delete the product
     function delete() {
         // delete query
-        $query = "DELETE FROM tipo_eventos WHERE id = ?";
+        $query = "DELETE FROM evento_tipo WHERE id = ?";
     
         // prepare query
         $stmt = $this->conn->prepare($query);

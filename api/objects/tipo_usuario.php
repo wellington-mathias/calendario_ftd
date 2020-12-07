@@ -1,4 +1,6 @@
 <?php
+include_once '../config/database.php';
+
 class TipoUsuario {
 
     // database connection and table name
@@ -9,14 +11,17 @@ class TipoUsuario {
     public $descricao;
 
     // constructor with $db as database connection
-    public function __construct($db){
+    public function __construct(){
+        $database = new Database();
+        $db = $database->getConnection();
+        
         $this->conn = $db;
     }
 
    // create method
    function create() {
         // query to insert record
-        $query = "INSERT INTO tipo_usuarios SET descricao = :descricao";
+        $query = "INSERT INTO usuario_tipo SET descricao = :descricao";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
@@ -28,17 +33,19 @@ class TipoUsuario {
         $stmt->bindParam(":descricao", $this->descricao);
 
         // execute query
-        if(!$stmt->execute()){
+        if (!$stmt->execute()) {
             return false;
-        }
+        } else {
+            $this->id = $this->conn->lastInsertId();
 
-        return true;
+            return true;
+        }
     }
     
     // read all eventos
     function read() {
         // select all query
-        $query = "SELECT id, descricao FROM tipo_usuarios ORDER BY id DESC";
+        $query = "SELECT id, descricao FROM usuario_tipo ORDER BY id DESC";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
@@ -52,7 +59,7 @@ class TipoUsuario {
     // read one
     function readOne() {
         // query to read single record
-        $query = "SELECT id, descricao FROM tipo_usuarios WHERE id = ? LIMIT 0,1";
+        $query = "SELECT id, descricao FROM usuario_tipo WHERE id = ? LIMIT 0,1";
     
         // prepare query statement
         $stmt = $this->conn->prepare( $query );
@@ -78,7 +85,7 @@ class TipoUsuario {
     // update method
     function update() {
         // update query
-        $query = "UPDATE tipo_usuarios SET descricao = :descricao WHERE id = :id";
+        $query = "UPDATE usuario_tipo SET descricao = :descricao WHERE id = :id";
     
         // prepare query statement
         $stmt = $this->conn->prepare($query);
@@ -102,7 +109,7 @@ class TipoUsuario {
     // delete the product
     function delete() {
         // delete query
-        $query = "DELETE FROM tipo_usuarios WHERE id = ?";
+        $query = "DELETE FROM usuario_tipo WHERE id = ?";
     
         // prepare query
         $stmt = $this->conn->prepare($query);
