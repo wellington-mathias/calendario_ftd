@@ -1,17 +1,12 @@
 <?php
 include_once '../objects/crud_object.php';
-include_once '../objects/tipo_usuario.php';
 
-class Usuario extends CrudObject {
+class Instituicao extends CrudObject {
     // object properties
     public $id;
-    public $tipo_usuario;
     public $nome;
-    public $email;
-    public $login;
-    public $senha;
-    public $login_ftd;
-    public $senha_ftd;
+    public $logo;
+    public $uf;
     public $dt_criacao;
     public $dt_alteracao;
 
@@ -22,37 +17,23 @@ class Usuario extends CrudObject {
    // create method
    function create() {
         // query to insert record
-        $query = "INSERT INTO usuario
+        $query = "INSERT INTO instituicao
                     SET
-                        usuario_tipo_id = :tipo_usuario_id,
                         nome = :nome,
-                        email = :email,
-                        login = :login,
-                        senha = :senha,
-                        login_ftd = :login_ftd,
-                        senha_ftd = :senha_ftd";
+                        logo = :logo,
+                        uf = :uf";
 
         $stmt = $this->conn->prepare($query);
 
         // sanitize
-        $this->tipo_usuario->id = (int) htmlspecialchars(strip_tags($this->tipo_usuario->id));
         $this->nome = htmlspecialchars(strip_tags($this->nome));
-        $this->email = (is_null ($this->email)) ? null : htmlspecialchars(strip_tags($this->email));
-        $this->login = (is_null ($this->login)) ? null : htmlspecialchars(strip_tags($this->login));
-        $this->senha = (is_null ($this->senha)) ? null : password_hash(htmlspecialchars(strip_tags($this->senha)), PASSWORD_DEFAULT);
-        $this->login_ftd = (is_null ($this->login_ftd)) ? null : htmlspecialchars(strip_tags($this->login_ftd));
-        $this->senha_ftd = (is_null ($this->senha_ftd)) ? null : password_hash(htmlspecialchars(strip_tags($this->senha_ftd)), PASSWORD_DEFAULT);
-
+        $this->logo = htmlspecialchars(strip_tags($this->logo));
+        $this->uf = strtoupper(htmlspecialchars(strip_tags($this->uf)));
 
         // bind values
-        $stmt->bindParam(":tipo_usuario_id", $this->tipo_usuario->id);
         $stmt->bindParam(":nome", $this->nome);
-        $stmt->bindParam(":email", $this->email);
-        $stmt->bindParam(":login", $this->login);
-        $stmt->bindParam(":senha", $this->senha);
-        $stmt->bindParam(":login_ftd", $this->login_ftd);
-        $stmt->bindParam(":senha_ftd", $this->senha_ftd);
-
+        $stmt->bindParam(":logo", $this->logo);
+        $stmt->bindParam(":uf", $this->uf);
 
         // execute query
         if (!$stmt->execute()) {
@@ -69,14 +50,12 @@ class Usuario extends CrudObject {
         // select all query
         $query = "SELECT
                     u.id,
-                    u.usuario_tipo_id AS tipo_usuario_id,
-                    tu.descricao AS tipo_usuario_descricao,
                     u.nome,
-                    u.email,
+                    u.logo,
+                    u.uf,
                     u.dt_criacao,
                     u.dt_alteracao
-                FROM usuario u
-                INNER JOIN usuario_tipo tu ON (tu.id = u.usuario_tipo_id)
+                FROM instituicao u
                 ORDER BY u.dt_criacao DESC, u.id DESC";
 
         // prepare query statement
@@ -99,21 +78,16 @@ class Usuario extends CrudObject {
                 // just $name only
                 extract($row);
 
-                $tipo_usuario = new TipoUsuario();
+                $instituicao = new Instituicao();
 
-                $tipo_usuario->id = $tipo_usuario_id;
-                $tipo_usuario->descricao = html_entity_decode($tipo_usuario_descricao);
-                
-                $usuario = new Usuario();
+                $instituicao->id = $id;
+                $instituicao->nome = html_entity_decode($nome);
+                $instituicao->logo = html_entity_decode($logo);
+                $instituicao->uf = strtoupper(html_entity_decode($uf));
+                $instituicao->dt_criacao = $dt_criacao;
+                $instituicao->dt_alteracao = $dt_alteracao;
 
-                $usuario->id = $id;
-                $usuario->tipo_usuario = $tipo_usuario;
-                $usuario->nome = html_entity_decode($nome);
-                $usuario->email = (is_null ($email)) ? null: html_entity_decode($email);
-                $usuario->dt_criacao = $dt_criacao;
-                $usuario->dt_alteracao = $dt_alteracao;
-
-                array_push($objects_arr, $usuario);
+                array_push($objects_arr, $instituicao);
             }
         }
 
@@ -125,14 +99,12 @@ class Usuario extends CrudObject {
         // query to read single record
         $query = "SELECT
                     u.id,
-                    u.usuario_tipo_id AS tipo_usuario_id,
-                    tu.descricao AS tipo_usuario_descricao,
                     u.nome,
-                    u.email,
+                    u.logo,
+                    u.uf,
                     u.dt_criacao,
                     u.dt_alteracao
-                    FROM usuario u
-                INNER JOIN usuario_tipo tu ON (tu.id = u.usuario_tipo_id)
+                FROM instituicao u
                 WHERE u.id = ?
                 LIMIT 0,1";
     
@@ -159,13 +131,9 @@ class Usuario extends CrudObject {
 
             extract($row);
 
-            $tipo_usuario = new TipoUsuario();
-            $tipo_usuario->id = $tipo_usuario_id;
-            $tipo_usuario->descricao = html_entity_decode($tipo_usuario_descricao);
-
-            $this->tipo_usuario = $tipo_usuario;
             $this->nome = html_entity_decode($nome);
-            $this->email = (is_null ($email)) ? null: html_entity_decode($email);
+            $this->logo = html_entity_decode($logo);
+            $this->uf = strtoupper(html_entity_decode($uf));
             $this->dt_criacao = $dt_criacao;
             $this->dt_alteracao = $dt_alteracao;
         }
@@ -176,25 +144,26 @@ class Usuario extends CrudObject {
     // update method
     function update() {
         // update query
-        $query = "UPDATE usuario
+        $query = "UPDATE instituicao
                     SET
-                        usuario_tipo_id = :tipo_usuario_id,
                         nome = :nome,
-                        dt_alteracao = :dt_alteracao
+                        logo = :logo,
+                        uf = :uf
                     WHERE id = :id";
     
         // prepare query statement
         $stmt = $this->conn->prepare($query);
     
         // sanitize
-        $this->tipo_usuario->id = (int) htmlspecialchars(strip_tags($this->tipo_usuario->id));
         $this->nome = htmlspecialchars(strip_tags($this->nome));
+        $this->logo = htmlspecialchars(strip_tags($this->logo));
+        $this->uf = strtoupper(htmlspecialchars(strip_tags($this->uf)));
         $this->id = (int) htmlspecialchars(strip_tags($this->id));
 
-        // bind new values
-        $stmt->bindParam(":tipo_usuario_id", $this->tipo_usuario->id);
+        // bind values
         $stmt->bindParam(":nome", $this->nome);
-        $stmt->bindParam(":dt_alteracao", $this->dt_alteracao);
+        $stmt->bindParam(":logo", $this->logo);
+        $stmt->bindParam(":uf", $this->uf);
         $stmt->bindParam(":id", $this->id);
 
         // execute the query
@@ -208,7 +177,7 @@ class Usuario extends CrudObject {
     // delete the product
     function delete() {
         // delete query
-        $query = "DELETE FROM usuario WHERE id = ?";
+        $query = "DELETE FROM instituicao WHERE id = ?";
     
         // prepare query
         $stmt = $this->conn->prepare($query);

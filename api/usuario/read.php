@@ -35,11 +35,10 @@ function readAll() {
     $usuario = getObject();
 
     // query objects
-    $stmt = $usuario->read();
-    $num = $stmt->rowCount();
+    $usuarios = $usuario->read();
     
     // check if more than 0 record found
-    if ($num == 0) {
+    if (count($usuarios) == 0) {
         // set response code - 404 Not found
         http_response_code(404);
     
@@ -49,27 +48,20 @@ function readAll() {
         // objects array
         $objects_arr = array();
         $objects_arr["usuarios"] = array();
-    
-        // retrieve our table contents
-        // fetch() is faster than fetchAll()
-        // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-            // extract row
-            // this will make $row['name'] to
-            // just $name only
-            extract($row);
 
+        foreach($usuarios as $usuario) {
             $tipo_usuario_item = array(
-                "id" => $tipo_usuario_id,
-                "descricao" => html_entity_decode($tipo_usuario_descricao)
+                "id" => $usuario->tipo_usuario->id,
+                "descricao" => $usuario->tipo_usuario->descricao
             );
 
             $usuario_item = array(
-                "id" => $id,
+                "id" => $usuario->id,
                 "tipo_usuario" =>$tipo_usuario_item,
-                "nome" => html_entity_decode($nome),
-                "dt_criacao" => $dt_criacao,
-                "dt_alteracao" => $dt_alteracao
+                "nome" => $usuario->nome,
+                "email" => $usuario->email,
+                "dt_criacao" => $usuario->dt_criacao,
+                "dt_alteracao" => $usuario->dt_alteracao
             );
     
             array_push($objects_arr["usuarios"], $usuario_item);
@@ -97,33 +89,28 @@ function readOne() {
         $usuario->id = $_GET['id'];
 
         // read the details of usuario to be edited
-        $stmt = $usuario->readOne();
-        $num = $stmt->rowCount();
+        $usuario = $usuario->readOne();
 
         // check if the object is not null
-        if ($num == 0) {
+        if ($usuario == null) {
             // set response code - 404 Not found
             http_response_code(404);
         
             // tell the user usuario does not exist
             echo json_encode(array("message" => "usuario does not exist."));
         } else {
-            // get retrieved row
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            extract($row);
-
             $tipo_usuario_item = array(
-                "id" => $tipo_usuario_id,
-                "descricao" => html_entity_decode($tipo_usuario_descricao)
+                "id" => $usuario->tipo_usuario->id,
+                "descricao" => $usuario->tipo_usuario->descricao
             );
 
             $usuario_item = array(
-                "id" => $id,
+                "id" => $usuario->id,
                 "tipo_usuario" =>$tipo_usuario_item,
-                "nome" => html_entity_decode($nome),
-                "dt_criacao" => $dt_criacao,
-                "dt_alteracao" => $dt_alteracao
+                "nome" => $usuario->nome,
+                "email" => $usuario->email,
+                "dt_criacao" => $usuario->dt_criacao,
+                "dt_alteracao" => $usuario->dt_alteracao
             );
         
             // set response code - 200 OK

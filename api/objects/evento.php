@@ -25,36 +25,36 @@ class Evento {
    // create method
    function create() {
         // query to insert record
-        $query = "INSERT INTO eventos
+        $query = "INSERT INTO evento
                     SET
-                        tipo_evento = :tipo_evento,
                         dt_inicio = :dt_inicio,
                         dt_fim = :dt_fim,
                         titulo = :titulo,
                         descricao = :descricao,
                         uf = :uf,
-                        dia_letivo = :dia_letivo";
+                        dia_letivo = :dia_letivo,
+                        evento_tipo_id = :evento_tipo_id";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
 
         // sanitize
-        $this->tipo_evento_id = htmlspecialchars(strip_tags($this->tipo_evento_id));
         $this->dt_inicio = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_inicio))), "Y-m-d");
         $this->dt_fim = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim))), "Y-m-d");
         $this->titulo = htmlspecialchars(strip_tags($this->titulo));
         $this->descricao = (is_null ($this->descricao)) ? null : htmlspecialchars(strip_tags($this->descricao));
         $this->uf = (is_null ($this->uf)) ? null : strtoupper(htmlspecialchars(strip_tags($this->uf)));
         $this->dia_letivo = (int) htmlspecialchars(strip_tags($this->dia_letivo));
+        $this->tipo_evento_id = htmlspecialchars(strip_tags($this->tipo_evento_id));
 
         // bind values
-        $stmt->bindParam(":tipo_evento", $this->tipo_evento_id);
         $stmt->bindParam(":dt_inicio", $this->dt_inicio);
         $stmt->bindParam(":dt_fim", $this->dt_fim);
         $stmt->bindParam(":titulo", $this->titulo);
         $stmt->bindParam(":descricao", $this->descricao);
         $stmt->bindParam(":uf", $this->uf);
         $stmt->bindParam(":dia_letivo", $this->dia_letivo);
+        $stmt->bindParam(":evento_tipo_id", $this->tipo_evento_id);
 
 
         // execute query
@@ -72,7 +72,7 @@ class Evento {
         // select all query
         $query = "SELECT
                     e.id,
-                    e.tipo_evento AS tipo_evento_id,
+                    te.id AS tipo_evento_id,
                     te.descricao AS tipo_evento_descricao,
                     e.dt_inicio,
                     e.dt_fim,
@@ -82,8 +82,8 @@ class Evento {
                     e.dia_letivo,
                     e.dt_criacao,
                     e.dt_alteracao
-                FROM eventos e
-                INNER JOIN tipo_eventos te ON (te.id = e.tipo_evento)
+                FROM evento e
+                INNER JOIN evento_tipo te ON (te.id = e.evento_tipo_id)
                 ORDER BY e.dt_criacao DESC, e.id DESC";
 
         // prepare query statement
@@ -100,7 +100,7 @@ class Evento {
         // query to read single record
         $query = "SELECT
                     e.id,
-                    e.tipo_evento AS tipo_evento_id,
+                    te.id AS tipo_evento_id,
                     te.descricao AS tipo_evento_descricao,
                     e.dt_inicio,
                     e.dt_fim,
@@ -110,8 +110,8 @@ class Evento {
                     e.dia_letivo,
                     e.dt_criacao,
                     e.dt_alteracao
-                    FROM eventos e
-                INNER JOIN tipo_eventos te ON (te.id = e.tipo_evento)
+                    FROM evento e
+                INNER JOIN evento_tipo te ON (te.id = e.evento_tipo_id)
                 WHERE e.id = ?
                 LIMIT 0,1";
     
@@ -149,9 +149,9 @@ class Evento {
     // update method
     function update() {
         // update query
-        $query = "UPDATE eventos
+        $query = "UPDATE evento
                     SET
-                        tipo_evento = :tipo_evento,
+                        evento_tipo_id = :tipo_evento,
                         dt_inicio = :dt_inicio,
                         dt_fim = :dt_fim,
                         titulo = :titulo,
@@ -196,7 +196,7 @@ class Evento {
     // delete the product
     function delete() {
         // delete query
-        $query = "DELETE FROM eventos WHERE id = ?";
+        $query = "DELETE FROM evento WHERE id = ?";
     
         // prepare query
         $stmt = $this->conn->prepare($query);
