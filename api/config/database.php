@@ -1,9 +1,15 @@
 <?php
 class Database {
+
+    private $host = "calendario_ftd.mysql.dbaas.com.br";
+    private $username = "calendario_ftd";
+    private $password = "cpcinfo";
+/* 
     private $host = "localhost";
-    private $db_name = "calendario_ftd";
     private $username = "root";
-    private $password = "";
+    private $password = ""; */
+
+    private $db_name = "calendario_ftd";
     public $conn = 1;
 
     public function getConnection() {

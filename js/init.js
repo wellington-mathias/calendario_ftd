@@ -1,109 +1,281 @@
 var scale = 1;
+
+var inicioAno = fimAno = inicioRecesso = fimRecesso = {};
+var uf = null;
+var arDias = [];
+var feriados = [];
+var evtsIni = [];
+var evtsFTD = [];
+var simulados = [];
+var evtsProf = [];
+
+var dataEventos = [];
+var nomeMeses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+var nomeDias = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"];
+
+var qtdCapitulos = 0;
+var idProf = false;
+var idCalendario = false;
+var objCalendario = {
+	ano_referencia: '2021',
+};
+
 $(document).ready(function () {
 
 	$('.page').hide();
-	dispatch('GET', '/api/evento/read.php', {}, function (data) {
-		for (var i in data.eventos) {
-			if (data.eventos[i].tipo_evento.id == 3) {
-				feriados.push(convertFromDB(data.eventos[i]));
-			} else if (data.eventos[i].tipo_evento.id == 4 || data.eventos[i].tipo_evento.id == 5) {
-				evtsFTD.push(convertFromDB(data.eventos[i]));
-			}
-		}
+	$('#loading').hide().removeClass('hide');
+	$('#stage').fadeIn(300);
+	login();
 
+});
+
+
+function login() {
+	$('#telaLogin').fadeIn(300);
+	$('.formLoginProf input').off().on('focus', function (evt) {
+		$(this).removeClass('erro');
 	});
 
-	$('#loading').hide().removeClass('hide');
+	$('.formLoginProf').off().on('submit', function (evt) {
+		submitFormLogin(this);
+		evt.preventDefault();
+		return false;
+	})
+}
 
-	$('#stage').fadeIn(300);
+function submitFormLogin(form) {
+
+	$(form).find('.obgt').each(function () {
+		if ($(this).val() == '') {
+			$(this).addClass('erro');
+		}
+	})
+
+	if ($(form).find('.erro').length > 0) {
+		return false;
+	}
+
+	var data = getFormData($(form));
+	/* dispatch('GET', '/api/usuario/read.php', data, function (data) {
+		idProf = data.id;
+		abertura();
+	}); */
+	idProf = 1;
+	objCalendario.id_professor = idProf;
+
+	abertura();
+}
+
+function sendCalendario(method,url) {
+	dispatch(method, '/api/calendario/'+url+'.php', objCalendario, function (data) {
+		idCalendario = data.id;
+		objCalendario.id = idCalendario;
+	}); 
+}
+
+function abertura() {
 
 	$('#abertura').fadeIn();
 	$('#abertura .iniciar').off().on('click', function () {
 		$('#abertura').fadeOut();
 		$('#dadosGestor').fadeIn();
+
+		sendCalendario('PUT','create');
 	})
 	//.trigger('click');
 
 
 	$('#dadosGestor .iniciar').off().on('click', function () {
 		$('#dadosGestor').fadeOut();
+		$('#configCalendario').fadeIn();
+		uf = $('#uf').val();
+
+		criaCalendario();
+		loadEventos();
+
+	})
+	$('#configCalendario .iniciar').off().on('click', function () {
+		$('#configCalendario').fadeOut();
 		$('.tituloEscola').html('Instituição: ' + $('.nomeInstituicao').val());
+
 		evtsInicio();
+		sendCalendario('PUT','create');
 		calendario();
+		dividirCapitulos();
+
+		updateEventos();
+		evtsCalendario();
 	})
 	//.trigger('click');
 
+	$('#configCalendario li').off().on('click', function () {
+		$('li').removeClass('selecionada');
+		$(this).addClass('selecionada');
+		qtdCapitulos = parseInt($(this).attr('data-capitulos'));
+	})
 
 	$('.novoEvento input[name="dia_letivo"]:first').attr('checked', 'checked');
 	/* $('.novoEvento input[name="dia_letivo"]').off().on('click',function(){
 		console.log( $(this).val() , this.value )
 	}) */
 
-})
 
-var inicioAno = fimAno = inicioRecesso = fimRecesso = {};
+	$('.inputDate').on('input keydown keyup mousedown mouseup select contextmenu drop', function (e) {
+		var replace = $(this).val().replace(/[^0-9\/]/g, '');
+		$(this).val(replace);
+		var val = $(this).val();
+
+		if (val.length == 3 && val.match('/') == null) {
+			val = val.substr(0, 2) + '/' + val.substr(2, 1);
+		}
+		if (val.length == 6 && val.match(/\//g) != null && val.match(/\//g).length == 1) {
+			val = val.substr(0, 5) + '/' + val.substr(5, 1);
+		}
+
+		$(this).val(val);
+	});
+
+}
+
+function loadEventos() {
+	feriados = [];
+	evtsFTD = [];
+	dispatch('GET', '/api/evento/read.php', {}, function (data) {
+
+		for (var i in data.eventos) {
+			if (!data.eventos[i].uf || data.eventos[i].uf == uf) {
+
+				if (data.eventos[i].tipo_evento.id == 1) {
+					//evtsIni.push(convertFromDB(data.eventos[i]));
+				} else if (data.eventos[i].tipo_evento.id == 2) {
+					//evtsProf.push(convertFromDB(data.eventos[i]));
+				} else if (data.eventos[i].tipo_evento.id == 3) {
+					feriados.push(convertFromDB(data.eventos[i]));
+					//console.log(data.eventos[i].titulo, data.eventos[i].uf , uf);
+					//console.log( !data.eventos[i].uf , data.eventos[i].uf == uf );
+				} else if (data.eventos[i].tipo_evento.id == 4) {
+					evtsFTD.push(convertFromDB(data.eventos[i]));
+				} else if (data.eventos[i].tipo_evento.id == 5) {
+					//simulados.push(convertFromDB(data.eventos[i]));
+				}
+
+			}
+		}
+
+	});
+
+}
+
+function dividirCapitulos() {
+	if (qtdCapitulos > 0) {
+		arDias = [];
+		var d = 0;
+		var travaContador = true;
+		$('#calendario .ano .dia').each(function () {
+			if ($(this).hasClass('iniDia') || $(this).hasClass('iniRecesso') || $(this).hasClass('fimRecesso') || $(this).hasClass('fimDia')) {
+				travaContador = !travaContador;
+			}
+
+			if (
+				!$(this).hasClass('sabado') &&
+				!$(this).hasClass('domingo') &&
+				!$(this).hasClass('foraMes') &&
+				!$(this).hasClass('diasRecesso') &&
+				$(this)[0].dia_letivo &&
+				!travaContador
+			) {
+				arDias.push(this);
+				d++;
+			}
+		})
+		var diaDiv = arDias.length / qtdCapitulos;
+
+		for (var i = 0; i < qtdCapitulos; i++) {
+			var dia = arDias[parseInt(diaDiv * i)];
+			var data = dia.dataDia + '/' + dia.dataMes + '/' + dia.dataAno;
+
+			var obj = {
+				titulo: 'Início do capítulo ' + (i + 1),
+				dt_inicio: data,
+				dt_fim: data,
+				dia_letivo: true,
+				tipo_evento: {
+					id: 5,
+					descricao: null
+				},
+				descricao: null,
+				uf: uf,
+			}
+			simulados.push(obj);
+		}
+	}
+
+}
+
 function evtsInicio() {
 
-	var dia = $('.formInstituicao input[name="inicioAnoDia"]').val();
-	var mes = $('.formInstituicao input[name="inicioAnoMes"]').val();
+	var data = $('.formInstituicao input[name="inicioAno"]').val();
 	inicioAno = {
 		titulo: 'Início do ano letivo',
-		dt_inicio: dia + '/' + mes + '/2021',
-		dt_fim: dia + '/' + mes + '/2021',
+		dt_inicio: data,
+		dt_fim: data,
 		dia_letivo: true,
 		tipo_evento: {
 			id: 1,
 			descricao: null
 		},
 		descricao: null,
-		uf: null
+		uf: uf,
 	}
-	dia = $('.formInstituicao input[name="fimAnoDia"]').val();
-	mes = $('.formInstituicao input[name="fimAnoMes"]').val();
+	var data = $('.formInstituicao input[name="fimAno"]').val();
 	fimAno = {
 		titulo: 'Fim do ano letivo',
-		dt_inicio: dia + '/' + mes + '/2021',
-		dt_fim: dia + '/' + mes + '/2021',
+		dt_inicio: data,
+		dt_fim: data,
 		dia_letivo: true,
 		tipo_evento: {
 			id: 1,
 			descricao: null
 		},
 		descricao: null,
-		uf: null
+		uf: uf,
 	}
-	dia = $('.formInstituicao input[name="inicioRecessoDia"]').val();
-	mes = $('.formInstituicao input[name="inicioRecessoMes"]').val();
+	var data = $('.formInstituicao input[name="inicioRecesso"]').val();
 	inicioRecesso = {
 		titulo: 'Início do Recesso',
-		dt_inicio: dia + '/' + mes + '/2021',
-		dt_fim: dia + '/' + mes + '/2021',
+		dt_inicio: data,
+		dt_fim: data,
 		dia_letivo: true,
 		tipo_evento: {
 			id: 1,
 			descricao: null
 		},
 		descricao: null,
-		uf: null
+		uf: uf,
 	}
-	dia = $('.formInstituicao input[name="fimRecessoDia"]').val();
-	mes = $('.formInstituicao input[name="fimRecessoMes"]').val();
+	var data = $('.formInstituicao input[name="fimRecesso"]').val();
 	fimRecesso = {
 		titulo: 'Fim do Recesso',
-		dt_inicio: dia + '/' + mes + '/2021',
-		dt_fim: dia + '/' + mes + '/2021',
+		dt_inicio: data,
+		dt_fim: data,
 		dia_letivo: true,
 		tipo_evento: {
 			id: 1,
 			descricao: null
 		},
 		descricao: null,
-		uf: null
+		uf: uf,
 	}
 	evtsIni.push(inicioAno);
 	evtsIni.push(fimAno);
 	evtsIni.push(inicioRecesso);
 	evtsIni.push(fimRecesso);
+
+	
+	objCalendario.dt_inicio_ano_letivo = inicioAno.dt_inicio;
+	objCalendario.dt_fim_ano_letivo = fimAno.dt_inicio;
+	objCalendario.dt_inicio_recesso = inicioRecesso.dt_inicio;
+	objCalendario.dt_fim_recesso = fimRecesso.dt_inicio;
 
 	$('#calendario .ano .copyMes:eq(' + inicioAno.dt_inicio + ') .dia.iniDia').removeClass('iniDia evt1 evt2 evt3 evt4 evt5');
 	$('#calendario .ano .copyMes:eq(' + fimAno.dt_inicio + ') .dia.fimDia').removeClass('fimDia evt1 evt2 evt3 evt4 evt5');
@@ -117,150 +289,6 @@ function splitDt(len, dt) {
 	//console.log(num);
 	return num;
 }
-/* 
-var feriados = [
-	{
-		dt_inicio: '01/01/2021',
-		dt_fim: '01/01/2021',
-		titulo: 'Confraternização Universal',
-		dia_letivo: false,
-		uf: '',
-		tipo_evento: {
-			id: 3,
-			descricao: null
-		},
-	},
-	{
-		dt_inicio: '29/01/2021',
-		dt_fim: '3/02/2021',
-		titulo: 'Teste',
-		dia_letivo: false,
-		uf: '',
-		tipo_evento: {
-			id: 3,
-			descricao: null
-		},
-	},
-	{
-		dt_inicio: '15/02/2021',
-		dt_fim: '16/02/2021',
-		titulo: 'Carnaval',
-		dia_letivo: false,
-		uf: '',
-		tipo_evento: {
-			id: 3,
-			descricao: null
-		},
-	},
-	{
-		dt_inicio: '02/04/2021',
-		dt_fim: '02/04/2021',
-		titulo: 'Paixão de Cristo',
-		dia_letivo: false,
-		uf: '',
-		tipo_evento: {
-			id: 3,
-			descricao: null
-		},
-	},
-	{
-		dt_inicio: '21/04/2021',
-		dt_fim: '21/04/2021',
-		titulo: 'Tiradentes',
-		dia_letivo: false,
-		uf: '',
-		tipo_evento: {
-			id: 3,
-			descricao: null
-		},
-	},
-	{
-		dt_inicio: '01/05/2021',
-		dt_fim: '01/05/2021',
-		titulo: 'Dia do Trabalho',
-		dia_letivo: false,
-		uf: '',
-		tipo_evento: {
-			id: 3,
-			descricao: null
-		},
-	},
-	{
-		dt_inicio: '03/06/2021',
-		dt_fim: '03/06/2021',
-		titulo: 'Corpus Christi',
-		dia_letivo: false,
-		uf: '',
-		tipo_evento: {
-			id: 3,
-			descricao: null
-		},
-	},
-	{
-		dt_inicio: '07/09/2021',
-		dt_fim: '07/09/2021',
-		titulo: 'Independência do Brasil',
-		dia_letivo: false,
-		uf: '',
-		tipo_evento: {
-			id: 3,
-			descricao: null
-		},
-	},
-	{
-		dt_inicio: '12/10/2021',
-		dt_fim: '12/10/2021',
-		titulo: 'Nossa Sr.a Aparecida - Padroeira do Brasil',
-		dia_letivo: false,
-		uf: '',
-		tipo_evento: {
-			id: 3,
-			descricao: null
-		},
-	},
-	{
-		dt_inicio: '02/11/2021',
-		dt_fim: '02/11/2021',
-		titulo: 'Finados',
-		dia_letivo: false,
-		uf: '',
-		tipo_evento: {
-			id: 3,
-			descricao: null
-		},
-	},
-	{
-		dt_inicio: '15/10/2021',
-		dt_fim: '15/10/2021',
-		titulo: 'Proclamação da República',
-		dia_letivo: false,
-		uf: '',
-		tipo_evento: {
-			id: 3,
-			descricao: null
-		},
-	},
-	{
-		dt_inicio: '25/12/2021',
-		dt_fim: '25/12/2021',
-		titulo: 'Natal',
-		dia_letivo: false,
-		uf: '',
-		tipo_evento: {
-			id: 3,
-			descricao: null
-		},
-	},
-];
- */
-var feriados = [];
-var evtsIni = [];
-var evtsFTD = [];
-
-var evtsProf = [];
-var dataEventos = [];
-var nomeMeses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-var nomeDias = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"];
 
 function calendario() {
 	$('#stage *').removeAttr('style');
@@ -364,6 +392,12 @@ function calendario() {
 			if (hj.getDate() == fAno.getDate() && hj.getMonth() == fAno.getMonth() && hj.getFullYear() == fAno.getFullYear()) {
 				className += ' fimDia ';
 			}
+			if (hj.getDate() == iRec.getDate() && hj.getMonth() == iRec.getMonth() && hj.getFullYear() == iRec.getFullYear()) {
+				className += ' iniRecesso ';
+			}
+			if (hj.getDate() == fRec.getDate() && hj.getMonth() == fRec.getMonth() && hj.getFullYear() == fRec.getFullYear()) {
+				className += ' fimRecesso ';
+			}
 
 
 			this.dia_letivo = dia_letivo;
@@ -387,23 +421,10 @@ function calendario() {
 		contMes.find('.removeDia').remove();
 	}
 
-	/* if (inicio) {
-		for (var i in feriados) {
-			var dt = feriados[i].dt_inicio.split('/');
-			dataEventos.push(feriados[i]);
-		}
-	} */
-
-
-
-
-	updateEventos();
-	evtsCalendario();
 
 	$('#calendario').fadeIn(500);
 
 }
-
 
 function evtsCalendario() {
 	$('.ano .copyMes').addClass('hide');
@@ -426,7 +447,8 @@ function evtsCalendario() {
 	})
 
 	$('.ano .dias.numDias>div').not('.blockClick').off().on('click', function (evt) {
-		if (this.dia_letivo) {
+		//if (this.dia_letivo) {
+		if (!$(this).hasClass('diasRecesso')) {
 			addEvento(this.dataDia, this.dataMes, this.dataDia, this.dataMes)
 		}
 		evt.preventDefault();
@@ -460,34 +482,29 @@ function evtsCalendario() {
 	})
 
 	$('.btGerarCalendario').off().on('click', function () {
-		submitCalendario();
 		$('#calendario').fadeOut();
-		$('#configCalendario').fadeIn();
+		$('#configPaginas').fadeIn();
 	})
 
 	$('.btEditar').off().on('click', function () {
 		evtsIni = [];
+		simulados = [];
 		$('#dadosGestor').fadeIn();
 		$('#calendario').fadeOut();
 	})
 
-	$('#configCalendario li').off().on('click', function () {
-		$('li').removeClass('selecionada')
-		$(this).addClass('selecionada')
+	$('#configPaginas .btX').off().on('click', function () {
+		$('#calendario').fadeIn();
+		$('#configPaginas').fadeOut();
 	})
 
-	$('#configCalendario .gerar').off().on('click', function () {
-		$('#configCalendario').fadeOut();
+	$('#configPaginas .gerar').off().on('click', function () {
+		$('#configPaginas').fadeOut();
 		$('#mesesPage option').each(function () {
 			if (this.selected) $mesesPage = parseInt(this.value);
 		})
 		gerarCalendario();
 	})
-}
-
-function submitCalendario() {
-	/* console.log(evtsIni);
-	console.log(dataEventos); */
 }
 
 function addEvento(dia, mes, diaF, mesF) {
@@ -506,13 +523,14 @@ function addEvento(dia, mes, diaF, mesF) {
 			titulo: $('.novoEvento .tituloEvt').val(),
 			dt_inicio: dia + '/' + mes + '/2021',
 			dt_fim: diaF + '/' + mesF + '/2021',
+			id_professor: idCalendario,
 			dia_letivo: !!parseInt($('.novoEvento input[name="dia_letivo"]:checked').attr('data-value')),
 			tipo_evento: {
 				id: 2,
 				descricao: null
 			},
 			descricao: $('.novoEvento textarea').val(),
-			uf: null
+			uf: uf
 		}
 
 		if (dia != diaF) {
@@ -558,7 +576,7 @@ function edtEvento(dia) {
 		obj.titulo = $('.novoEvento .tituloEvt').val();
 		obj.dia_letivo = !!parseInt($('.novoEvento input[name="dia_letivo"]:checked').attr('data-value'));
 
-		
+
 		dispatch('POST', '/api/evento/update.php', convertToSave(obj), function (data) {
 			//console.log(data)
 			updateEventos();
@@ -584,18 +602,18 @@ function edtEvento(dia) {
 		$('.novoEvento').fadeOut();
 		$('.ano .numDias>div').removeClass('drag');
 	});
-
-
 }
+
 function updateEventos() {
 
 	$('.ano .copyMes .dia .evts').html('');
 	$('.ano .copyMes .infoMes').html('');
 	var ar = [
-		feriados,
 		evtsIni,
+		evtsProf,
+		feriados,
 		evtsFTD,
-		evtsProf
+		simulados,
 	]
 
 	for (var m = 0; m < ar.length; m++) {
@@ -620,17 +638,17 @@ function updateEventos() {
 					var d = $('.ano .numDias .dia' + parseInt(dt.getDate()) + '.diaM' + parseInt(dt.getMonth() + 1));
 					d.find('.evts').append('<div class="evt' + evt.tipo_evento.id + '"></div>');
 					d.removeClass('diaLetivo');
-					d[0].dia_letivo = false;
+					if (!evt.dia_letivo) d[0].dia_letivo = false;
 				}
 
 			} else {
 				diaI.find('.evts').append('<div class="evt' + evt.tipo_evento.id + '"></div>');
 				diaI.removeClass('diaLetivo');
-				diaI[0].dia_letivo = false;
+				if (!evt.dia_letivo) diaI[0].dia_letivo = false;
 			}
 
 
-			var clickEdita = m == 3;
+			var clickEdita = m == 2;
 
 			if (diaI[0] !== diaF[0]) {
 				var txt = '<strong>' + parseInt(dtI[0]) + '/' + parseInt(dtI[1]) + ' - ' + parseInt(dtF[0]) + '/' + parseInt(dtF[1]) + '</strong>' + ' - ' + evt.titulo;
@@ -640,7 +658,7 @@ function updateEventos() {
 			var divEvt = $('<div class="diaEvento">\
 				<div class="cor evt' + evt.tipo_evento.id + '"></div>\
 				<div class="txtEvento">'+ txt + '</div></div>');
-			$('.ano .mes' + (parseInt(dtI[1])) + ' .infoMes').append(divEvt);
+			$('.ano .mes' + (parseInt(dtI[1])) + ' .infoMes').prepend(divEvt);
 			if (clickEdita) {
 				divEvt[0].evento = evt;
 				divEvt[0].contEvt = ar[m];
@@ -652,7 +670,7 @@ function updateEventos() {
 					<div class="cor evt' + evt.tipo_evento.id + '"></div>\
 					<div class="txtEvento">'+ txt + '</div></div>');
 
-				$('.ano .mes' + (dt2.getMonth() + 1) + ' .infoMes').append(divEvt);
+				$('.ano .mes' + (dt2.getMonth() + 1) + ' .infoMes').prepend(divEvt);
 				if (clickEdita) {
 					divEvt[0].evento = evt;
 					divEvt[0].contEvt = ar[m];
@@ -663,16 +681,6 @@ function updateEventos() {
 
 	}
 
-	/* if (this.dataDia == dt1.getDate() && this.dataMes == dt1.getMonth() + 1) {
-		$(this).find('.evts').append('<div class="evt' + evt.tipo + '"></div>');
-		if (!addMes) {
-			
-		}
-		addMes = true;
-	} */
-
-
-
 
 	$('.diaEvento').off().on('click', function () {
 		if (this.evento) {
@@ -681,7 +689,6 @@ function updateEventos() {
 	})
 
 }
-
 
 function classDrag(obj1, obj2) {
 	$('.ano .numDias>div').removeClass('drag');
@@ -722,11 +729,15 @@ function gerarCalendario() {
 		$pdf = new jsPDF({
 			orientation: "landscape",
 			format: 'a3',
+			//unit:'mm',
+			//format: [ 420, 297 ],
 		});
 	} else {
 		$pdf = new jsPDF({
 			orientation: "portrait",
 			format: 'a3',
+			//unit:'mm',
+			//format: [ 297, 420 ],
 		});
 	}
 	$('#cont2').html('');
@@ -762,7 +773,9 @@ function cloneImage(j) {
 		html2canvas(document.querySelector('#pagePrint .cont')).then(canvas => {
 			$('#cont2').html(canvas);
 			var imageData = canvas.toDataURL("image/png");
+
 			$pdf.addImage(imageData, 'JPEG', 0, 0);
+
 			j += ($mesesPage % 12 == 0 ? 12 : $mesesPage % 12);
 
 			if (j < 12) {
@@ -900,9 +913,6 @@ function generateImage(input) {
 		reader.readAsDataURL(input.files[0]);
 	}
 }
-
-
-
 
 function getFormData(form) {
 	var unindexed_array = form.serializeArray();

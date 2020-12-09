@@ -46,8 +46,10 @@
                         <li>
                             <label for="">Dia letivo</label>
                             <div class="contRadio">
-                                <div><input class="diaL1" name="dia_letivo" type="radio" value="1" /> sim</div>
-                                <div><input class="diaL0" name="dia_letivo" type="radio" value="0" /> não</div>
+                                <select name="dia_letivo" class="selectDia">
+                                    <option value="1" >Sim</option>
+                                    <option value="0" >Não</option>
+                                </select>
                             </div>
                         </li>
                         <li>
@@ -84,7 +86,7 @@
 
         $('.lista li:gt(0)').remove();
         for (var i in dataListar) {
-            if (dataListar[i].tipo_evento.id == 3) {
+            if (dataListar[i].tipo_evento.id == 3 ) {
                 var dt = dataListar[i].dt_inicio.split('-');
                 var obj = $('<li>\
                     <div>' + (dt[2] + '/' + dt[1] + '/' + dt[0]) + '</div>\

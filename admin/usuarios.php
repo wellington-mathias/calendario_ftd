@@ -85,7 +85,7 @@
             obj[0].usuario = dataListar[i];
         }
         if ($('.lista li').length == 1) {
-            $('.lista').append('<li> <div>Nenhum evento cadastrado</div> </li>');
+            $('.lista').append('<li> <div>Nenhum usuario cadastrado</div> </li>');
         }
         
         creatEvents();

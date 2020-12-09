@@ -20,12 +20,12 @@ function dispatch(method, url, data, callback) {
 }
 
 function convertToSave(data) {
-    var d1 = data.dt_inicio.split('/');
-    var d2 = data.dt_fim.split('/');
+    var d1 = formatData2(data.dt_inicio);
+    var d2 = formatData2(data.dt_fim);
     var obj = {
         titulo: (data.titulo ? data.titulo : null),
-        dt_inicio: (d1.length == 3 ? d1[2] + '-' + d1[1] + '-' + d1[0] : '0000-00-00'),
-        dt_fim: (d2.length == 3 ? d2[2] + '-' + d2[1] + '-' + d2[0] : '0000-00-00'),
+        dt_inicio: (d1 == '' ?  '0000-00-00' : d1 ),
+        dt_fim: (d2 == '' ?  '0000-00-00' : d2 ),
         descricao: (data.descricao ? data.descricao : null),
         tipo_evento: {
             id: (data.tipo_evento.id ? data.tipo_evento.id : null),
@@ -40,12 +40,12 @@ function convertToSave(data) {
 }
 
 function convertFromDB(data) {
-    var d1 = data.dt_inicio.split('-');
-    var d2 = data.dt_fim.split('-');
+    var d1 = formatData1(data.dt_inicio);
+    var d2 = formatData1(data.dt_fim);
     var obj = {
         titulo: (data.titulo ? data.titulo : null),
-        dt_inicio: (d1.length == 3 ? d1[2] + '/' + d1[1] + '/' + d1[0] : ''),
-        dt_fim: (d2.length == 3 ? d2[2] + '/' + d2[1] + '/' + d2[0] : ''),
+        dt_inicio: d1,
+        dt_fim: d2,
         descricao: (data.descricao ? data.descricao : null),
         tipo_evento: {
             id: (data.tipo_evento.id ? data.tipo_evento.id : null),
@@ -57,4 +57,27 @@ function convertFromDB(data) {
     }
     
     return obj;
+}
+
+function formatData1(data){
+    var d = data.split('-');
+    if(d.length == 3){
+        var r = d[2] + '/' + d[1] + '/' + d[0];
+    } else {
+        var r = '';
+    }
+
+    return r;
+
+}
+function formatData2(data){
+    var d = data.split('/');
+    if(d.length == 3){
+        var r = d[2] + '-' + d[1] + '-' + d[0];
+    } else {
+        var r = '';
+    }
+
+    return r;
+
 }

@@ -22,6 +22,7 @@
 
                 <form class="formAdicionar" method="" action="">
                     <input type="hidden" name="id" value="" />
+                    <input type="hidden" name="tipo_evento" value="4" />
                     <ul class="camposAdicionar">
                         <li>
                             <label for="titulo">Titulo *</label>
@@ -44,17 +45,12 @@
                             <select name="uf" class="selectUf" ></select>
                         </li>
                         <li>
-                            <label for="uf">Tipo Evento</label>
-                            <select name="tipo_evento">
-                                <option value="4">Eventos FTD</option>
-                                <option value="5">Simulado</option>
-                            </select>
-                        </li>
-                        <li>
                             <label for="">Dia letivo</label>
                             <div class="contRadio">
-                                <div><input class="diaL1" name="dia_letivo" type="radio" value="1" /> sim</div>
-                                <div><input class="diaL0" name="dia_letivo" type="radio" value="0" /> não</div>
+                                <select name="dia_letivo" class="selectDia">
+                                    <option value="1" >Sim</option>
+                                    <option value="0" >Não</option>
+                                </select>
                             </div>
                         </li>
                         <li>
@@ -90,7 +86,7 @@
         dataListar = data.eventos;
         $('.lista li:gt(0)').remove();
         for (var i in dataListar) {
-            if (dataListar[i].tipo_evento.id == 4 || dataListar[i].tipo_evento.id == 5) {
+            if (dataListar[i].tipo_evento.id == 4 ) {
                 var dt = dataListar[i].dt_inicio.split('-');
                 var obj = $('<li>\
                         <div>' + (dt[2] + '/' + dt[1] + '/' + dt[0]) + '</div>\
