@@ -26,15 +26,15 @@
                     <ul class="camposAdicionar">
                         <li>
                             <label for="titulo">Titulo</label>
-                            <input type="text" value="" name="titulo" class=" obgt"  />
+                            <input type="text" value="" name="titulo" class=" obgt" />
                         </li>
                         <li>
                             <label for="data">Data inicio</label>
-                            <input type="text" value="" name="dt_inicio" placeholder="dd/mm/aaaa" class="inputDate obgt" maxlength="10"  />
+                            <input type="text" value="" name="dt_inicio" placeholder="dd/mm/aaaa" class="inputDate obgt" maxlength="10" />
                         </li>
                         <li>
                             <label for="data">Data fim</label>
-                            <input type="text" value="" name="dt_fim" placeholder="dd/mm/aaaa" class="inputDate obgt" maxlength="10"  />
+                            <input type="text" value="" name="dt_fim" placeholder="dd/mm/aaaa" class="inputDate obgt" maxlength="10" />
                         </li>
                         <li>
                             <label for="descricao">Descrição</label>
@@ -42,13 +42,15 @@
                         </li>
                         <li>
                             <label for="uf">UF</label>
-                            <select name="uf" class="selectUf" ></select>
+                            <select name="uf" class="selectUf"></select>
                         </li>
                         <li>
                             <label for="">Dia letivo</label>
                             <div class="contRadio">
-                                <div><input class="diaL1" name="dia_letivo" type="radio" value="1" /> sim</div>
-                                <div><input class="diaL0" name="dia_letivo" type="radio" value="0" /> não</div>
+                                <select name="dia_letivo" class="selectDia">
+                                    <option value="1" >Sim</option>
+                                    <option value="0" >Não</option>
+                                </select>
                             </div>
                         </li>
                         <li>
@@ -62,14 +64,13 @@
                 </div>
                 <div class="topo">
                     <h1>Eventos Professores</h1>
-                    <div class="btAdicionar">Adicionar + </div>
                 </div>
 
                 <ul class="lista">
                     <li>
                         <div>data</div>
                         <div class="titulo">Titulo</div>
-                        <div>UF</div>
+                        <div>Dia letivo</div>
                         <div class="bts"></div>
                     </li>
                 </ul>
@@ -86,15 +87,12 @@
         $('.lista li:gt(0)').remove();
         for (var i in dataListar) {
 
-            if (dataListar[i].tipo_evento.id != 3 &&
-                dataListar[i].tipo_evento.id != 4 && 
-                dataListar[i].tipo_evento.id != 5 
-            ) {
+            if (dataListar[i].tipo_evento.id == 2 || dataListar[i].tipo_evento.id == 5 ) {
                 var dt = dataListar[i].dt_inicio.split('-');
                 var obj = $('<li>\
                     <div>' + (dt[2] + '/' + dt[1] + '/' + dt[0]) + '</div>\
                     <div class="titulo">' + dataListar[i].titulo + '</div>\
-                    <div>' + (dataListar[i].uf ? dataListar[i].uf : '') + '</div>\
+                    <div>' + (dataListar[i].dia_letivo != 0 ? 'Sim' : 'Não') + '</div>\
                     <div class="bts">\
                         <button class="btEditar" >Editar</button>\
                         <button class="btExcluir" >X</button>\
@@ -112,8 +110,9 @@
     }
     var dataListar = [];
     var page = 'evento';
+
     function listar() {
-        dispatch('GET', '/api/'+page+'/read.php', '', complete);
+        dispatch('GET', '/api/' + page + '/read.php', '', complete);
     }
     listar();
 </script>

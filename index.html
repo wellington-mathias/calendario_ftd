@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/TweenMax.min.js"></script>
 	<script type="text/javascript" src="js/action_ajax.js"></script>
-	
+
 
 	<script type="text/javascript" src="js/html2canvas-min.js"></script>
 	<script type="text/javascript" src="js/jspdf.js"></script>
@@ -23,6 +23,29 @@
 	</script-->
 
 	<div id="stage">
+		<div id="telaLogin" class="page">
+			<div class="container">
+				<p class="bemvindo">
+					Seja bem-vindo, Faça seu login.
+				</p>
+				
+				<form class="formLoginProf" action="" method="" >
+					<ul class="camposForm" >
+						<li>
+							<label for="login_professor">Login</label>
+							<input type="text" name="login_professor" id="login_professor" class="obgt campoLogin" value="" />
+						</li>
+						<li>
+							<label for="senha_professor">Senha</label>
+							<input type="password" name="senha_professor" id="senha_professor" class="obgt campoLogin" value="" />
+						</li>
+						<li>
+							<button class="iniciar">Entrar</button>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
 		<div id="abertura" class="page">
 			<div class="container">
 				<p class="bemvindo">
@@ -47,35 +70,37 @@
 					<ul>
 						<li>
 							<label>Nome da instituição:</label>
-							<input type="text" class="txt nomeInstituicao" name="nomeInstituicao" value="" placeholder="Nome da escola">
+							<input type="text" class="txt nomeInstituicao" name="nomeInstituicao" value=""
+								placeholder="Nome da escola">
 						</li>
 						<li>
 							<label>Email:</label>
-							<input type="text" class="txt emailProfessor" name="emailProfessor" value="" placeholder="Email">
+							<input type="text" class="txt emailProfessor" name="emailProfessor" value=""
+								placeholder="Email">
 						</li>
 						<li>
 							<label>Logo:</label>
-							<input type="file" id="img" name="logo" accept="image/*" oninput="generateImage(this)" >
+							<input type="file" id="img" name="logo" accept="image/*" oninput="generateImage(this)">
 						</li>
 						<li>
 							<label>Início do ano letivo:</label>
-							<input type="text" class="data" name="inicioAnoDia" value="11" placeholder="dia" maxlength="2" >
-							<input type="text" class="data" name="inicioAnoMes" value="1" placeholder="mes" maxlength="2" >
+							<input type="text" class="data inputDate" name="inicioAno" value="11/01/2021"
+								placeholder="00/00/0000" maxlength="10">
 						</li>
 						<li>
 							<label>Início do recesso escolar:</label>
-							<input type="text" class="data" name="inicioRecessoDia" value="25" placeholder="dia" maxlength="2" >
-							<input type="text" class="data" name="inicioRecessoMes" value="6" placeholder="mes" maxlength="2" >
+							<input type="text" class="data inputDate" name="inicioRecesso" value="25/6/2021"
+								placeholder="00/00/0000" maxlength="10">
 						</li>
 						<li>
 							<label>Fim do recesso escolar:</label>
-							<input type="text" class="data" name="fimRecessoDia" value="12" placeholder="dia" maxlength="2" >
-							<input type="text" class="data" name="fimRecessoMes" value="7" placeholder="mes" maxlength="2" >
+							<input type="text" class="data inputDate" name="fimRecesso" value="12/07/2021"
+								placeholder="00/00/0000" maxlength="10">
 						</li>
 						<li>
 							<label>Fim do ano letivo:</label>
-							<input type="text" class="data" name="fimAnoDia" value="17" placeholder="dia" maxlength="2" >
-							<input type="text" class="data" name="fimAnoMes" value="12" placeholder="mes" maxlength="2" >
+							<input type="text" class="data inputDate" name="fimAno" value="17/12/2021"
+								placeholder="00/00/0000" maxlength="10">
 						</li>
 						<li>
 							<label>UF:</label>
@@ -111,7 +136,7 @@
 						</li>
 						<p>Não se preocupe! Sempre que precisar você pode voltar a esta ferramenta e gerar um novo
 							calendário com novas informações.</p>
-						<div class="iniciar">continuar</div>
+						<div class="iniciar">Continuar</div>
 
 					</ul>
 				</form>
@@ -208,12 +233,12 @@
 				<ul class="contForm">
 					<li>
 						<label>Data:</label>
-						<div class="adicionar" >
+						<div class="adicionar">
 							<p>início: <span class="dIni"></span> - Final: <span class="dFim"></span></p>
 						</div>
-						<div class="editar" >
-							<p>início: <input type="text" value="" class="dtInicio" ></p>
-							<p>Final: <input type="text" value="" class="dtFim" ></p>
+						<div class="editar">
+							<p>início: <input type="text" value="" class="dtInicio"></p>
+							<p>Final: <input type="text" value="" class="dtFim"></p>
 						</div>
 					</li>
 					<li>
@@ -238,43 +263,52 @@
 				<button class="btCancelar">x</button>
 			</div>
 		</div>
-		
-	<div id="configCalendario" class="page">
-		<div class="container">
-			<div class="bemvindo">Escolha uma das opções abaixo para gerar o calendário:</div>
-			<strong>Igualitária (adoção total do material)</strong>
-			<ol>
-				<li>
-					Adoção de 12 capítulos por ano (anos regulares):
-					<p>1º ano → C1 a C12</p>
-					<p>2º ano → C13 a C24</p>
-					<p>3º ano → C25 a C36</p>
-				</li>
-				<li>
-					Adoção de 18 capítulos por ano (3 séries em 2 anos):
-					<p>1º ano → C1 a C18 </p>
-					<p>2º ano → C19 a C36</p>
-				</li>
-			</ol>
-			<strong>Personalizada (adoção parcial do material)</strong>
-			<ol start=3>
-				<li>
-					Adoção de capítulos avulsos
-					<p>sem sugestão de para distribuição dos capítulo</p>
-				</li>
-			</ol>
-			<label for="">Quantidade de meses por página:</label>
-			<select name="meses" id="mesesPage">
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="4">4</option>
-				<option value="6">6</option>
-				<option value="12">12</option>
-			</select>
 
-			<div class="gerar">gerar</div>
+		<div id="configCalendario" class="page">
+			<div class="container">
+				<div class="bemvindo">Escolha uma das opções abaixo para gerar o calendário:</div>
+				<strong>Igualitária (adoção total do material)</strong>
+				<ol>
+					<li data-capitulos="12">
+						Adoção de 12 capítulos por ano (anos regulares):
+						<p>1º ano → C1 a C12</p>
+						<p>2º ano → C13 a C24</p>
+						<p>3º ano → C25 a C36</p>
+					</li>
+					<li data-capitulos="18">
+						Adoção de 18 capítulos por ano (3 séries em 2 anos):
+						<p>1º ano → C1 a C18 </p>
+						<p>2º ano → C19 a C36</p>
+					</li>
+				</ol>
+				<strong>Personalizada (adoção parcial do material)</strong>
+				<ol start=3>
+					<li data-capitulos="0">
+						Adoção de capítulos avulsos
+						<p>sem sugestão de para distribuição dos capítulo</p>
+					</li>
+				</ol>
+
+				<div class="iniciar">Continuar</div>
+			</div>
 		</div>
-	</div>
+
+		
+		<div id="configPaginas" class="page">
+			<div class="container">
+				<label for="">Quantidade de meses por página:</label>
+				<select name="meses" id="mesesPage">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="4">4</option>
+					<option value="6">6</option>
+					<option value="12">12</option>
+				</select>
+				<div class="iniciar gerar">gerar</div>
+				<div class="btX">X</div>
+			</div>
+		</div>
+
 	</div>
 
 
@@ -282,10 +316,10 @@
 		<!-- loading -->
 	</div>
 
-<div id="loading" class="hide">
-	<div class="sprite">Gerando PDF</div>
-	<div class="ponteiro"></div>
-</div>
+	<div id="loading" class="hide">
+		<div class="sprite">Gerando PDF</div>
+		<div class="ponteiro"></div>
+	</div>
 </body>
 
 </html>

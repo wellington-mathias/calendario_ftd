@@ -117,7 +117,8 @@ function submitForm(form) {
             id: data.tipo_usuario,
             descricao: ''
         }
-        console.log(data.tipo_usuario);
+    } else if ($(form).attr('action').match('calendario') != null) {
+        
     }
     dispatch($(form).attr('method'), $(form).attr('action'), data, function (data) {
         listar();
@@ -201,14 +202,22 @@ function pageAdcionar(obj) {
     if (obj) {
         for (var i in obj) {
             if (i != 'tipo_evento' && i != 'tipo_usuario') {
-                $('.formAdicionar *[name="' + i + '"]').val(obj[i]);
+                if(i.match(/dt_/) !== null ){
+                    if(obj[i] && obj[i].match('-') !== null){
+                        $('.formAdicionar *[name="' + i + '"]').val(formatData1(obj[i]));
+                    } else {
+                        $('.formAdicionar *[name="' + i + '"]').val(obj[i]);
+                    }
+                } else {
+                    $('.formAdicionar *[name="' + i + '"]').val(obj[i]);
+                }
             }
         }
-        $('.formAdicionar input[name="dia_letivo"]').removeAttr('checked');
+        $('.formAdicionar .selectDia option').prop({selected: false});
         if (obj.dia_letivo) {
-            $('.formAdicionar .diaL1').attr('checked', 'checked');
+            $('.formAdicionar .selectDia option:first').prop({selected: true});
         } else {
-            $('.formAdicionar .diaL0').attr('checked', 'checked');
+            $('.formAdicionar .selectDia option:last').prop({selected: true});
         }
 
         $('.formAdicionar').attr('method', 'POST');

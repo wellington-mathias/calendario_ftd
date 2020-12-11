@@ -39,6 +39,10 @@ if($data_incomplete) {
     $calendario->dt_fim_ano_letivo = $data->dt_fim_ano_letivo;
     $calendario->dt_inicio_recesso = $data->dt_inicio_recesso;
     $calendario->dt_fim_recesso = $data->dt_fim_recesso;
+    $calendario->qtde_volumes_1o_ano = $data->qtde_volumes_1o_ano;
+    $calendario->qtde_volumes_2o_ano = $data->qtde_volumes_2o_ano;
+    $calendario->qtde_volumes_3o_ano = $data->qtde_volumes_3o_ano;
+    $calendario->revisao_volume_3o_ano = $data->revisao_volume_3o_ano;
     $calendario->instituicao =  $data->instituicao;
 
     if ($calendario->instituicao->id == null) {

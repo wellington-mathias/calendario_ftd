@@ -1,5 +1,18 @@
 
 @font-face {
+  font-family: 'Montserrat';
+  src: url('fonts/Montserrat-Regular.eot');
+  src: url('fonts/Montserrat-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('fonts/Montserrat-SemiBold.eot');
+  src: url('fonts/Montserrat-SemiBold.ttf');
+  font-weight: bold;
+}
+
+@font-face {
   font-family: 'roboto';
   src: url('fonts/Roboto-Regular.eot');
   src: url('fonts/Roboto-Regular.ttf');
@@ -41,24 +54,26 @@
 
 * {border:0; margin:0; padding:0; }
 #stage {display:block; min-width: 1024px; width:100%; min-height:100vh; overflow:hidden; position:absolute; background-color: #ededed;}
-#stage.print{width: 1575px; height: 1575px; }
 #stage #console{display:block; width:100%; height:100px; overflow:hidden; position:absolute; top:0; left:0; pointer-events:none; z-index:100000; font-size:20px;}
+#stage.print{width: 2500px; height: 2500px; }
 
-.page {display:flex; width:1024px; min-height:100vh; overflow:hidden; position:absolute; box-sizing: border-box; font-family: roboto; font-size: 20px; z-index: 3;  left: 0; right: 0; margin: auto;}
+.page {display:flex; width:1024px; min-height:100vh; overflow:hidden; position:absolute; box-sizing: border-box; font-family: Montserrat; font-size: 20px; z-index: 3;  left: 0; right: 0; margin: auto;}
+.page.hide {display: none; }
 #abertura {background-color: #ededed; align-items: center; justify-content: center;}
-.container {background-color: #fff; padding:20px; width: 640px;}
+.container {background-color: #fff; padding:20px; width: 640px; position: relative; }
 .container p{margin: 10px 0;}
 .container ol{margin: 0 10px;}
 .container .bemvindo {font-size: 24px;}
-.container .iniciar {padding: 5px 20px; background-color: #ccc; display: block; margin: 60px 200px; text-align: center; font-size: 24px; font-weight: bold; border: 1px solid; cursor: pointer;}
+.container .iniciar {padding: 5px 20px; background-color: #ccc; display: block; margin: 60px auto; text-align: center; font-size: 24px; font-weight: bold; border: 1px solid; cursor: pointer;}
 
 #dadosGestor {background-color: #ededed; font-size: 16px; align-items: center; justify-content: center;}
 #dadosGestor label{margin-top: 10px;}
-#dadosGestor input.txt{border: 1px solid #000; width: 227px; height: 25px;}
-#dadosGestor input.data{border: 1px solid #000; width: 50px; height: 25px;}
+#dadosGestor input.txt{border: 1px solid #000; width: 227px; height: 25px; padding: 0 3px;}
+#dadosGestor input.data{border: 1px solid #000; width: 150px; height: 25px; padding: 0 3px;}
 select{border: 1px solid #000; width: 100px; height: 25px;}
 #dadosGestor li{margin-bottom: 5px; list-style: none;}
 #dadosGestor li label{display: block;}
+
 
 #configCalendario {padding: 5% 18%; background-color: #ededed;}
 #configCalendario li{ margin-top:20px; cursor: pointer;}
@@ -73,13 +88,14 @@ select{border: 1px solid #000; width: 100px; height: 25px;}
 #calendario>.copyMes {display: none;}
 .ano {margin:150px 20px 0; height: 410px; position: relative; }
 .ano>.contMes {position: absolute; top: 0; left: 0; right: 0;}
-.contMes {display: grid; color: #000;   font-size: 20px; font-family: roboto;  background-color: #666; grid-gap: 1px; padding: 1px; }
+.contMes {display: grid; color: #000;   font-size: 20px; font-family: Montserrat;  background-color: #666; grid-gap: 1px; padding: 1px; }
 .contMes .dias {display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr ; grid-gap: 1px; }
 .hide {display: none }
-.contMes .tableheader {grid-template-columns: 1fr  ;  }
-.contMes .dias>div{display: flex; align-items: center; justify-content: center; height: 50px; line-height: 20px; background-color: #fff; padding: 0 10px; cursor: pointer; position: relative;}
-.contMes .dias .dia>div{position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-.contMes .dias .dia .txt{z-index: 2; user-select: none;}
+.contMes .tableheader {grid-template-columns: 1fr  ;  font-weight: bold;}
+.contMes .tableheader>div { background-color: #d6d6d6 !important;}
+.contMes .dias>div{display: flex; align-items: center; justify-content: center; height: 50px; line-height: 20px; background-color: #fff; padding: 0; cursor: pointer; position: relative;}
+.contMes .dias .dia>div{position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: flex-end; justify-content: flex-end; }
+.contMes .dias .dia .txt{z-index: 2; user-select: none; line-height: 140%; width: 95%;}
 .contMes .dias .dia .evts{display: flex; flex-wrap: nowrap; }
 .contMes .dias .dia .evts>div{flex:1; height:100%; box-sizing: border-box;  }
 .contMes .dias .sabado,
@@ -100,9 +116,9 @@ select{border: 1px solid #000; width: 100px; height: 25px;}
 .contMes .dias .domingo.drag{color: #000;}
 
 .infoMes {margin:5px 0px 0 ; height: 250px; position: relative; display: flex; flex-wrap: wrap; flex-direction: column; }
-.infoMes .diaEvento { width: 30%; padding: 10px; display: flex; box-sizing: border-box; cursor: pointer; }
+.infoMes .diaEvento { width: 50%; padding: 10px; display: flex; box-sizing: border-box; cursor: pointer; align-items: center;}
 .infoMes .diaEvento .cor{width: 30px; height: 30px; box-sizing: border-box;border: 1px solid #333;  }
-.infoMes .diaEvento .txtEvento{ width: calc(100% - 40px); margin-left: 10px; font-family: 'roboto'; font-size: 14px; line-height: 20px;  }
+.infoMes .diaEvento .txtEvento{ width: calc(100% - 40px); margin-left: 10px; font-family: 'Montserrat'; font-size: 14px; line-height: 20px;  }
 
 
 .setaEsq {position: absolute; bottom: 20px; left: 50px; width: 80px; height: 20px; cursor: pointer; background-color: rgba(0,0,0,.5);}
@@ -124,56 +140,83 @@ select{border: 1px solid #000; width: 100px; height: 25px;}
 
 
 .btsTopo {position: absolute; top: 10px; left: 10px; display: flex; align-items: center; }
-.btGerarCalendario { padding: 5px 10px; background-color: #ff6600; color: #fff; cursor: pointer; margin-right: 10px; width: 170px; float: right;}
-.btEditar { padding: 5px 10px; background-color: #ff6600; color: #fff; cursor: pointer; margin-right: 10px; width: 170px; float: right;}
-.tituloEscola { float: left; color: #000; width: 480px;}
+.btGerarCalendario { padding: 5px 10px; background-color: #ff6600; color: #fff; cursor: pointer; margin-right: 10px; width: 130px; float: right; font-size: 16px; text-align: center; font-weight: bold;}
+.btEditar { padding: 5px 10px; background-color: #ff6600; color: #fff; cursor: pointer; margin-right: 10px; width: 130px; float: right; font-size: 16px; text-align: center; font-weight: bold;}
+.tituloEscola { float: left; color: #000; width: 560px; font-weight: bold; font-size: 24px; font-family: 'Montserrat'; font-weight: bold;}
 #logoEscola { width: 100px; height: 100px; float: left; text-align: center; line-height: 100px;  margin: 10px; background-size: contain; background-color: #fff; position: relative; border: 1px solid #000; font-size: 20px; overflow: hidden; }
 #logoEscola img{max-width: 100%; max-height: 100%; position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; }
 
+.contMes .dias.semana>div {background-color: #d6d6d6;}
 .contMes .dias.semana strong { display: none;}
 .contMes .dias.semana strong:first-child { display: inline;}
-#pagePrint  {height: 1575px; width: 1575px;}
-#pagePrint .contMes .dias.semana strong { display: inline;}
-#pagePrint .contMes .dias.semana strong:first-child { display: none;}
+
+#pagePrint {width: 1146px; height: 1620px; transform: scale(1); background-color: #fff; transform-origin: 0 0;}
+#pagePrint.qtd1  {height: 1146px; width: 1620px;}
+#pagePrint.qtd4  {height: 1146px; width: 1620px;}
 
 #pagePrint .ano  { margin: 20px 75px 0; display: flex; flex-wrap: wrap; height: auto;  justify-content:space-between;}
-#pagePrint .cont  { position: absolute; width: 1120px; display: flex; flex-wrap: wrap; justify-content: space-between; margin: 0 0 0; box-sizing: border-box; padding: 135px 20px 30px; }
+#pagePrint .cont  { position: absolute; width: 100%; height: 100%; display: flex; flex-wrap: wrap; justify-content: space-between; margin: 0 0 0; box-sizing: border-box; padding: 135px 100px 30px; }
 #pagePrint .cont #logoEscola { border: 0; background-color: transparent; font-size: 0; }
+#pagePrint .copyMes  {transform-origin: 0 0;  width: 884px; }
 #pagePrint #cont2  { position: absolute; width: 100%; height: 100%;  overflow-y: scroll; }
 
-#pagePrint.qtd1 .cont  { width: 1575px;}
-#pagePrint.qtd1 .copyMes  { width: 1025px; margin: 20px 200px 0; }
-#pagePrint.qtd1 .contMes .dias>div  { font-size: 20px; }
-#pagePrint.qtd1 .infoMes  { height: auto; margin: 5px 0; flex-direction:row; }
+/* #pagePrint.qtd1 .cont  { width: 1550px; height: 1000px} */
+#pagePrint.qtd1 .copyMes  {transform: scale(1.58); transform-origin: 0 0;}
+/* #pagePrint.qtd1 .contMes .dias>div  { font-size: 15px; } */
+#pagePrint.qtd1 .infoMes  { height: 220px; margin: 5px 0;/*  flex-direction:row; */ }
+#pagePrint.qtd1 .infoMes .diaEvento {padding: 5px 0;}
+#pagePrint.qtd1 .btsTopo{left: 90px;}
 
-#pagePrint.qtd2 .copyMes  { width: 1020px; margin: 20px 50px;  }
-#pagePrint.qtd2 .contMes .dias>div  {height: 45px; font-size: 20px; }
-#pagePrint.qtd2 .infoMes  { height: auto; margin: 5px 0; flex-direction:row; }
-#pagePrint.qtd2 .infoMes  .cor{ width: 15px; height: 15px;}
-#pagePrint.qtd2 .infoMes .diaEvento .txtEvento{line-height: 15px;}
-#pagePrint.qtd2 .infoMes .diaEvento{width: 100%; padding: 0; margin-bottom: 5px; }
 
-#pagePrint.qtd4 .cont  { width: 1575px;}
-#pagePrint.qtd4 .copyMes  { width: 725px; margin: 0 0 30px; }
-#pagePrint.qtd4 .contMes .dias>div  {height: 45px; font-size: 20px; }
-#pagePrint.qtd4 .infoMes  { height: auto; margin: 5px 0; flex-direction:row; }
+#pagePrint.qtd2 .cont  {padding: 135px 60px 30px;}
+#pagePrint.qtd2 .copyMes  {transform:scale(1.15)}
+/* #pagePrint.qtd2 .contMes .dias>div  {height: 45px; font-size: 15px; } */
+#pagePrint.qtd2 .infoMes  { height: 220px; margin: 5px 0; /* flex-direction:row; */ }
+#pagePrint.qtd2 .infoMes  .cor{ width: 20px; height: 20px;}
+#pagePrint.qtd2 .btsTopo{left: 50px;}
+#pagePrint.qtd2 .infoMes .diaEvento .txtEvento{font-size: 16px;}
+#pagePrint.qtd2 .infoMes .diaEvento{width: 50%; padding: 0; margin: 5px 0; }
+
+#pagePrint.qtd4 .cont  { justify-content: space-around; padding: 135px 50px 30px;}
+#pagePrint.qtd4 .btsTopo{left: 55px;}
+#pagePrint.qtd4 .copyMes  {width: 541px; margin: 0; transform: scale(1.35); transform-origin: 50% 0;}
+#pagePrint.qtd4 .contMes .dias>div  {height: 28px; font-size: 12px; }
+#pagePrint.qtd4 .infoMes  { height: 120px; margin: 5px 0;/*  flex-direction:row; */ }
 #pagePrint.qtd4 .infoMes  .cor{ width: 15px; height: 15px;}
-#pagePrint.qtd4 .infoMes .diaEvento .txtEvento{line-height: 15px;}
-#pagePrint.qtd4 .infoMes .diaEvento{width: 100%; padding: 0; margin-bottom: 5px; }
+#pagePrint.qtd4 .infoMes .diaEvento .txtEvento{font-size: 12px;}
+#pagePrint.qtd4 .infoMes .diaEvento{width: 50%; padding: 0; margin-bottom: 5px; }
 
-#pagePrint.qtd6 .copyMes  { width: 515px; margin: 0 0 30px; }
-#pagePrint.qtd6 .contMes .dias>div  {height: 25px; font-size: 18px; }
-#pagePrint.qtd6 .infoMes  { height: auto; margin: 5px 0; flex-direction:row; }
+#pagePrint.qtd6 .cont  { padding: 135px 60px 30px;}
+#pagePrint.qtd6 .btsTopo{left: 50px;}
+#pagePrint.qtd6 .copyMes  { width: 500px; margin: 0 0 10px; }
+#pagePrint.qtd6 .contMes .dias>div  {height: 30px; font-size: 12px; }
+#pagePrint.qtd6 .infoMes  { height: 220px; margin: 5px 0; /* flex-direction:row; */ }
 #pagePrint.qtd6 .infoMes  .cor{ width: 15px; height: 15px;}
-#pagePrint.qtd6 .infoMes .diaEvento .txtEvento{line-height: 15px;}
-#pagePrint.qtd6 .infoMes .diaEvento{width: 100%; padding: 0; margin-bottom: 5px; }
+#pagePrint.qtd6 .infoMes .diaEvento .txtEvento{line-height: 18px;}
+#pagePrint.qtd6 .infoMes .diaEvento{width: 50%; padding: 0; margin-bottom: 5px;  align-items: flex-start;}
 
-#pagePrint.qtd12 .copyMes  { width: 500px; margin: 0 0 20px;  }
-#pagePrint.qtd12 .contMes .dias>div  {height: 15px; font-size: 14px;}
-#pagePrint.qtd12 .infoMes  { height: auto; margin: 5px 0; flex-direction:row; }
+#pagePrint.qtd12 .cont  { padding: 135px 50px 30px;}
+#pagePrint.qtd12 .btsTopo{left: 50px;}
+#pagePrint.qtd12 .copyMes  { width: 330px; margin: 0 0 20px;  }
+#pagePrint.qtd12 .contMes .dias>div  {height: 20px; font-size: 12px;}
+#pagePrint.qtd12 .infoMes  { height: 220px; margin: 5px 0; /* flex-direction:row; */ align-items: flex-start;}
 #pagePrint.qtd12 .infoMes  .cor{ width: 15px; height: 15px;}
-#pagePrint.qtd12 .infoMes .diaEvento .txtEvento{line-height: 15px;}
+#pagePrint.qtd12 .infoMes .diaEvento .txtEvento{font-size: 12px; line-height: 18px;}
 #pagePrint.qtd12 .infoMes .diaEvento{width: 100%; padding: 0; margin-bottom: 5px; }
+
+#pagePrint.qtd12 .contMes .dias.semana strong { display: inline;}
+#pagePrint.qtd12 .contMes .dias.semana strong:first-child { display: none;}
+
+
+#telaLogin {background-color: #ededed; align-items: center; justify-content: center;}
+#telaLogin .camposForm {display: flex; flex-direction: column; padding: 30px; align-items: center; }
+#telaLogin .camposForm li{list-style: none; display: flex; flex-direction: column; width: 250px;  }
+#telaLogin .camposForm li .campoLogin{border: 2px solid #666; line-height: 30px; padding: 0 3px; border-radius: 4px; margin:5px 0 10px; }
+#telaLogin .camposForm li .campoLogin.erro{border-color: rgb(212, 0, 0);}
+
+
+#configPaginas { align-items: center; justify-content: center;}
+#configPaginas .btX{position: absolute; top: 10px; right: 10px; border-radius: 50%; background-color: #ddd; color: #000; font-weight: bold; width: 30px; height: 30px; text-align: center; line-height: 30px; font-size: 20px;  cursor: pointer; }
 
 
 

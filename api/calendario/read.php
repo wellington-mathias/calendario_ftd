@@ -57,6 +57,10 @@ function readAll() {
                 "dt_fim_ano_letivo" => $calendario->dt_fim_ano_letivo,
                 "dt_inicio_recesso" => $calendario->dt_inicio_recesso,
                 "dt_fim_recesso" => $calendario->dt_fim_recesso,
+                "qtde_volumes_1o_ano" => $calendario->qtde_volumes_1o_ano,
+                "qtde_volumes_2o_ano" => $calendario->qtde_volumes_2o_ano,
+                "qtde_volumes_3o_ano" => $calendario->qtde_volumes_3o_ano,
+                "revisao_volume_3o_ano" => $calendario->revisao_volume_3o_ano,
                 "dt_criacao" => $calendario->dt_criacao,
                 "dt_alteracao" => $calendario->dt_alteracao,
                 "instituicao" =>$instituicao_item
@@ -113,6 +117,10 @@ function readOne() {
                 "dt_fim_ano_letivo" => $calendario->dt_fim_ano_letivo,
                 "dt_inicio_recesso" => $calendario->dt_inicio_recesso,
                 "dt_fim_recesso" => $calendario->dt_fim_recesso,
+                "qtde_volumes_1o_ano" => $calendario->qtde_volumes_1o_ano,
+                "qtde_volumes_2o_ano" => $calendario->qtde_volumes_2o_ano,
+                "qtde_volumes_3o_ano" => $calendario->qtde_volumes_3o_ano,
+                "revisao_volume_3o_ano" => $calendario->revisao_volume_3o_ano,
                 "dt_criacao" => $calendario->dt_criacao,
                 "dt_alteracao" => $calendario->dt_alteracao,
                 "instituicao" =>$instituicao_item
