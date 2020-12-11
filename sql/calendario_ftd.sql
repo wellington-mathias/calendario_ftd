@@ -35,11 +35,14 @@ CREATE TABLE IF NOT EXISTS `calendario` (
   `dt_fim_ano_letivo` date NOT NULL,
   `dt_inicio_recesso` date NOT NULL,
   `dt_fim_recesso` date NOT NULL,
+  `qtde_volumes_1o_ano` tinyint(4) NOT NULL,
+  `qtde_volumes_2o_ano` tinyint(4) NOT NULL,
+  `qtde_volumes_3o_ano` tinyint(4) NOT NULL,
+  `revisao_volume_3o_ano` tinyint(4) NOT NULL,
   `dt_criacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `dt_alteracao` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `instituicao_id` int(10) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `ano_referencia` (`ano_referencia`,`instituicao_id`) USING BTREE,
   KEY `calendario_instituicao` (`instituicao_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 

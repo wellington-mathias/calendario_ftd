@@ -10,6 +10,10 @@ class Calendario extends CrudObject {
     public $dt_fim_ano_letivo;
     public $dt_inicio_recesso;
     public $dt_fim_recesso;
+    public $qtde_volumes_1o_ano;
+    public $qtde_volumes_2o_ano;
+    public $qtde_volumes_3o_ano;
+    public $revisao_volume_3o_ano;
     public $dt_criacao;
     public $dt_alteracao;
     public $instituicao;
@@ -29,6 +33,10 @@ class Calendario extends CrudObject {
                         dt_fim_ano_letivo = :dt_fim_ano_letivo,
                         dt_inicio_recesso = :dt_inicio_recesso,
                         dt_fim_recesso = :dt_fim_recesso,
+                        qtde_volumes_1o_ano = :qtde_volumes_1o_ano,
+                        qtde_volumes_2o_ano = :qtde_volumes_2o_ano,
+                        qtde_volumes_3o_ano = :qtde_volumes_3o_ano,
+                        revisao_volume_3o_ano = :revisao_volume_3o_ano,
                         instituicao_id = :instituicao_id";
 
         // prepare query
@@ -40,6 +48,10 @@ class Calendario extends CrudObject {
         $this->dt_fim_ano_letivo = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim_ano_letivo))), "Y-m-d");
         $this->dt_inicio_recesso = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_inicio_recesso))), "Y-m-d");
         $this->dt_fim_recesso = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim_recesso))), "Y-m-d");
+        $this->qtde_volumes_1o_ano = (int) htmlspecialchars(strip_tags($this->qtde_volumes_1o_ano));
+        $this->qtde_volumes_2o_ano = (int) htmlspecialchars(strip_tags($this->qtde_volumes_2o_ano));
+        $this->qtde_volumes_3o_ano = (int) htmlspecialchars(strip_tags($this->qtde_volumes_3o_ano));
+        $this->revisao_volume_3o_ano = (int) htmlspecialchars(strip_tags($this->revisao_volume_3o_ano));
         $this->instituicao->id = (int) htmlspecialchars(strip_tags($this->instituicao->id));
 
         // bind values
@@ -48,6 +60,10 @@ class Calendario extends CrudObject {
         $stmt->bindParam(":dt_fim_ano_letivo", $this->dt_fim_ano_letivo);
         $stmt->bindParam(":dt_inicio_recesso", $this->dt_inicio_recesso);
         $stmt->bindParam(":dt_fim_recesso", $this->dt_fim_recesso);
+        $stmt->bindParam(":qtde_volumes_1o_ano", $this->qtde_volumes_1o_ano);
+        $stmt->bindParam(":qtde_volumes_2o_ano", $this->qtde_volumes_2o_ano);
+        $stmt->bindParam(":qtde_volumes_3o_ano", $this->qtde_volumes_3o_ano);
+        $stmt->bindParam(":revisao_volume_3o_ano", $this->revisao_volume_3o_ano);
         $stmt->bindParam(":instituicao_id", $this->instituicao->id);
 
         // execute query
@@ -71,6 +87,10 @@ class Calendario extends CrudObject {
                     a.dt_fim_ano_letivo,
                     a.dt_inicio_recesso,
                     a.dt_fim_recesso,
+                    a.qtde_volumes_1o_ano,
+                    a.qtde_volumes_2o_ano,
+                    a.qtde_volumes_3o_ano,
+                    a.revisao_volume_3o_ano,
                     a.dt_criacao,
                     a.dt_alteracao,
                     b.id AS instituicao_id,
@@ -120,6 +140,10 @@ class Calendario extends CrudObject {
                 $calendario->dt_fim_ano_letivo = $dt_fim_ano_letivo;
                 $calendario->dt_inicio_recesso = $dt_inicio_recesso;
                 $calendario->dt_fim_recesso = $dt_fim_recesso;
+                $calendario->qtde_volumes_1o_ano = $qtde_volumes_1o_ano;
+                $calendario->qtde_volumes_2o_ano = $qtde_volumes_2o_ano;
+                $calendario->qtde_volumes_3o_ano = $qtde_volumes_3o_ano;
+                $calendario->revisao_volume_3o_ano = $revisao_volume_3o_ano;
                 $calendario->dt_criacao = $dt_criacao;
                 $calendario->dt_alteracao = $dt_alteracao;
                 $calendario->instituicao = $instituicao;
@@ -141,6 +165,10 @@ class Calendario extends CrudObject {
                     a.dt_fim_ano_letivo,
                     a.dt_inicio_recesso,
                     a.dt_fim_recesso,
+                    a.qtde_volumes_1o_ano,
+                    a.qtde_volumes_2o_ano,
+                    a.qtde_volumes_3o_ano,
+                    a.revisao_volume_3o_ano,
                     a.dt_criacao,
                     a.dt_alteracao,
                     b.id AS instituicao_id,
@@ -191,6 +219,10 @@ class Calendario extends CrudObject {
             $this->dt_fim_ano_letivo = $dt_fim_ano_letivo;
             $this->dt_inicio_recesso = $dt_inicio_recesso;
             $this->dt_fim_recesso = $dt_fim_recesso;
+            $this->qtde_volumes_1o_ano = $qtde_volumes_1o_ano;
+            $this->qtde_volumes_2o_ano = $qtde_volumes_2o_ano;
+            $this->qtde_volumes_3o_ano = $qtde_volumes_3o_ano;
+            $this->revisao_volume_3o_ano = $revisao_volume_3o_ano;
             $this->dt_criacao = $dt_criacao;
             $this->dt_alteracao = $dt_alteracao;
             $this->instituicao = $instituicao;
@@ -209,6 +241,10 @@ class Calendario extends CrudObject {
                         dt_fim_ano_letivo = :dt_fim_ano_letivo,
                         dt_inicio_recesso = :dt_inicio_recesso,
                         dt_fim_recesso = :dt_fim_recesso,
+                        qtde_volumes_1o_ano = :qtde_volumes_1o_ano,
+                        qtde_volumes_2o_ano = :qtde_volumes_2o_ano,
+                        qtde_volumes_3o_ano = :qtde_volumes_3o_ano,
+                        revisao_volume_3o_ano = :revisao_volume_3o_ano,
                         instituicao_id = :instituicao_id
                     WHERE id = :id";
     
@@ -221,6 +257,10 @@ class Calendario extends CrudObject {
         $this->dt_fim_ano_letivo = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim_ano_letivo))), "Y-m-d");
         $this->dt_inicio_recesso = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_inicio_recesso))), "Y-m-d");
         $this->dt_fim_recesso = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim_recesso))), "Y-m-d");
+        $this->qtde_volumes_1o_ano = (int) htmlspecialchars(strip_tags($this->qtde_volumes_1o_ano));
+        $this->qtde_volumes_2o_ano = (int) htmlspecialchars(strip_tags($this->qtde_volumes_2o_ano));
+        $this->qtde_volumes_3o_ano = (int) htmlspecialchars(strip_tags($this->qtde_volumes_3o_ano));
+        $this->revisao_volume_3o_ano = (int) htmlspecialchars(strip_tags($this->revisao_volume_3o_ano));
         $this->instituicao->id = (int) htmlspecialchars(strip_tags($this->instituicao->id));
         $this->id = (int) htmlspecialchars(strip_tags($this->id));
 
@@ -230,6 +270,10 @@ class Calendario extends CrudObject {
         $stmt->bindParam(":dt_fim_ano_letivo", $this->dt_fim_ano_letivo);
         $stmt->bindParam(":dt_inicio_recesso", $this->dt_inicio_recesso);
         $stmt->bindParam(":dt_fim_recesso", $this->dt_fim_recesso);
+        $stmt->bindParam(":qtde_volumes_1o_ano", $this->qtde_volumes_1o_ano);
+        $stmt->bindParam(":qtde_volumes_2o_ano", $this->qtde_volumes_2o_ano);
+        $stmt->bindParam(":qtde_volumes_3o_ano", $this->qtde_volumes_3o_ano);
+        $stmt->bindParam(":revisao_volume_3o_ano", $this->revisao_volume_3o_ano);
         $stmt->bindParam(":instituicao_id", $this->instituicao->id);
         $stmt->bindParam(":id", $this->id);
 

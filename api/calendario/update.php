@@ -43,6 +43,10 @@ if($data_incomplete) {
     $obj->dt_fim_ano_letivo = $data->dt_fim_ano_letivo;
     $obj->dt_inicio_recesso = $data->dt_inicio_recesso;
     $obj->dt_fim_recesso = $data->dt_fim_recesso;
+    $obj->qtde_volumes_1o_ano = $data->qtde_volumes_1o_ano;
+    $obj->qtde_volumes_2o_ano = $data->qtde_volumes_2o_ano;
+    $obj->qtde_volumes_3o_ano = $data->qtde_volumes_3o_ano;
+    $obj->revisao_volume_3o_ano = $data->revisao_volume_3o_ano;
     $obj->instituicao = $data->instituicao;
     
     // update the evento
