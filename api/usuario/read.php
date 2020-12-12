@@ -17,6 +17,8 @@ include_once '../objects/usuario.php';
 
 if (isset($_GET['id'])) {
     readOne();
+} else if (isset($_GET['tipo'])) {
+    readByType();
 } else {
     readAll();
 }
@@ -119,6 +121,53 @@ function readOne() {
             // make it json format
             echo json_encode($usuario_item);
         }
+    }
+}
+
+function readByType() {
+    // Retrieve the usuario object
+    $usuario = getObject();
+
+    $tipo_id = $_GET['tipo'];
+
+    // query objects
+    $usuarios = $usuario->readByType($tipo_id);
+    
+    // check if more than 0 record found
+    if (count($usuarios) == 0) {
+        // set response code - 404 Not found
+        http_response_code(404);
+    
+        // tell the user no object found
+        echo json_encode(array("message" => "Nenhum usuario encontrado."));
+    } else {
+        // objects array
+        $objects_arr = array();
+        $objects_arr["usuarios"] = array();
+
+        foreach($usuarios as $usuario) {
+            $tipo_usuario_item = array(
+                "id" => $usuario->tipo_usuario->id,
+                "descricao" => $usuario->tipo_usuario->descricao
+            );
+
+            $usuario_item = array(
+                "id" => $usuario->id,
+                "tipo_usuario" =>$tipo_usuario_item,
+                "nome" => $usuario->nome,
+                "email" => $usuario->email,
+                "dt_criacao" => $usuario->dt_criacao,
+                "dt_alteracao" => $usuario->dt_alteracao
+            );
+    
+            array_push($objects_arr["usuarios"], $usuario_item);
+        }
+    
+        // set response code - 200 OK
+        http_response_code(200);
+    
+        // show objects data in json format
+        echo json_encode($objects_arr);
     }
 }
 ?>

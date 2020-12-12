@@ -173,6 +173,69 @@ class Usuario extends CrudObject {
         return $this;
     }
 
+    // read all usuarios
+    public function  readByType($tipo_id) {
+        // select all query
+        $query = "SELECT
+                    u.id,
+                    u.usuario_tipo_id AS tipo_usuario_id,
+                    tu.descricao AS tipo_usuario_descricao,
+                    u.nome,
+                    u.email,
+                    u.dt_criacao,
+                    u.dt_alteracao
+                FROM usuario u
+                INNER JOIN usuario_tipo tu ON (tu.id = u.usuario_tipo_id)
+                WHERE u.usuario_tipo_id = :tipo_id
+                ORDER BY u.dt_criacao DESC, u.id DESC";
+
+        // prepare query statement
+        $stmt = $this->conn->prepare($query);
+
+        // sanitize
+        $tipo_id = (int) htmlspecialchars(strip_tags($tipo_id));
+
+        // bind new values
+        $stmt->bindParam(":tipo_id", $tipo_id);
+
+        // execute query
+        $stmt->execute();
+
+        // objects array
+        $objects_arr = array();
+
+        // check if more than 0 record found
+        if ($stmt->rowCount() > 0) {
+            // retrieve our table contents
+            // fetch() is faster than fetchAll()
+            // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                // extract row
+                // this will make $row['name'] to
+                // just $name only
+                extract($row);
+
+                $tipo_usuario = new TipoUsuario();
+
+                $tipo_usuario->id = $tipo_usuario_id;
+                $tipo_usuario->descricao = html_entity_decode($tipo_usuario_descricao);
+                
+                $usuario = new Usuario();
+
+                $usuario->id = $id;
+                $usuario->tipo_usuario = $tipo_usuario;
+                $usuario->nome = html_entity_decode($nome);
+                $usuario->email = (is_null ($email)) ? null: html_entity_decode($email);
+                $usuario->dt_criacao = $dt_criacao;
+                $usuario->dt_alteracao = $dt_alteracao;
+
+                array_push($objects_arr, $usuario);
+            }
+        }
+
+        return $objects_arr;
+    }
+
     // update method
     function update() {
         // update query
