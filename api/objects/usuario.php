@@ -226,5 +226,93 @@ class Usuario extends CrudObject {
     
         return true;
     }
+
+    function login($env, $user, $pass) {
+        $query = null;
+
+        switch ($env) {
+            case 'ADMIN':
+                $query = "SELECT
+                                u.id,
+                                u.usuario_tipo_id AS tipo_usuario_id,
+                                tu.descricao AS tipo_usuario_descricao,
+                                u.nome,
+                                u.email,
+                                u.login,
+                                u.senha,
+                                u.dt_criacao,
+                                u.dt_alteracao
+                            FROM usuario AS u
+                            INNER JOIN usuario_tipo AS tu ON (tu.id = u.usuario_tipo_id)
+                            WHERE login = :login
+                                AND usuario_tipo_id = 1
+                            LIMIT 0, 1";
+
+                // sanitize
+                $user = htmlspecialchars(strip_tags($user));
+
+                break;
+            case 'SITE':
+                $query = "SELECT
+                                u.id,
+                                u.usuario_tipo_id AS tipo_usuario_id,
+                                tu.descricao AS tipo_usuario_descricao,
+                                u.nome,
+                                u.email,
+                                u.login_ftd AS login,
+                                u.senha_ftd AS senha,
+                                u.dt_criacao,
+                                u.dt_alteracao
+                            FROM usuario AS u
+                            INNER JOIN usuario_tipo AS tu ON (tu.id = u.usuario_tipo_id)
+                            WHERE login_ftd = :login
+                                AND usuario_tipo_id = 2
+                            LIMIT 0, 1";
+
+                // sanitize
+                $user = htmlspecialchars(strip_tags($user));
+                break;
+            default:
+                return null;
+            break;
+        }
+
+        // prepare query statement
+        $stmt = $this->conn->prepare( $query );
+
+        // bind data
+        $stmt->bindParam(":login", $user);
+    
+        // execute query
+        $stmt->execute();
+       
+        $num = $stmt->rowCount();
+
+        // check if the object is not null
+        if ($num == 0) {
+            return null;
+        } else {
+            // get retrieved row
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            extract($row);
+
+            $tipo_usuario = new TipoUsuario();
+            $tipo_usuario->id = $tipo_usuario_id;
+            $tipo_usuario->descricao = html_entity_decode($tipo_usuario_descricao);
+
+            $this->tipo_usuario = $tipo_usuario;
+            $this->id = $id;
+            $this->nome = html_entity_decode($nome);
+            $this->email = (is_null ($email)) ? null: html_entity_decode($email);
+            $this->login = $login;
+            $this->senha = $senha;
+            $this->dt_criacao = $dt_criacao;
+            $this->dt_alteracao = $dt_alteracao;
+        }
+        
+        return $this;
+        
+    }
 }
 ?>
