@@ -100,16 +100,28 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                     "message" => "You have successfully logged in.",
                     "usuario" => array(
                         "id" => $usuario->id,
-                        "tipo_usuario" => array(
-                            "id" => $usuario->tipo_usuario->id,
-                        	"descricao" => $usuario->tipo_usuario->descricao
-                        ),
                         "nome" => $usuario->nome,
                         "email" => $usuario->email, 
                         "dt_criacao" => $usuario->dt_criacao,
-                        "dt_alteracao" => $usuario->dt_alteracao
+                        "dt_alteracao" => $usuario->dt_alteracao,
+                        "tipo_usuario" => array(
+                            "id" => $usuario->tipo_usuario->id,
+                        	"descricao" => $usuario->tipo_usuario->descricao
+                        )
                     )
                 );
+
+                if ($usuario->instituicao != null) {
+                    $response["usuario"]["instituicao"] = array(
+                        "id" => $usuario->instituicao->id,
+                        "nome" => $usuario->instituicao->nome,
+                        "logo" => $usuario->instituicao->logo,
+                        "uf" => $usuario->instituicao->uf,
+                        "dt_criacao" => $usuario->instituicao->dt_criacao,
+                        "dt_alteracao" => $usuario->instituicao->dt_alteracao
+                    );
+            
+                }
 
                 // set response code - 200 OK
                 http_response_code(200);

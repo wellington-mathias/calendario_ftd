@@ -11,8 +11,7 @@ if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "GET") {
     exit();
 }
 
-// include database and object files
-include_once '../config/database.php';
+// includes
 include_once '../objects/evento.php';
 
 if (isset($_GET['id'])) {
@@ -22,12 +21,8 @@ if (isset($_GET['id'])) {
 }
 
 function getObject() {
-    // get database connection
-    $database = new Database();
-    $db = $database->getConnection();
-
     // prepare evento object
-    return new Evento($db);
+    return new Evento();
 }
 
 function readAll() {

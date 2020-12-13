@@ -11,16 +11,8 @@ if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "DELETE") {
     exit();
 }
   
-// include database and object files
-include_once '../config/database.php';
+// includes
 include_once '../objects/evento.php';
-  
-// get database connection
-$database = new Database();
-$db = $database->getConnection();
-  
-// prepare evento object
-$evento = new Evento($db);
   
 // get evento id
 $data = json_decode(file_get_contents("php://input"));
@@ -32,6 +24,9 @@ if(empty($data->id)) {
     // tell the user
     echo json_encode(array("message" => "Unable to delete evento. No id informed."));
 } else {
+    // prepare evento object
+    $evento = new Evento();
+
     // set evento id to be deleted
     $evento->id = $data->id;
     

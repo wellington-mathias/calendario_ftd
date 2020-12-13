@@ -7,8 +7,7 @@ header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=UTF-8");
 
 if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "GET") {
-    http_response_code(405);
-    exit();
+    send_message(405, null);
 }
 
 // includes
@@ -16,6 +15,8 @@ include_once '../objects/calendario.php';
 
 if (isset($_GET['id'])) {
     readOne();
+} else if (isset($_GET['usuario'])) {
+    readByUser($_GET['usuario']);
 } else {
     readAll();
 }
@@ -29,61 +30,23 @@ function readAll() {
     
     // check if more than 0 record found
     if (count($calendarios) == 0) {
-        // set response code - 404 Not found
-        http_response_code(404);
-    
-        // tell the user no object found
-        echo json_encode(array("message" => "Nenhum Calendario encontrado."));
+        send_message(404, array("message" => "Nenhum Calendario encontrado."));
     } else {
         // objects array
         $objects_arr = array();
         $objects_arr["calendarios"] = array();
     
         foreach($calendarios as $calendario) {
-
-            $instituicao_item = array(
-                "id" => $calendario->instituicao->id,
-                "nome" => $calendario->instituicao->nome,
-                "logo" => $calendario->instituicao->logo,
-                "uf" => $calendario->instituicao->uf,
-                "dt_criacao" => $calendario->instituicao->dt_criacao,
-                "dt_alteracao" => $calendario->instituicao->dt_alteracao
-            );
-
-            $calendario_item = array(
-                "id" => $calendario->id,
-                "ano_referencia" => $calendario->ano_referencia,
-                "dt_inicio_ano_letivo" => $calendario->dt_inicio_ano_letivo,
-                "dt_fim_ano_letivo" => $calendario->dt_fim_ano_letivo,
-                "dt_inicio_recesso" => $calendario->dt_inicio_recesso,
-                "dt_fim_recesso" => $calendario->dt_fim_recesso,
-                "qtde_volumes_1o_ano" => $calendario->qtde_volumes_1o_ano,
-                "qtde_volumes_2o_ano" => $calendario->qtde_volumes_2o_ano,
-                "qtde_volumes_3o_ano" => $calendario->qtde_volumes_3o_ano,
-                "revisao_volume_3o_ano" => $calendario->revisao_volume_3o_ano,
-                "dt_criacao" => $calendario->dt_criacao,
-                "dt_alteracao" => $calendario->dt_alteracao,
-                "instituicao" =>$instituicao_item
-            );
-
-            array_push($objects_arr["calendarios"], $calendario_item);
+            array_push($objects_arr["calendarios"], getDataAsArray($calendario));
         }
     
-        // set response code - 200 OK
-        http_response_code(200);
-    
-        // show objects data in json format
-        echo json_encode($objects_arr);
+       send_message(200, $objects_arr);
     }
 }
 
 function readOne() {
     if (empty($_GET['id'])) {
-        // set response code - 400 bad request
-        http_response_code(400);
-        
-        // tell the user
-        echo json_encode(array("message" => "Unable to read Calendario. No id informed."));
+        send_message(400, array("message" => "Unable to read Calendario. No id informed."));
     } else {
         // Retrieve object
         $calendario = new Calendario();
@@ -95,43 +58,87 @@ function readOne() {
 
         // check if the object is not null
         if($calendario == null)  {
-            // set response code - 404 Not found
-            http_response_code(404);
-        
-            // tell the user object does not exist
-            echo json_encode(array("message" => "Calendario does not exist."));
+            send_message(404, array("message" => "Calendario does not exist."));
         } else {
-            $instituicao_item = array(
-                "id" => $calendario->instituicao->id,
-                "nome" => $calendario->instituicao->nome,
-                "logo" => $calendario->instituicao->logo,
-                "uf" => $calendario->instituicao->uf,
-                "dt_criacao" => $calendario->instituicao->dt_criacao,
-                "dt_alteracao" => $calendario->instituicao->dt_alteracao
-            );
-
-            $calendario_item = array(
-                "id" => $calendario->id,
-                "ano_referencia" => $calendario->ano_referencia,
-                "dt_inicio_ano_letivo" => $calendario->dt_inicio_ano_letivo,
-                "dt_fim_ano_letivo" => $calendario->dt_fim_ano_letivo,
-                "dt_inicio_recesso" => $calendario->dt_inicio_recesso,
-                "dt_fim_recesso" => $calendario->dt_fim_recesso,
-                "qtde_volumes_1o_ano" => $calendario->qtde_volumes_1o_ano,
-                "qtde_volumes_2o_ano" => $calendario->qtde_volumes_2o_ano,
-                "qtde_volumes_3o_ano" => $calendario->qtde_volumes_3o_ano,
-                "revisao_volume_3o_ano" => $calendario->revisao_volume_3o_ano,
-                "dt_criacao" => $calendario->dt_criacao,
-                "dt_alteracao" => $calendario->dt_alteracao,
-                "instituicao" =>$instituicao_item
-            );
-        
-            // set response code - 200 OK
-            http_response_code(200);
-        
-            // make it json format
-            echo json_encode($calendario_item);
+            send_message(200, getDataAsArray($calendario));
         }
     }
+}
+
+function readByUser($usuario_id) {
+    if (empty($usuario_id)) {
+        send_message(400, array("message" => "Unable to read Calendarios. No User informed."));
+    } else {
+        // Retrieve object
+        $calendario = new Calendario();
+
+        // query objects
+        $calendarios = $calendario->readByUser($usuario_id);
+        
+        // check if more than 0 record found
+        if (count($calendarios) == 0) {
+            send_message(404, array("message" => "Nenhum Calendario encontrado."));
+        } else {
+            // objects array
+            $objects_arr = array();
+            $objects_arr["calendarios"] = array();
+        
+            foreach($calendarios as $calendario) {
+                array_push($objects_arr["calendarios"], getDataAsArray($calendario));
+            }
+        
+        send_message(200, $objects_arr);
+        }
+    }
+}
+
+function send_message($http_code, $response_data) {
+    // set response code - 400 bad request
+    http_response_code($http_code);
+    
+    if ($response_data != null) {
+        // tell the user
+        echo json_encode($response_data);
+    }
+
+    exit();
+}
+
+function getDataAsArray($dataAsObject) {
+    $dataAsArray = array(
+        "id" => $dataAsObject->id,
+        "ano_referencia" => $dataAsObject->ano_referencia,
+        "dt_inicio_ano_letivo" => $dataAsObject->dt_inicio_ano_letivo,
+        "dt_fim_ano_letivo" => $dataAsObject->dt_fim_ano_letivo,
+        "dt_inicio_recesso" => $dataAsObject->dt_inicio_recesso,
+        "dt_fim_recesso" => $dataAsObject->dt_fim_recesso,
+        "qtde_volumes_1o_ano" => $dataAsObject->qtde_volumes_1o_ano,
+        "qtde_volumes_2o_ano" => $dataAsObject->qtde_volumes_2o_ano,
+        "qtde_volumes_3o_ano" => $dataAsObject->qtde_volumes_3o_ano,
+        "revisao_volume_3o_ano" => $dataAsObject->revisao_volume_3o_ano,
+        "dt_criacao" => $dataAsObject->dt_criacao,
+        "dt_alteracao" => $dataAsObject->dt_alteracao,
+        "usuario" => array(
+            "id" => $dataAsObject->usuario->id,
+            "nome" => $dataAsObject->usuario->nome,
+            "email" =>  $dataAsObject->usuario->email,
+            "dt_criacao" => $dataAsObject->usuario->dt_criacao,
+            "dt_alteracao" => $dataAsObject->usuario->dt_alteracao,
+            "tipo_usuario" => array(
+                "id" => $dataAsObject->usuario->tipo_usuario->id,
+                "descricao" => $dataAsObject->usuario->tipo_usuario->descricao
+            ),
+            "instituicao" => array(
+                "id" => $dataAsObject->usuario->instituicao->id,
+                "nome" => $dataAsObject->usuario->instituicao->nome,
+                "logo" => $dataAsObject->usuario->instituicao->logo,
+                "uf" => $dataAsObject->usuario->instituicao->uf,
+                "dt_criacao" => $dataAsObject->usuario->instituicao->dt_criacao,
+                "dt_alteracao" => $dataAsObject->usuario->instituicao->dt_alteracao
+            )
+        )
+    );
+
+    return $dataAsArray;
 }
 ?>
