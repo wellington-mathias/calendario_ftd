@@ -1,9 +1,7 @@
 <?php
-class Evento {
+include_once '../objects/crud_object.php';
 
-    // database connection and table name
-    private $conn;
-
+class Evento extends CrudObject {
     // object properties
     public $id;
     public $tipo_evento_id;
@@ -18,8 +16,8 @@ class Evento {
     public $dt_alteracao;
 
     // constructor with $db as database connection
-    public function __construct($db){
-        $this->conn = $db;
+    public function __construct() {
+        parent::__construct();
     }
 
    // create method
@@ -92,7 +90,39 @@ class Evento {
         // execute query
         $stmt->execute();
 
-        return $stmt;
+        // objects array
+        $objects_arr = array();
+
+        // check if more than 0 record found
+        if ($stmt->rowCount() > 0) {
+            // retrieve our table contents
+            // fetch() is faster than fetchAll()
+            // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                // extract row
+                // this will make $row['name'] to
+                // just $name only
+                extract($row);
+
+                $evento = new Evento();
+
+                $evento->id = $id;
+                $evento->dt_inicio = $dt_inicio;
+                $evento->dt_fim = $dt_fim;
+                $evento->titulo = (is_null ($titulo)) ? null: html_entity_decode($titulo);
+                $evento->descricao = (is_null ($descricao)) ? null: html_entity_decode($descricao);
+                $evento->uf = (is_null ($uf)) ? null: strtoupper($uf);
+                $evento->dia_letivo = (bool) $dia_letivo;
+                $evento->dt_criacao = $dt_criacao;
+                $evento->dt_alteracao = $dt_alteracao;
+                $evento->tipo_evento_id = $tipo_evento_id;
+                $evento->tipo_evento_descricao = $tipo_evento_descricao;
+
+                array_push($objects_arr, $evento);
+            }
+        }
+
+        return $objects_arr;
     }
 
     // read one product
@@ -126,24 +156,172 @@ class Evento {
     
         // execute query
         $stmt->execute();
-    
-        // get retrieved row
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-        if (is_array($row)) {
-            // set values to object properties
-            $this->tipo_evento_id = $row["tipo_evento_id"];
-            $this->tipo_evento_descricao = $row["tipo_evento_descricao"];
-            $this->dt_inicio = $row["dt_inicio"];
-            $this->dt_fim = $row["dt_fim"];
-            $this->titulo = $row["titulo"];
-            $this->descricao = $row["descricao"];
-            $this->uf = $row["uf"];
-            $this->dia_letivo = $row["dia_letivo"];
-            $this->dt_criacao = $row["dt_criacao"];
-            $this->dt_alteracao = $row["dt_alteracao"];
 
+        if ($stmt->rowCount() == 0) {
+            return false;
+        } else {
+            // get retrieved row
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+            if (is_array($row)) {
+                // set values to object properties
+                $this->tipo_evento_id = $row["tipo_evento_id"];
+                $this->tipo_evento_descricao = $row["tipo_evento_descricao"];
+                $this->dt_inicio = $row["dt_inicio"];
+                $this->dt_fim = $row["dt_fim"];
+                $this->titulo = $row["titulo"];
+                $this->descricao = $row["descricao"];
+                $this->uf = $row["uf"];
+                $this->dia_letivo = $row["dia_letivo"];
+                $this->dt_criacao = $row["dt_criacao"];
+                $this->dt_alteracao = $row["dt_alteracao"];
+            }
+
+            return true;
         }
+    }
+
+    // read one product by calendario_id
+    function readOneByCalendario($calendario_id, $evento_id) {
+        // select all query
+        $query = "SELECT
+                        e.id,
+                        te.id AS tipo_evento_id,
+                        te.descricao AS tipo_evento_descricao,
+                        e.dt_inicio,
+                        e.dt_fim,
+                        e.titulo,
+                        e.descricao,
+                        e.uf,
+                        e.dia_letivo,
+                        e.dt_criacao,
+                        e.dt_alteracao
+                    FROM evento e
+                    INNER JOIN evento_tipo te ON (te.id = e.evento_tipo_id)
+                    INNER JOIN calendario_evento ce ON (ce.evento_id = e.id)
+                    WHERE ce.calendario_id = :calendario_id
+                    AND ce.evento_id = :evento_id
+                    ORDER BY e.dt_criacao DESC, e.id DESC
+                    LIMIT 0,1";
+
+        // prepare query statement
+        $stmt = $this->conn->prepare( $query );
+
+        // sanitize
+        $calendario_id = (int) htmlspecialchars(strip_tags($calendario_id));
+        $evento_id = (int) htmlspecialchars(strip_tags($evento_id));
+
+        // bind id of product to be updated
+        $stmt->bindParam(":calendario_id", $calendario_id);
+        $stmt->bindParam(":evento_id", $evento_id);
+
+        // execute query
+        $stmt->execute();
+        
+        if ($stmt->rowCount() == 0) {
+            return null;
+        } else {
+            // get retrieved row
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!is_array($row)) {
+                return null;
+            } else {
+                $evento = new Evento();
+                
+                // set values to object properties
+                $evento->tipo_evento_id = $row["tipo_evento_id"];
+                $evento->tipo_evento_descricao = $row["tipo_evento_descricao"];
+                $evento->dt_inicio = $row["dt_inicio"];
+                $evento->dt_fim = $row["dt_fim"];
+                $evento->titulo = $row["titulo"];
+                $evento->descricao = $row["descricao"];
+                $evento->uf = $row["uf"];
+                $evento->dia_letivo = $row["dia_letivo"];
+                $evento->dt_criacao = $row["dt_criacao"];
+                $evento->dt_alteracao = $row["dt_alteracao"];
+            }
+        }
+
+        return $evento;
+        
+    }
+
+    // search eventos
+    public function search($evento_tipo_id, $uf, $calendario_id, $dia_letivo) {
+        // select all query
+        $query = "SELECT
+                    e.id,
+                    e.dt_inicio,
+                    e.dt_fim,
+                    e.titulo,
+                    e.descricao,
+                    e.uf,
+                    e.dia_letivo,
+                    e.dt_criacao,
+                    e.dt_alteracao,
+                    te.id AS tipo_evento_id,
+                    te.descricao AS tipo_evento_descricao
+                FROM evento e
+                INNER JOIN evento_tipo te ON (te.id = e.evento_tipo_id)
+                LEFT OUTER JOIN calendario_evento ce ON (ce.evento_id = e.id)";
+
+        $where = "";
+        $where .= $this->addWhereClause($where, $evento_tipo_id, "te.id", "evento_tipo_id");
+        $where .= $this->addWhereClause($where, $uf, "e.uf", "uf");
+        $where .= $this->addWhereClause($where, $calendario_id, "ce.calendario_id", "calendario_id");
+        $where .= $this->addWhereClause($where, $dia_letivo, "e.dia_letivo", "dia_letivo");
+
+        $query = $query . $where . " ORDER BY e.dt_criacao DESC, e.id DESC";
+        
+        // prepare query statement
+        $stmt = $this->conn->prepare($query);
+
+        if (!is_null($evento_tipo_id)) $stmt->bindParam(":evento_tipo_id", $evento_tipo_id);
+        if (!is_null($uf)) $stmt->bindParam(":uf", $uf);
+        if (!is_null($calendario_id)) $stmt->bindParam(":calendario_id", $calendario_id);
+        if (!is_null($dia_letivo)) $stmt->bindParam(":dia_letivo", $dia_letivo);
+
+        // execute query
+        $stmt->execute();
+
+        // objects array
+        $objects_arr = array();
+
+        // check if more than 0 record found
+        if ($stmt->rowCount() > 0) {
+            // retrieve our table contents
+            // fetch() is faster than fetchAll()
+            // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                // extract row
+                // this will make $row['name'] to
+                // just $name only
+                extract($row);
+
+                $evento = new Evento();
+
+                $evento->id = $id;
+                $evento->dt_inicio = $dt_inicio;
+                $evento->dt_fim = $dt_fim;
+                $evento->titulo = (is_null ($titulo)) ? null: html_entity_decode($titulo);
+                $evento->descricao = (is_null ($descricao)) ? null: html_entity_decode($descricao);
+                $evento->uf = (is_null ($uf)) ? null: strtoupper($uf);
+                $evento->dia_letivo = (bool) $dia_letivo;
+                $evento->dt_criacao = $dt_criacao;
+                $evento->dt_alteracao = $dt_alteracao;
+                $evento->tipo_evento_id = $tipo_evento_id;
+                $evento->tipo_evento_descricao = $tipo_evento_descricao;
+
+                array_push($objects_arr, $evento);
+            }
+        }
+
+        return $objects_arr;
+    }
+
+    private function addWhereClause($where, $data, $table_field, $binder_str) {
+        return is_null($data) ? "" : (empty($where) ? " WHERE " : " AND ") . $table_field ." = :" . $binder_str;
     }
 
     // update method

@@ -11,14 +11,9 @@ if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "PUT") {
     exit();
 }
 
-include_once '../config/database.php';
+// includes
 include_once '../objects/evento.php';
 
-$database = new Database();
-$db = $database->getConnection();
-
-$evento = new Evento($db);
-  
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
   
@@ -32,6 +27,8 @@ if($data_incomplete) {
     // tell the user
     echo json_encode(array("message" => "Unable to create evento. Data is incomplete."));
 } else {
+    $evento = new Evento();
+
     // set evento property values
     $evento->tipo_evento_id = $data->tipo_evento->id;
     $evento->dt_inicio = $data->dt_inicio;

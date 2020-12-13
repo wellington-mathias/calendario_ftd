@@ -11,16 +11,8 @@ if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "POST") {
     exit();
 }
 
-// include database and object files
-include_once '../config/database.php';
+// includes
 include_once '../objects/evento.php';
-
-// get database connection
-$database = new Database();
-$db = $database->getConnection();
-
-// prepare evento object
-$evento = new Evento($db);
 
 // get data to be updated
 $data = json_decode(file_get_contents("php://input"));
@@ -34,6 +26,9 @@ if($data_incomplete) {
     // tell the user
     echo json_encode(array("message" => "Unable to update evento. Data is incomplete."));
 } else {
+    // prepare evento object
+    $evento = new Evento();
+
     // set ID property to be edited
     $evento->id = $data->id;
     
