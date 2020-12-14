@@ -67,7 +67,7 @@ function readOne() {
 
 function search() {
     $tipo_evento_id = (!isset($_GET['tipo_evento']) || empty($_GET['tipo_evento'])) ? null : (int) $_GET['tipo_evento'];
-    $uf = (!isset($_GET['uf']) || empty($_GET['uf'])) ? null : strtoupper(htmlspecialchars(strip_tags($_GET['uf'])));
+    $uf = (!isset($_GET['uf'])) ? null : strtoupper(trim(htmlspecialchars(strip_tags($_GET['uf']))));
     $calendario_id = (!isset($_GET['calendario']) || empty($_GET['calendario'])) ? null : (int) $_GET['calendario'];
     $dia_letivo = (!isset($_GET['dia_letivo']) || empty($_GET['dia_letivo'])) ? null : filter_var($_GET['dia_letivo'], FILTER_VALIDATE_BOOLEAN);
 

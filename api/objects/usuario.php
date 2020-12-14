@@ -432,6 +432,7 @@ class Usuario extends CrudObject {
 
             extract($row);
 
+            $this->id = $id;
             $this->nome = html_entity_decode($nome);
             $this->email = (is_null ($email)) ? null: html_entity_decode($email);
             $this->login = $login;
