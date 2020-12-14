@@ -13,6 +13,7 @@ if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "PUT") {
 
 include_once '../objects/usuario.php';
 include_once '../objects/tipo_usuario.php';
+include_once '../objects/instituicao.php';
 
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
@@ -36,14 +37,16 @@ if($data_incomplete) {
     $usuario = new Usuario();
 
     // set usuario property values
-    $usuario->tipo_usuario = $data->tipo_usuario;
     $usuario->nome = $data->nome;
     $usuario->email = empty($data->email) ? null : $data->email;
     $usuario->login = empty($data->login) ? null : $data->login;
     $usuario->senha = empty($data->password) ? null : $data->password; 
     $usuario->login_ftd = empty($data->login_ftd) ? null : $data->login_ftd;
     $usuario->senha_ftd = empty($data->password_ftd) ? null : $data->password_ftd;
+    $usuario->tipo_usuario = $data->tipo_usuario;
+    $usuario->instituicao = empty($data->instituicao) || is_null($data->instituicao) ? new Instituicao() : $data->instituicao;
 
+    // create tipo usuario
     if ($usuario->tipo_usuario->id == null) {
         $data_incomplete = empty($data->tipo_usuario->descricao);
 
@@ -74,6 +77,8 @@ if($data_incomplete) {
         }
     }
 
+    validateUsername($usuario);
+
     // create the usuario
     if(!$usuario->create()) {
         // set response code - 503 service unavailable
@@ -93,5 +98,39 @@ if($data_incomplete) {
                 "message" => "Usuario was created.")
         );
     }
+}
+
+function validateUsername($usuario) {
+    if (!empty($usuario->login)) {
+        $user = $usuario->login("ADMIN", $usuario->login);
+        
+        if (!is_null($user)) {
+            send_message(503, array("message" => "Unable to create usuario. Login already in use"));
+        }
+    }
+
+    if (!empty($usuario->login_ftd)) {
+        if (empty($usuario->instituicao->id) || !is_numeric($usuario->instituicao->id)) {
+            send_message(503, array("message" => "Unable to create usuario. Instituicao is required"));
+        }
+
+        $user = $usuario->login("SITE", $usuario->login_ftd);
+
+        if (!is_null($user)) {
+            send_message(503, array("message" => "Unable to create usuario. Login FTD already in use"));
+        }
+    }
+}
+
+function send_message($http_code, $response_data) {
+    // set response code - 400 bad request
+    http_response_code($http_code);
+    
+    if ($response_data != null) {
+        // tell the user
+        echo json_encode($response_data);
+    }
+
+    exit();
 }
 ?>

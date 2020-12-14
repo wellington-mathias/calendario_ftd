@@ -348,7 +348,7 @@ class Usuario extends CrudObject {
         return true;
     }
 
-    function login($env, $user, $pass) {
+    function login($env, $user) {
         $query = null;
 
         switch ($env) {
