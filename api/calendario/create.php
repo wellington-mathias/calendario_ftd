@@ -13,7 +13,7 @@ if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "PUT") {
 
 // includes
 include_once '../objects/calendario.php';
-include_once '../objects/instituicao.php';
+include_once '../objects/usuario.php';
 
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
@@ -22,7 +22,7 @@ $data = json_decode(file_get_contents("php://input"));
 $data_incomplete = empty($data->ano_referencia);
 $data_incomplete = $data_incomplete && empty($data->dt_inicio_ano_letivo) && empty($data->dt_fim_ano_letivo);
 $data_incomplete = $data_incomplete && empty($data->dt_inicio_recesso) && empty($data->dt_fim_recesso);
-$data_incomplete = $data_incomplete && empty($data->instituicao);
+$data_incomplete = $data_incomplete && empty($data->usuario);
 
 if($data_incomplete) {
     // set response code - 400 bad request
@@ -43,17 +43,25 @@ if($data_incomplete) {
     $calendario->qtde_volumes_2o_ano = $data->qtde_volumes_2o_ano;
     $calendario->qtde_volumes_3o_ano = $data->qtde_volumes_3o_ano;
     $calendario->revisao_volume_3o_ano = $data->revisao_volume_3o_ano;
-    $calendario->instituicao =  $data->instituicao;
+    $calendario->usuario =  $data->usuario;
 
-    if ($calendario->instituicao->id == null) {
-        $data_incomplete = empty($data->instituicao->nome) && empty($data->instituicao->logo) && empty($data->instituicao->uf);
+    if (!isset($calendario->usuario->id) || is_null($calendario->usuario->id) || empty($calendario->usuario->id)) {
+        // set response code - 400 bad request
+        http_response_code(400);
+            
+        // tell the user
+        echo json_encode(array("message" => "Unable to create tipo de calendario. Data is incomplete."));
+        
+        die();
+        /*
+        $data_incomplete = empty($data->usuario->nome) && empty($data->usuario->logo) && empty($data->usuario->uf);
 
         if ($data_incomplete) {
             // set response code - 400 bad request
             http_response_code(400);
             
             // tell the user
-            echo json_encode(array("message" => "Unable to create tipo de usuario. Data is incomplete."));
+            echo json_encode(array("message" => "Unable to create tipo de calendario. Data is incomplete."));
 
             die();
         } else {
@@ -65,6 +73,7 @@ if($data_incomplete) {
 
             die();
         }
+        */
     }
     
     // create the calendario
