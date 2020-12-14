@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 13-Dez-2020 às 00:26
+-- Tempo de geração: 14-Dez-2020 às 03:35
 -- Versão do servidor: 5.7.31
 -- versão do PHP: 7.4.9
 
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `evento` (
   `evento_tipo_id` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `evento_tipo_id` (`evento_tipo_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `evento`
@@ -146,7 +146,7 @@ DROP TABLE IF EXISTS `instituicao`;
 CREATE TABLE IF NOT EXISTS `instituicao` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `nome` varchar(80) NOT NULL,
-  `logo` varchar(80) NOT NULL,
+  `logo` text NOT NULL,
   `uf` char(2) NOT NULL,
   `dt_criacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `dt_alteracao` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -189,8 +189,8 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `usuario_tipo_id` tinyint(4) NOT NULL,
   `instituicao_id` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `login` (`login`),
-  UNIQUE KEY `login_ftd` (`login_ftd`),
+  UNIQUE KEY `login` (`login`,`usuario_tipo_id`) USING BTREE,
+  UNIQUE KEY `login_ftd` (`login_ftd`,`usuario_tipo_id`) USING BTREE,
   KEY `usuario_tipo_id` (`usuario_tipo_id`),
   KEY `usuario_instituicao_id` (`instituicao_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;

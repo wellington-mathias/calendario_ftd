@@ -73,7 +73,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
         
         $obj = new Usuario();
 
-        $usuario = $obj->login($ambiente,  $login, $password);
+        $usuario = $obj->login($ambiente, $login);
         
         if ($usuario == null) {
             // set response code - 400 bad request
