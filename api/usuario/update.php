@@ -15,19 +15,17 @@ if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "POST") {
 include_once '../config/database.php';
 include_once '../objects/usuario.php';
 include_once '../objects/tipo_usuario.php';
-
-// get database connection
-$database = new Database();
-$db = $database->getConnection();
+include_once '../objects/instituicao.php';
 
 // prepare usuario object
-$usuario = new Usuario($db);
-$usuario->tipo_usuario = new TipoUsuario($db);
+$usuario = new Usuario();
+$usuario->tipo_usuario = new TipoUsuario();
+$usuario->instituicao = new Instituicao();
 
 // get data to be updated
 $data = json_decode(file_get_contents("php://input"));
 
-$data_incomplete = empty($data->id) && empty($data->tipo_usuario->id) && empty($data->nome);
+$data_incomplete = empty($data->id) && empty($data->nome);
 
 if($data_incomplete) {
     // set response code - 400 bad request
@@ -40,9 +38,10 @@ if($data_incomplete) {
     $usuario->id = $data->id;
     
     // set property values
-    $usuario->tipo_usuario->id = $data->tipo_usuario->id;
     $usuario->nome = $data->nome;
     $usuario->dt_alteracao = date('Y-m-d H:i:s');
+    $usuario->tipo_usuario->id = $data->tipo_usuario->id;
+    $usuario->instituicao->id = empty($data->instituicao) || empty($data->instituicao->id)  ? null : $data->instituicao->id;
     
     // update the usuario
     if (!$usuario->update()) {
