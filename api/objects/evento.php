@@ -250,7 +250,7 @@ class Evento extends CrudObject {
     // search eventos
     public function search($evento_tipo_id, $uf, $calendario_id, $dia_letivo) {
         // select all query
-        $query = "SELECT
+        $query = "SELECT DISTINCT
                     e.id,
                     e.dt_inicio,
                     e.dt_fim,
@@ -267,10 +267,10 @@ class Evento extends CrudObject {
                 LEFT OUTER JOIN calendario_evento ce ON (ce.evento_id = e.id)";
 
         $where = "";
-        $where .= $this->addWhereClause($where, $evento_tipo_id, "te.id", "evento_tipo_id");
-        $where .= $this->addWhereClause($where, $uf, "e.uf", "uf");
-        $where .= $this->addWhereClause($where, $calendario_id, "ce.calendario_id", "calendario_id");
-        $where .= $this->addWhereClause($where, $dia_letivo, "e.dia_letivo", "dia_letivo");
+        $where .= $this->addWhereClause($where, $evento_tipo_id, "te.id", "evento_tipo_id", false);
+        $where .= $this->addWhereClause($where, $uf, "e.uf", "uf", true);
+        $where .= $this->addWhereClause($where, $calendario_id, "ce.calendario_id", "calendario_id", false);
+        $where .= $this->addWhereClause($where, $dia_letivo, "e.dia_letivo", "dia_letivo", false);
 
         $query = $query . $where . " ORDER BY e.dt_criacao DESC, e.id DESC";
         
@@ -278,7 +278,7 @@ class Evento extends CrudObject {
         $stmt = $this->conn->prepare($query);
 
         if (!is_null($evento_tipo_id)) $stmt->bindParam(":evento_tipo_id", $evento_tipo_id);
-        if (!is_null($uf)) $stmt->bindParam(":uf", $uf);
+        if (!is_null($uf) && !empty($evento_tipo_id) && (strcmp($evento_tipo_id, "NULL") == 0)) $stmt->bindParam(":uf", $uf);
         if (!is_null($calendario_id)) $stmt->bindParam(":calendario_id", $calendario_id);
         if (!is_null($dia_letivo)) $stmt->bindParam(":dia_letivo", $dia_letivo);
 
@@ -320,8 +320,24 @@ class Evento extends CrudObject {
         return $objects_arr;
     }
 
-    private function addWhereClause($where, $data, $table_field, $binder_str) {
-        return is_null($data) ? "" : (empty($where) ? " WHERE " : " AND ") . $table_field ." = :" . $binder_str;
+    private function addWhereClause($where, $data, $table_field, $binder_str, $nullable) {
+        if (is_null($data)) {
+            return "";
+        } else {
+            $returnStr = (empty($where) ? " WHERE " : " AND ");
+
+            if ($nullable) {
+                if (empty($data) || strcmp($data, "NULL") == 0) {
+                    $returnStr .= $table_field ." IS NULL";
+                } else {
+                    $returnStr .= $table_field ." = :" . $binder_str;
+                }
+            } else {
+                $returnStr .= $table_field ." = :" . $binder_str;
+            }
+            
+            return $returnStr;
+        }
     }
 
     // update method
