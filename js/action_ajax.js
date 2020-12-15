@@ -1,4 +1,4 @@
-function dispatch(method, url, data, callback) {
+function dispatch(method, url, data, callback,error) {
     $.ajax({
         method: method,
         type: method,
@@ -14,7 +14,12 @@ function dispatch(method, url, data, callback) {
         if (callback) callback(data);
         return data;
     }).fail(function (jqXHR, textStatus, msg) {
-        console.log(textStatus, msg);
+        //console.log(textStatus, msg);
+        if (error) {
+            error(msg);
+        } else {
+            callback(msg);
+        }
         return [jqXHR, textStatus, msg];
     });
 }

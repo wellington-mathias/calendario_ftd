@@ -25,82 +25,102 @@
 	<div id="stage">
 		<div id="telaLogin" class="page">
 			<div class="container">
-				<p class="bemvindo">
+				<div class="header">
+					<p>Calendario <span>2021</span></p>
+				</div>
+				<p class="bemvindo tarjaLeft">
 					Seja bem-vindo, Faça seu login.
 				</p>
-				
-				<form class="formLoginProf" action="" method="" >
-					<ul class="camposForm" >
+
+				<form class="formLoginProf" action="" method="">
+					<ul class="camposForm fioTop ">
+						<li class="error"></li>
 						<li>
 							<label for="login_professor">Login</label>
-							<input type="text" name="login_professor" id="login_professor" class="obgt campoLogin" value="" />
+							<input type="text" name="usuario" id="login_professor" class="obgt campoLogin"
+								value="login_prof_ftd" />
 						</li>
 						<li>
 							<label for="senha_professor">Senha</label>
-							<input type="password" name="senha_professor" id="senha_professor" class="obgt campoLogin" value="" />
-						</li>
-						<li>
-							<button class="iniciar">Entrar</button>
+							<input type="password" name="senha" id="senha_professor" class="obgt campoLogin"
+								value="senha_prof_ftd" />
 						</li>
 					</ul>
+					<button class="iniciar btBase"><span>Entrar</span></button>
 				</form>
 			</div>
 		</div>
+
 		<div id="abertura" class="page">
 			<div class="container">
-				<p class="bemvindo">
-					Seja bem-vindo, <strong>Fulano de Tal</strong>!
+				<div class="header">
+					<p>Calendario <span>2021</span></p>
+				</div>
+				<p class="bemvindo tarjaLeft">
+					Seja bem-vindo, <strong class="nameUsuario">Fulano de Tal</strong>!
 				</p>
-				<p>Nesta ferramenta você poderá gerar um calendário anual com os eventos do FTD Sistema de Ensino, os
-					eventos de sua instituição de ensino e nossa sugestão de uso da coleção FTD Sistema de Ensino para o
-					Ensino Médio.</p>
-				<p>Responda às perguntas à seguir para que possamos gerar o melhor calendário sugerido para o ano letivo
-					de sua instituição de ensino.</p>
-				<div class="iniciar">Iniciar</div>
+				<div class="containerTexto fioTop">
+					<p>A partir de agora, estaremos ainda mais juntos ao longo do ano letivo!</p>
+					<p>Nesta ferramenta você irá gerar um calendário anual com os eventos do FTD Sistema de Ensino, os
+						eventos de sua instituição e uma sugestão de uso da coleção do Ensino Médio.</p>
+					<p>Siga os passos a seguir, informando os dados solicitados, para que possamos gerar o melhor
+						calendário sugerido para sua instituição de ensino.</p>
+					<div class="contCalendarios"></div>
+				</div>
+				<div class="iniciar btBase"><span>Iniciar</span></div>
 			</div>
 		</div>
 
 		<div id="dadosGestor" class="page">
 			<div class="container">
-				<p class="bemvindo">
+				<div class="header">
+					<p>Calendario <span>2021</span></p>
+				</div>
+				<p class="bemvindo tarjaLeft">
 					Preencha as informações a seguir:
 				</p>
 
-				<form class="formInstituicao">
+				<form class="formInstituicao fioTop">
 					<ul>
 						<li>
-							<label>Nome da instituição:</label>
-							<input type="text" class="txt nomeInstituicao" name="nomeInstituicao" value=""
+							<label>Nome da instituição:</label><br>
+							<input type="text" class="txt nomeInstituicao" name="nomeInstituicao" value="Nome Escola"
 								placeholder="Nome da escola">
 						</li>
 						<li>
-							<label>Email:</label>
+							<label>Email:</label><br>
 							<input type="text" class="txt emailProfessor" name="emailProfessor" value=""
 								placeholder="Email">
 						</li>
 						<li>
-							<label>Logo:</label>
+							<label>Logo:</label><br>
 							<input type="file" id="img" name="logo" accept="image/*" oninput="generateImage(this)">
 						</li>
 						<li>
-							<label>Início do ano letivo:</label>
-							<input type="text" class="data inputDate" name="inicioAno" value="11/01/2021"
-								placeholder="00/00/0000" maxlength="10">
+							<label>Ano letivo:</label>
+							<div class="containerData">
+								<div class="div">
+									<span>Início:</span><br><input type="text" class="data inputDate" name="inicioAno"
+										value="11/01/2021" placeholder="00/00/0000" maxlength="10">
+								</div>
+								<div>
+									<span>Final:</span><br><input type="text" class="data inputDate" name="fimAno"
+										value="17/12/2021" placeholder="00/00/0000" maxlength="10">
+								</div>
+							</div>
 						</li>
 						<li>
-							<label>Início do recesso escolar:</label>
-							<input type="text" class="data inputDate" name="inicioRecesso" value="25/6/2021"
-								placeholder="00/00/0000" maxlength="10">
-						</li>
-						<li>
-							<label>Fim do recesso escolar:</label>
-							<input type="text" class="data inputDate" name="fimRecesso" value="12/07/2021"
-								placeholder="00/00/0000" maxlength="10">
-						</li>
-						<li>
-							<label>Fim do ano letivo:</label>
-							<input type="text" class="data inputDate" name="fimAno" value="17/12/2021"
-								placeholder="00/00/0000" maxlength="10">
+							<label>Fecesso escolar:</label>
+							<div class="containerData">
+								<div>
+									<span>Início:</span><br><input type="text" class="data inputDate"
+										name="inicioRecesso" value="25/6/2021" placeholder="00/00/0000" maxlength="10">
+								</div>
+								<div>
+									<span>Final:</span><br><input type="text" class="data inputDate" name="fimRecesso"
+										value="12/07/2021" placeholder="00/00/0000" maxlength="10">
+								</div>
+							</div>
 						</li>
 						<li>
 							<label>UF:</label>
@@ -136,18 +156,124 @@
 						</li>
 						<p>Não se preocupe! Sempre que precisar você pode voltar a esta ferramenta e gerar um novo
 							calendário com novas informações.</p>
-						<div class="iniciar">Continuar</div>
-
 					</ul>
 				</form>
+				<div class="iniciar btBase"><span>Continuar</span></div>
 			</div>
 		</div>
+
+		<div id="configCalendario" class="page">
+			<div class="container">
+				<div class="header">
+					<p>Calendario <span>2021</span></p>
+				</div>
+				<p class="bemvindo tarjaLeft">
+					Escolha uma das opções abaixo para gerar o calendário:
+				</p>
+				<div class="containerTexto fioTop">
+					<div class="tiposVol">
+						<div class="selectVol" data-tipo="1">
+							<div class="titulo"><span class="num">1.</span>Regular: utilizo a coleção conforme sugerida
+								pelo FTD Sistema de Ensino.</div>
+							<div class="cont">
+								<p>
+									1º ano → <input type="text" name="v1" value="1" maxlength="2" readonly /> a
+									<input type="text" name="v2" value="12" maxlength="2" />
+								</p>
+								<p>
+									2º ano → <input type="text" name="v3" value="13" maxlength="2" /> a
+									<input type="text" name="v4" value="24" maxlength="2" />
+								</p>
+								<p>
+									3º ano → <input type="text" name="v5" value="25" maxlength="2" /> a
+									<input type="text" name="v6" value="36" readonly maxlength="2" />
+								</p>
+							</div>
+						</div>
+						<div class="selectVol">
+							<div class="titulo"><span class="num">2.</span>Regular: utilizo tota a coleção do FTD
+								Sistema de ensino com</div>
+							<div class="cont">
+								<div class="selectVol s2 " data-tipo="2">
+									<div class="titulo"><span class="num">a)</span>Revisão Anual na 3ª série</div>
+									<div class="cont">
+										<p>
+											1º ano → <input type="text" name="v1" value="1" readonly maxlength="2" /> a
+											<input type="text" name="v2" value="18" maxlength="2" />
+										</p>
+										<p>
+											2º ano → <input type="text" name="v3" value="19" maxlength="2" /> a
+											<input type="text" name="v4" value="36" readonly maxlength="2" />
+										</p>
+										<p>
+											3º ano → Revisão Anual
+										</p>
+									</div>
+								</div>
+								<div class="selectVol s2" data-tipo="3">
+									<div class="titulo"><span class="num">b)</span>Revisão Semestral no 3º ano.</div>
+									<div class="cont">
+										<p>
+											1º ano → <input type="text" name="v1" value="1" readonly maxlength="2" /> a
+											<input type="text" name="v2" value="12" maxlength="2" />
+										</p>
+										<p>
+											2º ano → <input type="text" name="v3" value="13" maxlength="2" /> a
+											<input type="text" name="v4" value="24" maxlength="2" />
+										</p>
+										<p>
+											3º ano → <input type="text" name="v5" value="25" maxlength="2" /> a
+											<input type="text" name="v6" value="36" readonly maxlength="2" /> +
+											Revisão Semestral*
+										</p>
+										<p class="comentAsterisco">
+											* A divisão de volumes se daria no 1º semestre, enquanto no 2º ficaria o
+											todo o RS.
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="selectVol">
+							<div class="titulo"><span class="num">3.</span>Não desejo sugestão de uso da coleção.
+								calendário apenas com os eventos internos e do FTD Sistema de Ensino.</div>
+						</div>
+
+					</div>
+					<!--ol>
+						<li data-capitulos="12">
+							Adoção de 12 capítulos por ano (anos regulares):
+							<p>1º ano → C1 a C12</p>
+							<p>2º ano → C13 a C24</p>
+							<p>3º ano → C25 a C36</p>
+						</li>
+						<li data-capitulos="18">
+							Adoção de 18 capítulos por ano (3 séries em 2 anos):
+							<p>1º ano → C1 a C18 </p>
+							<p>2º ano → C19 a C36</p>
+						</li>
+					</ol>
+					<strong>Personalizada (adoção parcial do material)</strong>
+					<ol start=3>
+						<li data-capitulos="0">
+							Adoção de capítulos avulsos
+							<p>sem sugestão de para distribuição dos capítulo</p>
+						</li>
+					</ol-->
+				</div>
+				<div class="iniciar btBase"><span>Continuar</span></div>
+			</div>
+		</div>
+
+
 
 		<div id="calendario" class="page">
 			<div class="copyMes">
 				<div class="contMes">
 					<div class="tableheader dias ">
-						<div></div>
+						<div class="nomeMes"><span></span></div>
+						<div class="nomeAno"><span></span></div>
 					</div>
 					<div class="dias semana">
 						<div><strong>Domingo</strong><strong>D</strong></div>
@@ -208,17 +334,24 @@
 						<div></div>
 					</div>
 				</div>
-				<div class="infoMes"></div>
+				<div class="infos">
+					<div class="infoMes"></div>
+					<div class="infoMesVol"></div>
+				</div>
 			</div>
 
 			<div class="ano"></div>
 			<div class="setaEsq"></div>
 			<div class="setaDir"></div>
 			<div class="btsTopo">
-				<div id="logoEscola" class="off">LOGO</div>
-				<div class="tituloEscola"></div>
-				<div class="btGerarCalendario">Gerar Calendario</div>
-				<div class="btEditar">Editar informações</div>
+				<div class="containerLeft">
+					<div id="logoEscola" class="off">LOGO</div>
+					<div class="tituloEscola"></div>
+				</div>
+				<div class="containerRight">
+					<div class="btEditar btBase"><span>Editar informações</span></div>
+					<div class="btGerarCalendario btBase"><span>Gerar Calendario</span></div>
+				</div>
 			</div>
 
 		</div>
@@ -264,48 +397,23 @@
 			</div>
 		</div>
 
-		<div id="configCalendario" class="page">
-			<div class="container">
-				<div class="bemvindo">Escolha uma das opções abaixo para gerar o calendário:</div>
-				<strong>Igualitária (adoção total do material)</strong>
-				<ol>
-					<li data-capitulos="12">
-						Adoção de 12 capítulos por ano (anos regulares):
-						<p>1º ano → C1 a C12</p>
-						<p>2º ano → C13 a C24</p>
-						<p>3º ano → C25 a C36</p>
-					</li>
-					<li data-capitulos="18">
-						Adoção de 18 capítulos por ano (3 séries em 2 anos):
-						<p>1º ano → C1 a C18 </p>
-						<p>2º ano → C19 a C36</p>
-					</li>
-				</ol>
-				<strong>Personalizada (adoção parcial do material)</strong>
-				<ol start=3>
-					<li data-capitulos="0">
-						Adoção de capítulos avulsos
-						<p>sem sugestão de para distribuição dos capítulo</p>
-					</li>
-				</ol>
-
-				<div class="iniciar">Continuar</div>
-			</div>
-		</div>
-
-		
 		<div id="configPaginas" class="page">
 			<div class="container">
-				<label for="">Quantidade de meses por página:</label>
-				<select name="meses" id="mesesPage">
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="4">4</option>
-					<option value="6">6</option>
-					<option value="12">12</option>
-				</select>
-				<div class="iniciar gerar">gerar</div>
-				<div class="btX">X</div>
+				<div class="header">
+					<p>Calendario <span>2021</span></p>
+				</div>
+				<p class="bemvindo tarjaLeft">Quantidade de meses por página:</p>
+				<div class="containerTexto fioTop">
+					<select name="meses" id="mesesPage">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="4">4</option>
+						<option value="6">6</option>
+						<option value="12">12</option>
+					</select>
+				</div>
+				<div class="iniciar gerar btBase"><span>gerar</span></div>
+				<div class="btX btBase"><span>Voltar</span></div>
 			</div>
 		</div>
 

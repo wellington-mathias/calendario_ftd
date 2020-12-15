@@ -894,7 +894,6 @@
           if (pageFormats.hasOwnProperty(format)) {
             width = pageFormats[format][0] / k;
             height = pageFormats[format][1] / k;
-            console.log(width,height);
           }
         }
         if (Array.isArray(width)) {
@@ -922,7 +921,6 @@
           width: Number(width) || pageWidth,
           height: Number(height) || pageHeight
         };
-        console.log(width,height);
         pagesContext[page] = {};
         _setPage(page);
       },

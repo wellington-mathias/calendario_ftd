@@ -7,7 +7,7 @@
     <? include('includes/head.php'); ?>
 </head>
 
-<body> 
+<body>
 
     <div id="content">
 
@@ -22,7 +22,6 @@
 
                 <form class="formAdicionar" method="" action="">
                     <input type="hidden" name="id" value="" />
-                    <input type="hidden" name="tipo_evento" value="4" />
                     <ul class="camposAdicionar">
                         <li>
                             <label for="titulo">Titulo *</label>
@@ -34,7 +33,7 @@
                         </li>
                         <li>
                             <label for="data">Data fim *</label>
-                            <input type="text" value="" name="dt_fim" placeholder="dd/mm/aaaa" class="inputDate obgt"maxlength="10"  />
+                            <input type="text" value="" name="dt_fim" placeholder="dd/mm/aaaa" class="inputDate obgt" maxlength="10" />
                         </li>
                         <li>
                             <label for="descricao">Descrição</label>
@@ -42,14 +41,21 @@
                         </li>
                         <li>
                             <label for="uf">UF</label>
-                            <select name="uf" class="selectUf" ></select>
+                            <select name="uf" class="selectUf"></select>
+                        </li>
+                        <li>
+                            <label for="">Tipo Evento</label>
+                            <div class="contRadio">
+                                <select name="tipo_evento">
+                                </select>
+                            </div>
                         </li>
                         <li>
                             <label for="">Dia letivo</label>
                             <div class="contRadio">
                                 <select name="dia_letivo" class="selectDia">
-                                    <option value="1" >Sim</option>
-                                    <option value="0" >Não</option>
+                                    <option value="1">Sim</option>
+                                    <option value="0">Não</option>
                                 </select>
                             </div>
                         </li>
@@ -72,6 +78,7 @@
                         <div>data</div>
                         <div class="titulo">Titulo</div>
                         <div>UF</div>
+                        <div>Tipo</div>
                         <div class="bts"></div>
                     </li>
                 </ul>
@@ -82,24 +89,34 @@
     </div>
 </body>
 <script>
-    function complete(data) {
-        dataListar = data.eventos;
+    function preComplete(data) {
+        if(data.eventos) dataListar = dataListar.concat(data.eventos);
+        load++;
+        
+        if (load == 2) {
+            complete()
+        }
+    }
+
+    function complete() {
+
         $('.lista li:gt(0)').remove();
         for (var i in dataListar) {
-            if (dataListar[i].tipo_evento.id == 4 ) {
-                var dt = dataListar[i].dt_inicio.split('-');
-                var obj = $('<li>\
+            //if (dataListar[i].tipo_evento.id == 4 || dataListar[i].tipo_evento.id == 5) {
+            var dt = dataListar[i].dt_inicio.split('-');
+            var obj = $('<li>\
                         <div>' + (dt[2] + '/' + dt[1] + '/' + dt[0]) + '</div>\
                         <div class="titulo">' + dataListar[i].titulo + '</div>\
                         <div>' + (dataListar[i].uf ? dataListar[i].uf : '') + '</div>\
+                        <div>' + (dataListar[i].tipo_evento.descricao ) + '</div>\
                         <div class="bts">\
                             <button class="btEditar" >Editar</button>\
                             <button class="btExcluir" >X</button>\
                         </div>\
                     </li>');
-                $('.lista').append(obj);
-                obj[0].evento = dataListar[i];
-            }
+            $('.lista').append(obj);
+            obj[0].obj = dataListar[i];
+            //}
         }
         if ($('.lista li').length == 1) {
             $('.lista').append('<li> <div>Nenhum evento cadastrado</div> </li>');
@@ -110,10 +127,22 @@
 
     var dataListar = [];
     var page = 'evento';
+    var load = 0;
+
     function listar() {
-        dispatch('GET', '/api/'+page+'/read.php', '', complete);
+        load = 0;
+        dataListar = [];
+        dispatch('GET', '/api/' + page + '/read.php?tipo_evento=4', '', preComplete, preComplete );
+        dispatch('GET', '/api/' + page + '/read.php?tipo_evento=5', '', preComplete, preComplete );
     }
     listar();
+    dispatch('GET', '/api/tipo_evento/read.php', '', function(data) {
+        for (var i in data) {
+            if (data[i].id == 4 || data[i].id == 5) {
+                $('select[name="tipo_evento"]').append('<option value="' + data[i].id + '" >' + data[i].descricao + '</option>');
+            }
+        }
+    });
 </script>
 
 </html>

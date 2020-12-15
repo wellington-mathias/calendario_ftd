@@ -82,11 +82,11 @@
 </body>
 <script>
     function complete(data) {
-        dataListar = data.eventos;
+        if(data.eventos) dataListar = data.eventos;
 
         $('.lista li:gt(0)').remove();
         for (var i in dataListar) {
-            if (dataListar[i].tipo_evento.id == 3 ) {
+            //if (dataListar[i].tipo_evento.id == 3 ) {
                 var dt = dataListar[i].dt_inicio.split('-');
                 var obj = $('<li>\
                     <div>' + (dt[2] + '/' + dt[1] + '/' + dt[0]) + '</div>\
@@ -98,8 +98,8 @@
                     </div>\
                 </li>');
                 $('.lista').append(obj);
-                obj[0].evento = dataListar[i];
-            }
+                obj[0].obj = dataListar[i];
+           // }
         }
         if ($('.lista li').length == 1) {
             $('.lista').append('<li> <div>Nenhum evento cadastrado</div> </li>');
@@ -111,7 +111,7 @@
     var dataListar = [];
     var page = 'evento';
     function listar() {
-        dispatch('GET', '/api/'+page+'/read.php', '', complete);
+        dispatch('GET', '/api/'+page+'/read.php?tipo_evento=3', '', complete);
     }
     listar();
 </script>

@@ -10,7 +10,7 @@ checkLogin();
 
 function logOut() {
     eraseCookie('idLogin');
-    checkLogin();
+    dispatch('POST', '/api/usuario/logout.php', '', checkLogin);
 }
 
 var UFs = ['AC - Acre ', 'AL - Alagoas ', 'AP - Amapá ', 'AM - Amazonas ', 'BA - Bahia ', 'CE - Ceará ', 'DF - Distrito Federal ', 'ES - Espírito Santo ', 'GO - Goiás ', 'MA - Maranhão ', 'MT - Mato Grosso ', 'MS - Mato Grosso do Sul ', 'MG - Minas Gerais ', 'PA - Pará ', 'PB - Paraíba ', 'PR - Paraná ', 'PE - Pernambuco ', 'PI - Piauí ', 'RJ - Rio de Janeiro ', 'RN - Rio Grande do Norte ', 'RS - Rio Grande do Sul ', 'RO - Rondônia ', 'RR - Roraima ', 'SC - Santa Catarina ', 'SP - São Paulo ', 'SE - Sergipe ', 'TO - Tocantins']
@@ -45,19 +45,14 @@ function creatEvents() {
     })
 
     $('.bts .btExcluir').off().on('click', function () {
-        var evt = $(this).parent().parent()[0].evento;
+        var evt = $(this).parent().parent()[0].obj;
         $(this).parent().parent().remove();
         dispatch('DELETE', '/api/' + page + '/delete.php', evt, pageListar);
     })
 
     $('.bts .btEditar').off().on('click', function () {
-        if($(this).parent().parent()[0].evento){
-            var evt = $(this).parent().parent()[0].evento;
-            pageAdcionar(convertFromDB(evt));
-        } else if($(this).parent().parent()[0].usuario){
-            var evt = $(this).parent().parent()[0].usuario;
-            pageAdcionar(evt);
-        }
+        var evt = $(this).parent().parent()[0].obj;
+        pageAdcionar(evt);
     })
 
     $('.menu .btSair').off().on('click', function () {
@@ -113,13 +108,19 @@ function submitForm(form) {
         }
         data = convertToSave(data);
     } else if ($(form).attr('action').match('usuario') != null) {
-        data.tipo_usuario = {
-            id: data.tipo_usuario,
-            descricao: ''
-        }
-    } else if ($(form).attr('action').match('calendario') != null) {
         
+        data.instituicao = {
+            id: null
+        };
+        data.tipo_usuario = {
+            id: $(form).find('select[name="tipo_usuario"]').val(),
+            descricao: null,
+        }
+        console.log(data)
+    } else if ($(form).attr('action').match('calendario') != null) {
+
     }
+    
     dispatch($(form).attr('method'), $(form).attr('action'), data, function (data) {
         listar();
         pageListar();
@@ -130,9 +131,7 @@ function submitForm(form) {
 }
 
 function submitFormLogin(form) {
-    if ($('.inputDate[name="dt_fim"]').val() == '') {
-        $('.inputDate[name="dt_fim"]').val($('.inputDate[name="dt_inicio"]').val())
-    }
+    
     $(form).find('.obgt').each(function () {
         if ($(this).val() == '') {
             $(this).addClass('erro');
@@ -147,10 +146,17 @@ function submitFormLogin(form) {
     var data = getFormData($(form));
 
     //console.log( $(form).attr('method') , $(form).attr('action') , convertToSave(data));
-    //dispatch("GET", $(form).attr('action'), convertToSave(data), function (data) {
-    setCookie('idLogin', '1', 1);
-    window.location.href = "index.php";
-    //});
+    
+    dispatch("POST", '/api/usuario/login.php', data, function (data) {
+        if(data.sucess){
+            setCookie('idLogin', '1', 1);
+            window.location.href = "index.php";
+        } else {
+
+        }
+    },function(data){
+        $('.formLogin .error').html('Dados Invalidos').slideDown(150);
+    });
 
 
     return false;
@@ -202,8 +208,8 @@ function pageAdcionar(obj) {
     if (obj) {
         for (var i in obj) {
             if (i != 'tipo_evento' && i != 'tipo_usuario') {
-                if(i.match(/dt_/) !== null ){
-                    if(obj[i] && obj[i].match('-') !== null){
+                if (i.match(/dt_/) !== null) {
+                    if (obj[i] && obj[i].match('-') !== null) {
                         $('.formAdicionar *[name="' + i + '"]').val(formatData1(obj[i]));
                     } else {
                         $('.formAdicionar *[name="' + i + '"]').val(obj[i]);
@@ -213,18 +219,19 @@ function pageAdcionar(obj) {
                 }
             }
         }
-        $('.formAdicionar .selectDia option').prop({selected: false});
+
+        $('.formAdicionar .selectDia option').prop({ selected: false });
         if (obj.dia_letivo) {
-            $('.formAdicionar .selectDia option:first').prop({selected: true});
+            $('.formAdicionar .selectDia option:first').prop({ selected: true });
         } else {
-            $('.formAdicionar .selectDia option:last').prop({selected: true});
+            $('.formAdicionar .selectDia option:last').prop({ selected: true });
         }
 
         $('.formAdicionar').attr('method', 'POST');
         $('.formAdicionar').attr('action', '/api/' + page + '/update.php');
-        
-        if(obj.tipo_evento) $('select[name="tipo_evento"] option[value="' + obj.tipo_evento.id + '"]').attr('selected', 'selected');
-        if(obj.tipo_usuario) $('select[name="tipo_usuario"] option[value="' + obj.tipo_usuario.id + '"]').attr('selected', 'selected');
+
+        if (obj.tipo_evento) $('select[name="tipo_evento"] option[value="' + obj.tipo_evento.id + '"]').attr('selected', 'selected');
+        if (obj.tipo_usuario) $('select[name="tipo_usuario"] option[value="' + obj.tipo_usuario.id + '"]').attr('selected', 'selected');
     } else {
         $('.formAdicionar input[name="dia_letivo"]').removeAttr('checked');
         $('.formAdicionar .diaL1').attr('checked', 'checked');

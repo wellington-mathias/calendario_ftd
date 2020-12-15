@@ -82,7 +82,7 @@
 </body>
 <script>
     function complete(data) {
-        dataListar = data.eventos;
+        if(data.eventos) dataListar = data.eventos;
 
         $('.lista li:gt(0)').remove();
         for (var i in dataListar) {
@@ -99,7 +99,7 @@
                     </div>\
                 </li>');
                 $('.lista').append(obj);
-                obj[0].evento = dataListar[i];
+                obj[0].obj = dataListar[i];
             }
         }
         if ($('.lista li').length == 1) {
@@ -112,7 +112,7 @@
     var page = 'evento';
 
     function listar() {
-        dispatch('GET', '/api/' + page + '/read.php', '', complete);
+        dispatch('GET', '/api/' + page + '/read.php', '', complete  );
     }
     listar();
 </script>
