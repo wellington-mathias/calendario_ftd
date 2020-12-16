@@ -31,11 +31,11 @@
                             <label for="nome_instituicao">Email Professor</label>
                             <input type="text" value="" name="email_professor" placeholder="Email" class="" />
                         </li>
-                        <li>
+                        <!--li>
                             <label for="logo">Logo</label>
                             <input type="file" value="" name="logo"  />
                             <div class="contLogo"></div>
-                        </li>
+                        </li-->
                         <li>
                             <label for="dt_inicio_ano_letivo">Inicio Ano Letivo *</label>
                             <input type="text" value="" name="dt_inicio_ano_letivo" placeholder="dd/mm/aaaa" class="inputDate obgt" maxlength="10" />
@@ -83,7 +83,6 @@
         
         $('.lista li:gt(0)').remove();
         for (var i in dataListar) {
-            console.log(dataListar[i])
             var obj = $('<li>\
                 <div class="titulo">' + dataListar[i].usuario.nome + '</div>\
                 <div class="bts">\

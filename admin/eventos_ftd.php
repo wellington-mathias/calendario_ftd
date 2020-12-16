@@ -22,6 +22,7 @@
 
                 <form class="formAdicionar" method="" action="">
                     <input type="hidden" name="id" value="" />
+                    <input type="hidden" name="tipo_evento" value="4" />
                     <ul class="camposAdicionar">
                         <li>
                             <label for="titulo">Titulo *</label>
@@ -43,13 +44,13 @@
                             <label for="uf">UF</label>
                             <select name="uf" class="selectUf"></select>
                         </li>
-                        <li>
+                        <!--li>
                             <label for="">Tipo Evento</label>
                             <div class="contRadio">
                                 <select name="tipo_evento">
                                 </select>
                             </div>
-                        </li>
+                        </li-->
                         <li>
                             <label for="">Dia letivo</label>
                             <div class="contRadio">
@@ -136,13 +137,13 @@
         dispatch('GET', '/api/' + page + '/read.php?tipo_evento=5', '', preComplete );
     }
     listar();
-    dispatch('GET', '/api/tipo_evento/read.php', '', function(data) {
+    /* dispatch('GET', '/api/tipo_evento/read.php', '', function(data) {
         for (var i in data) {
             if (data[i].id == 4 || data[i].id == 5) {
                 $('select[name="tipo_evento"]').append('<option value="' + data[i].id + '" >' + data[i].descricao + '</option>');
             }
         }
-    });
+    }); */
 </script>
 
 </html>

@@ -99,7 +99,7 @@
                 <div >' + dataListar[i].tipo_usuario.descricao + '</div>\
                 <div class="bts">\
                     <div></div>\
-                    <button class="btEditar" >Editar</button>\
+                    <button class="btEditar" >visualizar</button>\
                     <button class="btExcluir" >X</button>\
                 </div>\
             </li>');

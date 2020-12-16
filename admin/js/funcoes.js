@@ -240,11 +240,23 @@ function pageAdcionar(obj) {
         if (obj.tipo_usuario) $('select[name="tipo_usuario"] option[value="' + obj.tipo_usuario.id + '"]').attr('selected', 'selected');
 
         if (page == 'usuario') {
-            $('.formAdicionar input[name="id_instituicao"]').val(obj.instituicao.id),
-                $('.formAdicionar input[name="nome_instituicao"]').val(obj.instituicao.nome);
-            $('.selectUf option[value="' + obj.instituicao.uf + '"]').prop({ selected: true });
+            $('.formAdicionar input ').prop({ readonly: true });
+            $('.formAdicionar select').prop({ disabled: true });
+            if (obj.instituicao && obj.instituicao.id) {
+                $('.formAdicionar input[name="id_instituicao"]').val(obj.instituicao.id),
+                    $('.formAdicionar input[name="nome_instituicao"]').val(obj.instituicao.nome);
+                $('.selectUf option[value="' + obj.instituicao.uf + '"]').prop({ selected: true });
+            }
+        }
+        if (page == 'calendario') {
+            console.log(obj)
+            $('.formAdicionar input[name="nome_instituicao"]').val(obj.usuario.instituicao.nome);
+            $('.formAdicionar input[name="email_professor"]').val(obj.usuario.email);
         }
     } else {
+
+        $('.formAdicionar input ').prop({ readonly: false });
+        $('.formAdicionar select').prop({ disabled: false });
         $('.formAdicionar input[name="dia_letivo"]').removeAttr('checked');
         $('.formAdicionar .diaL1').attr('checked', 'checked');
         $('.formAdicionar').attr('method', 'PUT');
