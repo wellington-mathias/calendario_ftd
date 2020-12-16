@@ -23,6 +23,7 @@
                 <form class="formAdicionar" method="" action="">
                     <input type="hidden" name="id" value="" />
                     <input type="hidden" name="tipo_usuario" value="" />
+                    <input type="hidden" value="" name="id_instituicao" />
                     <ul class="camposAdicionar">
                         <li>
                             <label for="nome">Nome</label>
@@ -47,6 +48,14 @@
                         <li>
                             <label for="senha">Senha calendario</label>
                             <input type="text" value="" name="password_ftd" class=" "/>
+                        </li>
+                        <li>
+                            <label for="senha">Nome da instituição</label>
+                            <input type="text" value="" name="nome_instituicao" class=" "/>
+                        </li>
+                        <li>
+                            <label for="uf">UF</label>
+                            <select name="uf" class="selectUf"></select>
                         </li>
                         <li>
                             <label for="senha">Tipo Usuario</label>
@@ -90,6 +99,7 @@
                 <div >' + dataListar[i].tipo_usuario.descricao + '</div>\
                 <div class="bts">\
                     <div></div>\
+                    <button class="btEditar" >Editar</button>\
                     <button class="btExcluir" >X</button>\
                 </div>\
             </li>');

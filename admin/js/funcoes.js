@@ -108,19 +108,25 @@ function submitForm(form) {
         }
         data = convertToSave(data);
     } else if ($(form).attr('action').match('usuario') != null) {
-        
+
         data.instituicao = {
-            id: null
+            id: $('.formAdicionar input[name="id_instituicao"]').val(),
+            uf: $('.selectUf').val(),
+            nome: $('.formAdicionar input[name="nome_instituicao"]').val()
         };
         data.tipo_usuario = {
             id: $(form).find('select[name="tipo_usuario"]').val(),
             descricao: null,
         }
-        console.log(data)
+        if (data.instituicao.id) {
+            dispatch('POST', '/api/instituicao/update.php', data.instituicao, function (data) {
+            });
+        }
+
     } else if ($(form).attr('action').match('calendario') != null) {
 
     }
-    
+
     dispatch($(form).attr('method'), $(form).attr('action'), data, function (data) {
         listar();
         pageListar();
@@ -131,7 +137,7 @@ function submitForm(form) {
 }
 
 function submitFormLogin(form) {
-    
+
     $(form).find('.obgt').each(function () {
         if ($(this).val() == '') {
             $(this).addClass('erro');
@@ -146,15 +152,15 @@ function submitFormLogin(form) {
     var data = getFormData($(form));
 
     //console.log( $(form).attr('method') , $(form).attr('action') , convertToSave(data));
-    
+
     dispatch("POST", '/api/usuario/login.php', data, function (data) {
-        if(data.sucess){
+        if (data.sucess) {
             setCookie('idLogin', '1', 1);
             window.location.href = "index.php";
         } else {
 
         }
-    },function(data){
+    }, function (data) {
         $('.formLogin .error').html('Dados Invalidos').slideDown(150);
     });
 
@@ -232,6 +238,12 @@ function pageAdcionar(obj) {
 
         if (obj.tipo_evento) $('select[name="tipo_evento"] option[value="' + obj.tipo_evento.id + '"]').attr('selected', 'selected');
         if (obj.tipo_usuario) $('select[name="tipo_usuario"] option[value="' + obj.tipo_usuario.id + '"]').attr('selected', 'selected');
+
+        if (page == 'usuario') {
+            $('.formAdicionar input[name="id_instituicao"]').val(obj.instituicao.id),
+                $('.formAdicionar input[name="nome_instituicao"]').val(obj.instituicao.nome);
+            $('.selectUf option[value="' + obj.instituicao.uf + '"]').prop({ selected: true });
+        }
     } else {
         $('.formAdicionar input[name="dia_letivo"]').removeAttr('checked');
         $('.formAdicionar .diaL1').attr('checked', 'checked');
