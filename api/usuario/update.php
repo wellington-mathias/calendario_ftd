@@ -39,6 +39,7 @@ if($data_incomplete) {
     
     // set property values
     $usuario->nome = $data->nome;
+    $usuario->email = empty($data->email) ? null : $data->email;
     $usuario->dt_alteracao = date('Y-m-d H:i:s');
     $usuario->tipo_usuario->id = $data->tipo_usuario->id;
     $usuario->instituicao->id = empty($data->instituicao) || empty($data->instituicao->id)  ? null : $data->instituicao->id;

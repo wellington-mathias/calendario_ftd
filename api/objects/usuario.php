@@ -297,6 +297,7 @@ class Usuario extends CrudObject {
         $query = "UPDATE usuario
                     SET
                         nome = :nome,
+                        email = :email,
                         dt_alteracao = :dt_alteracao,
                         usuario_tipo_id = :tipo_usuario_id,
                         instituicao_id = :instituicao_id
@@ -307,12 +308,14 @@ class Usuario extends CrudObject {
     
         // sanitize
         $this->nome = htmlspecialchars(strip_tags($this->nome));
+        $this->email = (is_null ($this->email)) ? null : htmlspecialchars(strip_tags($this->email));
         $this->id = (int) htmlspecialchars(strip_tags($this->id));
         $this->tipo_usuario->id = (int) htmlspecialchars(strip_tags($this->tipo_usuario->id));
         $this->instituicao->id = (int) (is_null ($this->instituicao->id)) ? null : htmlspecialchars(strip_tags($this->instituicao->id));
 
         // bind new values
         $stmt->bindParam(":nome", $this->nome);
+        $stmt->bindParam(":email", $this->email);
         $stmt->bindParam(":dt_alteracao", $this->dt_alteracao);
         $stmt->bindParam(":id", $this->id);
         $stmt->bindParam(":tipo_usuario_id", $this->tipo_usuario->id);

@@ -13,7 +13,6 @@ if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "POST") {
 
 // includes
 include_once '../objects/calendario.php';
-include_once '../objects/instituicao.php';
 
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
@@ -22,7 +21,7 @@ $data = json_decode(file_get_contents("php://input"));
 $data_incomplete = empty($data->id) && empty($data->ano_referencia);
 $data_incomplete = $data_incomplete && empty($data->dt_inicio_ano_letivo) && empty($data->dt_fim_ano_letivo);
 $data_incomplete = $data_incomplete && empty($data->dt_inicio_recesso) && empty($data->dt_fim_recesso);
-$data_incomplete = $data_incomplete && empty($data->instituicao->id);
+$data_incomplete = $data_incomplete && empty($data->usuario->id);
 
 if($data_incomplete) {
     // set response code - 400 bad request
@@ -36,7 +35,7 @@ if($data_incomplete) {
 
      // set ID property to be edited
      $obj->id = $data->id;
-    
+
     // set property values
     $obj->ano_referencia = $data->ano_referencia;
     $obj->dt_inicio_ano_letivo = $data->dt_inicio_ano_letivo;
@@ -47,7 +46,7 @@ if($data_incomplete) {
     $obj->qtde_volumes_2o_ano = $data->qtde_volumes_2o_ano;
     $obj->qtde_volumes_3o_ano = $data->qtde_volumes_3o_ano;
     $obj->revisao_volume_3o_ano = $data->revisao_volume_3o_ano;
-    $obj->instituicao = $data->instituicao;
+    $obj->usuario = $data->usuario;
     
     // update the evento
     if (!$obj->update()) {
