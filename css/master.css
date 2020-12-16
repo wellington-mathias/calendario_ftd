@@ -137,6 +137,8 @@ html {overflow: scroll;}
 #configCalendario .selectVol .cont{display: none; margin-left: 20px; }
 #configCalendario .selectVol .comentAsterisco{font-size: 11px; font-style: italic;}
 #configCalendario .selectVol input{border: 2px solid #666; line-height: 30px; padding: 0 3px; border-radius: 4px; margin:0 10px ; width: 60px;}
+#configCalendario .selectVol.off>.titulo{ cursor: default; }
+#configCalendario .selectVol.off>.cont{display: block ;}
 
 #calendario { position: relative; display:block; background-color: #fff;}
 

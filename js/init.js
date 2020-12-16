@@ -113,6 +113,7 @@ function sendCalendario(method, url) {
 
 	instituicao.uf = uf;
 	instituicao.nome = $('.nomeInstituicao').val();
+	instituicao.email = $('.emailProfessor').val();
 	dataUsuario.instituicao = instituicao;
 
 	//console.log(dataUsuario)
@@ -126,12 +127,26 @@ function sendCalendario(method, url) {
 }
 
 function loadCalendarios() {
+	$('#abertura .iniciar span').html('Criar Calendario');
+	$('.contCalendarios .bts , .contCalendarios .tit').html('');
 	dispatch('GET', '/api/calendario/read.php?usuario=' + idProf, '', function (data) {
-		if (data.calendario) {
-			console.log(data.calendario);
+		if (data.calendarios) {
+			$('.contCalendarios .tit').html('Seus calendarios');
+			for (var i in data.calendarios) {
+				var obj = $('<div class="btCalendario" >' + formatData1(data.calendarios[i].dt_criacao.split(' ')[0]) + '</div>');
+				obj[0].obj = data.calendarios[i];
+				$('.contCalendarios .bts').append(obj);
+			}
+			if (data.calendarios.length > 0) {
+				//sendDataCalendario( data.calendarios[0] );
+				$('#abertura .iniciar span').html('Editar Calendario');
+			}
 		}
+		$('.contCalendarios .btCalendario').off().on('click', function () {
+			sendDataCalendario($(this)[0].obj);
+		})
 	}, function (data) {
-		console.log(data);
+		//console.log(data);
 	});
 }
 
@@ -143,11 +158,17 @@ function abertura() {
 
 	$('#abertura').fadeIn();
 	$('#abertura .iniciar').off().on('click', function () {
-		$('#abertura').fadeOut();
-		$('#dadosGestor').fadeIn();
+		if ($('.contCalendarios .btCalendario').length > 0) {
+			$('.contCalendarios .btCalendario:first').trigger('click');
+		} else {
+			page2();
+		}
 
 	})
-	//.trigger('click');
+}
+function page2() {
+	$('#abertura').fadeOut();
+	$('#dadosGestor').fadeIn();
 
 
 	$('#dadosGestor .iniciar').off().on('click', function () {
@@ -196,23 +217,31 @@ function abertura() {
 		$(this).val(val);
 	});
 
+	$('.selectVol').removeClass('on');
+	$('.selectVol').not('.off').find(' .cont').slideUp();
+	if (objCalendario.id) {
+		$('.selectVol.t' + objCalendario.revisao_volume_3o_ano).addClass('on');
+		$('.selectVol.t' + objCalendario.revisao_volume_3o_ano + ' .cont').slideDown(300);
+	} else {
+		$('.selectVol.t0').addClass('on');
+		$('.selectVol.t0 .cont').slideDown(300);
+	}
 	$('.selectVol .titulo').off().on('click', function () {
-		if ($(this).parent().hasClass('on')) {
-			$(this).parent().removeClass('on');
-		} else {
-			$('.selectVol').removeClass('on');
-			$(this).parent().addClass('on');
-		}
+		if (!$(this).parent().hasClass('off')) {
+			if ($(this).parent().hasClass('on')) {
+				$(this).parent().removeClass('on');
+			} else {
+				$('.selectVol').removeClass('on');
+				$(this).parent().addClass('on');
+			}
 
 
-		if ($(this).parent().hasClass('s2')) {
-			$(this).parent().parent().parent().addClass('on');
-		}
-		$('.selectVol').each(function () {
-			if (!$(this).hasClass('on')) $(this).find('.cont').slideUp(300);
-		})
-		if ($(this).parent().hasClass('on')) {
-			$(this).parent().find('.cont:first').slideDown(300);
+			$('.selectVol').not('.off').each(function () {
+				if (!$(this).hasClass('on')) $(this).find('.cont').slideUp(300);
+			})
+			if ($(this).parent().hasClass('on')) {
+				$(this).parent().find('.cont:first').slideDown(300);
+			}
 		}
 	})
 
@@ -925,6 +954,67 @@ function updateEventos() {
 		}).appendTo($(this));
 	})
 
+	$('.ano .infoMesVol').each(function () {
+		var _this = $(this);
+		var diaVol = -1;
+		var arGroup = [];
+		var txtEvt = '';
+		var dataEvt = '';
+		var appends = [];
+
+		function appendDiv() {
+			
+			if (arGroup.length > 0) {
+				txtEvt = '';
+				dataEvt = '';
+				for (var i in arGroup) {
+					dataEvt = arGroup[i].find('.txtEvento strong').html();
+					txtEvt += arGroup[i].find('.txtEvento span').html();
+					if (i != arGroup.length - 1) txtEvt += '<br>';
+					arGroup[i].addClass('remove');
+				}
+				//console.log(dataEvt.split('/')[0], arGroup, dataEvt, txtEvt);
+				obj = $('<div class="diaEvento" data-dia="' + dataEvt.split('/')[0] + '"><div class="cor evt6"></div>\
+					<div class="txtEvento">\
+					<strong>'+ dataEvt + '</strong><br>\
+					<span>'+ txtEvt + '</span></div></div>')
+				//_this.append(obj);
+				appends.push(obj);
+			}
+			arGroup = [];
+		}
+		$(this).find('.diaEvento').each(function () {
+
+			if ($(this).attr('data-dia') != diaVol) {
+				diaVol = parseInt($(this).attr('data-dia'));
+				appendDiv();
+			}
+			if (parseInt($(this).attr('data-dia')) == diaVol) {
+				arGroup.push($(this));
+			}
+			//console.log ($(this).index() , $(this).parent().find('.diaEvento').length - 1);
+			if ($(this).index() == $(this).parent().find('.diaEvento').length - 1) {
+				appendDiv();
+			}
+
+		})
+		for(var i in appends){
+			$(this).append(appends[i]);
+		}
+	})
+	$('.ano .infoMesVol .remove').remove();
+
+	$('.ano .infoMesVol').each(function () {
+		$(this).find('.diaEvento').sort(function (a, b) {
+			if (parseInt($(a).attr('data-dia')) < parseInt($(b).attr('data-dia'))) {
+				return -1;
+			} else {
+				return 1;
+			}
+		}).appendTo($(this));
+	})
+
+
 
 	$('.diaEvento').off().on('click', function () {
 		if (this.evento) {
@@ -996,9 +1086,6 @@ function gerarCalendario() {
 		gerarPdf();
 	});
 
-	//var imageData = canvas.toDataURL("image/png");
-	//$pdf.addImage(imageData, 'JPEG', 0, 0);
-	//$pdf.save("download.pdf");
 
 }
 
@@ -1020,7 +1107,7 @@ function cloneImage(j) {
 	setTimeout(function () {
 		html2canvas(document.querySelector('#pagePrint .cont')).then(canvas => {
 			$('#cont2').html(canvas);
-			var imageData = canvas.toDataURL("image/png");
+			var imageData = canvas.toDataURL("image/jpg");
 
 			$pdf.addImage(imageData, 'JPEG', 0, 0);
 

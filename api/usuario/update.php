@@ -56,7 +56,7 @@ if($data_incomplete) {
         http_response_code(200);
     
         // tell the user
-        echo json_encode(array("message" => "Evento was updated."));
+        echo json_encode(array("message" => "Usuario was updated."));
     }
 }
 ?>
