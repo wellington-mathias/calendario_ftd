@@ -132,8 +132,8 @@
     function listar() {
         load = 0;
         dataListar = [];
-        dispatch('GET', '/api/' + page + '/read.php?tipo_evento=4', '', preComplete, preComplete );
-        dispatch('GET', '/api/' + page + '/read.php?tipo_evento=5', '', preComplete, preComplete );
+        dispatch('GET', '/api/' + page + '/read.php?tipo_evento=4', '', preComplete );
+        dispatch('GET', '/api/' + page + '/read.php?tipo_evento=5', '', preComplete );
     }
     listar();
     dispatch('GET', '/api/tipo_evento/read.php', '', function(data) {

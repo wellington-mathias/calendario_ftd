@@ -151,7 +151,7 @@ class Instituicao extends CrudObject {
                         uf = :uf
                     WHERE id = :id";
     
-        echo $query;
+        //echo $query;
         // prepare query statement
         $stmt = $this->conn->prepare($query);
     

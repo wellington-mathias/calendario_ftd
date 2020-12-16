@@ -106,6 +106,7 @@
     var dataListar = [];
     var page = 'usuario';
     function listar() {
+        dataListar = [];
         dispatch('GET', '/api/'+page+'/read.php', '', complete);
     }
     listar();

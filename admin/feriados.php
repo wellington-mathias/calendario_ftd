@@ -111,6 +111,7 @@
     var dataListar = [];
     var page = 'evento';
     function listar() {
+        dataListar = [];
         dispatch('GET', '/api/'+page+'/read.php?tipo_evento=3', '', complete);
     }
     listar();

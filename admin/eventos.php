@@ -112,6 +112,7 @@
     var page = 'evento';
 
     function listar() {
+        dataListar = [];
         dispatch('GET', '/api/' + page + '/read.php', '', complete  );
     }
     listar();

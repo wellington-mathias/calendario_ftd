@@ -21,11 +21,11 @@
                     <li class="error"></li>
                     <li>
                         <label for="nome">Usuario:</label>
-                        <input type="text" class="obgt" name="usuario" value="admin_ftd" />
+                        <input type="text" class="obgt" name="usuario" value="" />
                     </li>
                     <li>
                         <label for="senha">Senha:</label>
-                        <input type="password" class="obgt" name="senha" value="senha_ftd" />
+                        <input type="password" class="obgt" name="senha" value="" />
                     </li>
                     <li>
                         <button>Enviar</button>

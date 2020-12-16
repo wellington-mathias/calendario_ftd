@@ -104,7 +104,8 @@
     var dataListar = [];
     var page = 'calendario';
     function listar() {
-        dispatch('GET', '/api/'+page+'/read.php', '', complete , complete );
+        dataListar = [];
+        dispatch('GET', '/api/'+page+'/read.php', '', complete  );
     }
     listar();
     

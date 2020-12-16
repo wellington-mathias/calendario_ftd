@@ -7,7 +7,7 @@
     <? include('includes/head.php'); ?>
 </head>
 
-<body>
+<body>w
 
 	<div id="content">
 

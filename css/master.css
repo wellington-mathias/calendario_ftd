@@ -72,7 +72,7 @@ html {overflow: scroll;}
 .page {display:flex; width:1024px; overflow:hidden; position:absolute; box-sizing: border-box; font-family: Montserrat; font-size: 20px; z-index: 3;  left: 0; right: 0; margin: 10px auto;  min-height: 100vh;}
 .page.hide {display: none; }
 
-.container {background-color: #fff; padding:20px; max-width: 980px; width: 80%; margin: 30px auto; position: relative; }
+.container {background-color: #fff; padding:20px; max-width: 980px; width: 100%; margin: 30px auto; position: relative; }
 
 .container .header { width: 60vh; height: 50px; background-color: #0f3a5d; color: #fff; position: absolute; right: 0; top: 20px; text-align: right; font-size: 24px;}
 .container .header:after {content: ''; position: absolute; left: -30px; top:0; width: 80px; height: 100%; transform: skewX(50deg); background-color: #0f3a5d;}
@@ -108,8 +108,12 @@ html {overflow: scroll;}
 
 #abertura {background-color: #ededed; align-items: center; justify-content: center;}
 #abertura .containerTexto { display: flex; flex-direction: column; margin: 210px 130px 0; background: #ffebcf; border-radius: 0; border: 0px solid #e95112; padding:80px 10%; position: relative; font-size: 18px;}
-#abertura .containerTexto .contCalendarios {display: flex; }
-#abertura .containerTexto .contCalendarios .btCalendario{ background-color: #0f3a5d; color: #fff; padding: 3px 5px; cursor: pointer; }
+
+#abertura .contCalendarios {display: none; }
+#abertura .contCalendarios .tit{margin: 10px 0 5px; color: #000; font-weight: bold; }
+#abertura .contCalendarios .bts{ display: flex; flex-wrap: wrap; }
+#abertura .contCalendarios .btCalendario{ background-color: #0f3a5d; color: #fff; padding: 3px 5px; cursor: pointer; margin: 0 3px 3px 0; }
+
 #abertura .iniciar{margin-right: 100px;margin-top: -30px;}
 
 #dadosGestor {background-color: #ededed; font-size: 16px; align-items: center; justify-content: center;}
