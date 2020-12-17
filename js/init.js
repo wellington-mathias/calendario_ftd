@@ -882,9 +882,7 @@ function addEvento(dia, mes, diaF, mesF) {
 			uf: uf
 		}
 
-		if (dia != diaF) {
-			$('.ano .numDias>div.drag').addClass('evt' + 2).removeClass('drag');
-		}
+		$('.ano .numDias>div.drag').removeClass('drag');
 		evtsProf.push(obj);
 		dispatch('PUT', '/api/evento/create.php', convertToSave(obj), function (data) {
 			//console.log(obj)
@@ -935,10 +933,28 @@ function edtEvento(dia) {
 			$('.novoEvento').fadeOut();
 		});
 	})
-	$('.dia'+parseInt(obj.dt_inicio.split('/')[0])+'.diaM'+parseInt(obj.dt_inicio.split('/')[1]))[0].dia_letivo = true;
-
 	
 	$('.novoEvento .btExcluir').show().off().on('click', function () {
+			
+		if(obj.dt_inicio != obj.dt_fim){
+			var dI = obj.dt_inicio.split('/');
+			var dF = obj.dt_fim.split('/');
+			
+			var dt1 = new Date(parseInt(dI[2]), parseInt(dI[1] - 1), parseInt(dI[0]));
+			var dt2 = new Date(parseInt(dF[2]), parseInt(dF[1] - 1), parseInt(dF[0]));
+			const diffTime = Math.abs(dt1 - dt2);
+			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+			for(var i = 0; i<= diffDays; i++){
+				var dt = new Date(dt1.getFullYear(), dt1.getMonth(), dt1.getDate() + i);
+				$('.ano .numDias .dia' + parseInt(dt.getDate()) + '.diaM' + parseInt(dt.getMonth() + 1))[0].dia_letivo = true;;
+				
+			}
+			
+		} else {
+			$('.dia'+parseInt(obj.dt_inicio.split('/')[0])+'.diaM'+parseInt(obj.dt_inicio.split('/')[1]))[0].dia_letivo = true;
+		}
+
+		
 		$(this).off();
 		var index = dia.contEvt.indexOf(obj);
 		if (index > -1) {

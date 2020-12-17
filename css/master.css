@@ -74,7 +74,9 @@ html {overflow: scroll;}
 
 .container {background-color: #fff; padding:20px; max-width: 980px; width: 100%; margin: 30px auto; position: relative; }
 
-.container .header { width: 60vh; height: 50px; background-color: #0f3a5d; color: #fff; position: absolute; right: 0; top: 20px; text-align: right; font-size: 24px;}
+.logoFTD{ width: 150px; height: 150px; position: absolute; left: 100px; top: 00px; background-image: url(../assets/imagens/logo.png); background-size: 100%;}
+.btsTopo .logoFTD { left: auto; right: 20px; width: 100px; height: 100px; display: none; }
+.container .header { width: 62vh; height: 50px; background-color: #0f3a5d; color: #fff; position: absolute; right: 0; top: 40px; text-align: right; font-size: 24px;}
 .container .header:after {content: ''; position: absolute; left: -30px; top:0; width: 80px; height: 100%; transform: skewX(50deg); background-color: #0f3a5d;}
 .container .header:before { content: ''; position: absolute; left: -50px; top: -20%; width: 7px; height: 140%; transform: skewX(50deg); background-color: #e95112;}
 .container .header p{margin:0 5px}
@@ -90,7 +92,7 @@ html {overflow: scroll;}
 .tarjaLeft:before { content: ''; position: absolute; right: -40px; top: 0; width: 3px; height: 100%; transform: skewX(50deg); background-color: #e95112; }
 .tarjaLeft:after {content: ''; position: absolute; right: -30px; top:0; width: 80px; height: 100%; transform: skewX(50deg); background-color: #0f3a5d;}
 
-.btBase { padding: 10px 40px; background-color: #0f3a5d; display: table; margin: 20px auto; text-align: left; font-size: 24px; font-weight: bold; border-right: 20px solid #0f3a5d; cursor: pointer; color: #fff; font-family: Montserrat; transform: skewX(50deg); }
+.btBase { padding: 10px 40px; background-color: #0f3a5d; display: table; margin: 20px auto; text-align: left; font-size: 24px; font-weight: bold; border-right: 20px solid #0f3a5d; cursor: pointer; color: #fff; font-family: Montserrat; transform: skewX(50deg); pointer-events: auto;}
 .btBase span { display: block; transform: skewX(-50deg); margin-left: -40px; font-variant: petite-caps; padding: 0 30px 0 0; }
 .btBase:before { content: ''; position: absolute; left: -40px; top: 15%; width: 100%; height: 70%; transform: skewX(0deg); background-color: rgb(233 81 18 / 95%); }
 .btBase:after { content: ''; position: absolute; right: 25px; top: 15%; width: 7px; height: 70%; transform: skewX(0deg); background-color: #e95112; }
@@ -108,13 +110,14 @@ html {overflow: scroll;}
 
 #abertura {background-color: #ededed; align-items: center; justify-content: center;}
 #abertura .containerTexto { display: flex; flex-direction: column; margin: 210px 130px 0; background: #ffebcf; border-radius: 0; border: 0px solid #e95112; padding:80px 10%; position: relative; font-size: 18px;}
+#abertura .iniciar{margin-right: 100px;margin-top: -30px;}
+
 
 #abertura .contCalendarios {display: none; }
 #abertura .contCalendarios .tit{margin: 10px 0 5px; color: #000; font-weight: bold; }
 #abertura .contCalendarios .bts{ display: flex; flex-wrap: wrap; }
 #abertura .contCalendarios .btCalendario{ background-color: #0f3a5d; color: #fff; padding: 3px 5px; cursor: pointer; margin: 0 3px 3px 0; }
 
-#abertura .iniciar{margin-right: 100px;margin-top: -30px;}
 
 #dadosGestor {background-color: #ededed; font-size: 16px; align-items: center; justify-content: center;}
 #dadosGestor .formInstituicao { display: flex; flex-direction: column; margin: 210px 130px 0; background: #ffebcf; border-radius: 0; border: 0px solid #e95112; padding:60px 10%; position: relative; }
@@ -129,7 +132,7 @@ html {overflow: scroll;}
 
 
 #configPaginas .containerTexto,
-#configCalendario .containerTexto { display: flex; flex-direction: column; margin: 210px 130px 0; background: #ffebcf; border-radius: 0; border: 0px solid #e95112; padding:60px 8%; position: relative; font-size: 18px;}
+#configCalendario .containerTexto { display: flex; flex-direction: column; margin: 210px 120px 0; background: #ffebcf; border-radius: 0; border: 0px solid #e95112; padding:60px 8%; position: relative; font-size: 18px;}
 #configCalendario { align-items: center; justify-content: center; background-color: #ededed;}
 #configCalendario .container .gerar {padding: 5px 20px; background-color: #ccc; display: block; margin: 60px 200px; text-align: center; font-size: 24px; font-weight: bold; border: 1px solid; cursor: pointer;}
 #configCalendario .iniciar{margin-right: 100px;margin-top: -30px;}
@@ -149,7 +152,7 @@ html {overflow: scroll;}
 #calendario>.copyMes {display: none;}
 .ano {margin:20px 20px 0; position: relative; }
 .ano>.contMes {position: absolute; top: 0; left: 0; right: 0;}
-.contMes {display: grid; color: #000;   font-size: 20px; font-family: Montserrat;  background-color: #fff; grid-gap: 3px; padding: 1px; margin-top: 20px;}
+.contMes {display: grid; color: #000;   font-size: 20px; font-family: Montserrat;  background-color: #fff; grid-gap: 3px; padding: 1px; margin-top: 0px;}
 .contMes .dias {display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr ; grid-gap: 3px; }
 .hide {display: none }
 
@@ -160,25 +163,23 @@ html {overflow: scroll;}
   font-weight: bold;
   height: 130px;
   color: #0f3a5d;
-  margin-top: 30px;
+  margin-bottom: 30px;
 }
 .contMes .tableheader.dias>div {display: flex; align-items: center; justify-content: center; height: 50px; line-height: 20px; background-color: #fff; padding: 0; cursor: pointer; position: relative; border:none}
-.contMes .tableheader .nomeMes span {
-  display: block;
-  position: absolute;
-}
 
-.contMes .tableheader .nomeMes:before {
+.contMes .tableheader .nomeMes span {display: block;position: absolute;}
+
+/* .contMes .tableheader .nomeMes .tarja {
   content: '';
-  background-color: #e95112;
-  width: 360px;
-  height: 25px;
-  transform: skewX(50deg); 
+  width: 452px;
+  height: 44px;
   left: 0;
-  bottom: 0;
-  position: absolute;;
-}
-.contMes .tableheader .nomeMes:after {
+  bottom: -10px;
+  position: absolute;
+  background-image: url(../assets/imagens/tarjaMes.png);
+  background-repeat: no-repeat;
+} */
+/* .contMes .tableheader .nomeMes:after {
   content: '';
   border-left: 3px solid #e95112;
   border-right: 3px solid #e95112;
@@ -188,16 +189,21 @@ html {overflow: scroll;}
   left: -8px;
   bottom: 0;
   position: absolute;;
-}
+} */
 .contMes .tableheader .nomeMes {
   position: relative;
   font-family: Harabara;
   font-size: 56px;
-  letter-spacing: 3px;  
+  /* letter-spacing: 3px;   */
   text-align: center;
   justify-self: center;
-  width: 360px;
+  width: 452px;
   align-self: end;
+  background-image: url(../assets/imagens/tarjaMes.png);
+  background-position: center 16px;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  height: 54px !important;
 }
 
 .contMes .tableheader .nomeAno {
@@ -208,8 +214,8 @@ html {overflow: scroll;}
   width: 250px;
   justify-self: center;
   align-self: start;
-  border-top: 1px solid #f60 !important;
-  margin-top: 5px;
+      background: none !important;
+
 }
 
 /* .contMes .tableheader>div { background-color: #d6d6d6 !important;} */
@@ -226,12 +232,16 @@ html {overflow: scroll;}
 .contMes .dias .foraMes.sabado,
 .contMes .dias .foraMes.domingo{color: #f99;}
 .contMes .dias .diaUtil{ }
-.contMes .dias .diasRecesso{background-color:#f5f4d3; }
-.evt1{background-color: #86eada !important}
+.contMes .dias .diasRecesso{background-color:#f7ecdb; }
+.evt1{background-color: #d1dda4  !important}
 .evt2{background-color: #fbb0e9 !important;}
-.evt3{background-color: #ffbf00 !important}
-.evt4{background-color: #62cdfd !important}
+.evt3{background-color: #a3d3e5 !important}
+.evt4{background-color: #ffbeb0 !important}
 .evt5{background-color: #bf62fd !important}
+
+.evt4::before{ width: 30px; height: 30px; position: absolute; left: 1px; bottom:1px; background-image: url(../assets/imagens/logo.png); background-size: 100%; content: '';}
+.diaEvento .evt4{background-color: transparent !important; border:none !important; position: relative;}
+.diaEvento .evt4:before {bottom: 0;left: 1px; width: 100%; height: 100%;}
 
 .infoMes .diaEvento .evt6{
   position: relative;
@@ -239,21 +249,19 @@ html {overflow: scroll;}
   left: 0;
   border: none !important;  
 }
+.vols .evt6{margin-top: 2px;}
+
 .evt6{
   width: 30px;
-  height: 30px !important;
-  background-image: url('../assets/imagens/livro.png');
+  height: 25px !important;
+  background-image: url(../assets/imagens/livro.svg);
   background-size: 100%;
   background-repeat: no-repeat;
-  background-position: 0;
-  text-align: right;
-  font-size: 12px;
-  line-height: 28px;
+  text-align: center;
+  font-size: 10px;
+  line-height: 19px;
   font-weight: bold;
-  letter-spacing: 5px;
-  margin-bottom: 5px;  
-  box-sizing: border-box;
-  padding-right: 1px;
+  color: #0f3a5d;
 }
 
 .drag{background-color: #f00 !important;}
@@ -264,9 +272,9 @@ html {overflow: scroll;}
 .infoMesVol {margin:5px 0px 0 ; height: 250px; position: relative; display: flex; flex-direction: column; width: 30%; }
 .infoMes {margin:5px 0px 0 ; height: 250px; position: relative; display: flex; flex-wrap: wrap; flex-direction: column; width: 70%; }
 .infoMesVol .diaEvento,
-.infoMes .diaEvento { padding: 10px; display: flex; box-sizing: border-box; cursor: pointer; align-items: center;}
-.infoMesVol .diaEvento .cor{width: 30px; height: 30px; box-sizing: border-box; }
-.infoMes .diaEvento .cor{width: 30px; height: 30px; box-sizing: border-box; border: 1px solid #000; }
+.infoMes .diaEvento { padding: 10px 10px 0 10px; display: flex; box-sizing: border-box; cursor: pointer; align-items: start;}
+.infoMesVol .diaEvento .cor{width: 30px; height: 30px; box-sizing: border-box; background-position: top;}
+.infoMes .diaEvento .cor{width: 30px; height: 30px; box-sizing: border-box; border: 1px solid #0f3a5d; border-radius: 5px;}
 .infoMesVol .diaEvento .txtEvento,
 .infoMes .diaEvento .txtEvento{ width: calc(100% - 40px); margin-left: 10px; font-family: 'Montserrat'; font-size: 14px; line-height: 20px;  }
 
@@ -298,17 +306,21 @@ html {overflow: scroll;}
   align-items: self-end;
   width: 100%;
   justify-content: space-between;
+  pointer-events: none;
 }
 
 .btsTopo .containerLeft{
   display: flex;
   flex-direction: column;
+  max-height: 150px;
+  overflow: hidden;
 }
 
 .btsTopo .containerRight{
   display: flex;
   align-items: flex-end;
   flex-direction: column;
+  margin-top: 20px;
 }
 
 .containerRight .btBase {
@@ -323,27 +335,24 @@ html {overflow: scroll;}
 .tituloEscola { 
   float: left;
   color: #000;
-  width: 220px;
-  font-size: 18px;
+  width: 200px;
+  font-size: 16px;
   font-family: 'Montserrat';
   font-weight: bold;
-  text-align: center;  
+  text-align: center;
+  margin:0 10px
 }
 #logoEscola {
   width: 200px;
   height: 80px;
   float: left;
-  text-align: center;
-  line-height: 80px;
-  margin: 10px 10px;
-  background-size: contain;
-  background-color: #fff;
-  position: relative;
-  border: 0px solid #000;
-  font-size: 20px;
-  overflow: hidden;  
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px 10px;
+  /* font-size: 20px; */
+  display: flex;
 }
-#logoEscola img{max-width: 100%; max-height: 100%;  }
+#logoEscola img{max-width: 100%; max-height: 100%; }
 
 .copyMes{width: 80%; margin: 0 10%;}
 .contMes .dias.semana>div {background-color: #d4d4d4; font-size: 18px;}
@@ -353,41 +362,105 @@ html {overflow: scroll;}
 .contMes .dias.semana strong:first-child { display: inline;}
 
 #pagePrint {width: 1146px; height: 1620px; transform: scale(1); background-color: #fff; transform-origin: 0 0;}
-#pagePrint .tableheader {margin-top: 0;}
+#pagePrint .btsTopo .logoFTD {
+  display: block;
+  right: -10px;
+  top: 0;
+  width: 140px;
+  height: 140px;
+  transform-origin: 0 100%;
+}
+#pagePrint .foraMes .vols {display: none;}
+#pagePrint .tableheader {margin-top: 0; margin-bottom: 0;}
 #pagePrint.qtd1  {height: 1146px; width: 1620px;}
 #pagePrint.qtd4  {height: 1146px; width: 1620px;}
 
 #pagePrint .ano  { margin: 20px 75px 0; display: flex; flex-wrap: wrap; height: auto;  justify-content:space-between;}
-#pagePrint .cont  { position: absolute; width: 100%; height: 100%; display: flex; flex-wrap: wrap; justify-content: space-between; margin: 0 0 0; box-sizing: border-box; padding: 0px 100px 30px; }
+#pagePrint .cont  { position: absolute; width: 100%; height: 100%; display: flex; flex-wrap: wrap; justify-content: space-between; margin: 0 0 0; box-sizing: border-box; padding: 0px 100px 30px; background-color: #fff;}
 #pagePrint .cont #logoEscola { border: 0; background-color: transparent; font-size: 0; }
-#pagePrint .copyMes  {transform-origin: 0 0;  width: 884px; margin: 0;}
+#pagePrint .copyMes  {transform-origin: 0 0;  width: 934px; margin: 0;}
 #pagePrint #cont2  { position: absolute; width: 100%; height: 100%;  overflow-y: scroll; }
 
 /* #pagePrint.qtd1 .cont  { width: 1550px; height: 1000px} */
-#pagePrint.qtd1 .copyMes  {transform: scale(1.58); transform-origin: 0 0;}
+#pagePrint.qtd1 .copyMes  {transform: scale(1.50); transform-origin: 0 0;}
 /* #pagePrint.qtd1 .contMes .dias>div  { font-size: 15px; } */
 #pagePrint.qtd1 .infoMes  { height: 220px; margin: 5px 0;/*  flex-direction:row; */ }
 #pagePrint.qtd1 .infoMes .diaEvento {padding: 5px 0;}
-#pagePrint.qtd1 .btsTopo{left: 90px;}
+#pagePrint.qtd1 .btsTopo{width: calc(100% - 220px); margin-left: 90px;}
+#pagePrint.qtd1 .btsTopo .logoFTD{width: 160px; height: 160px;}
 
 
 #pagePrint.qtd2 .cont  {padding: 0 60px 30px;}
-#pagePrint.qtd2 .copyMes  {transform:scale(1.15)}
+#pagePrint.qtd2 .copyMes:nth-child(2){border-top: 2px solid #0f3a5d}
+#pagePrint.qtd2 .copyMes  {transform:scale(1.10)}
 /* #pagePrint.qtd2 .contMes .dias>div  {height: 45px; font-size: 15px; } */
 #pagePrint.qtd2 .infoMes  { height: 220px; margin: 5px 0; /* flex-direction:row; */ }
 #pagePrint.qtd2 .infoMes  .cor{ width: 20px; height: 20px;}
-#pagePrint.qtd2 .btsTopo{left: 50px;}
-#pagePrint.qtd2 .infoMes .diaEvento .txtEvento{font-size: 16px;}
+#pagePrint.qtd2 .btsTopo{transform: scale(.9); left: 0; top: -10px;}
+#pagePrint.qtd2 .infoMes .diaEvento .txtEvento{font-size: 10px; line-height: 14px; margin-left: 5px;}
 #pagePrint.qtd2 .infoMes .diaEvento{width: 50%; padding: 0; margin: 5px 0; }
 
-#pagePrint.qtd4 .cont  { justify-content: space-around; padding: 0 50px 30px;}
-#pagePrint.qtd4 .btsTopo{left: 55px;}
-#pagePrint.qtd4 .copyMes  {width: 541px; margin: 0; transform: scale(1.35); transform-origin: 50% 0;}
-#pagePrint.qtd4 .contMes .dias>div  {height: 28px; font-size: 12px; }
-#pagePrint.qtd4 .infoMes  { height: 120px; margin: 5px 0;/*  flex-direction:row; */ }
+
+
+
+
+
+
+
+#pagePrint.qtd4 .btsTopo .logoFTD{
+  transform: scale(.5);
+  transform-origin: 0 0;
+  right: 5px;  
+}
+
+#pagePrint.qtd4 .cont  { justify-content: space-around; padding: 20px 50px 50px; }
+#pagePrint.qtd4 .copyMes  {width: 700px; margin: 0; transform: scale(1); transform-origin: 50% 0;}
+#pagePrint.qtd4 .copyMes:nth-child(3){border-top: 2px solid #0f3a5d; padding-top:10px;}
+#pagePrint.qtd4 .copyMes:nth-child(4){border-top: 2px solid #0f3a5d; padding-top:10px;}
+
+#pagePrint.qtd4 .tableheader { margin-top: 0px; margin-bottom: 10px; height: 60px;} 
+#pagePrint.qtd4 .contMes .dias .nomeMes {
+  height: 30px !important;
+  font-size: 24px !important;
+  background-size: 100%;
+  width: 240px;
+  background-position: 0 10px;  
+}
+#pagePrint.qtd4 .contMes .dias .nomeAno { align-items: start; height: 30px; }
+
+#pagePrint.qtd4 .contMes .evt6 {width: 20px; height: 16px !important; font-size: 8px; line-height: 13px; }
+#pagePrint.qtd4 .contMes .dia .evt4::before {width: 20px; height: 20px !important;}
+
+/* #pagePrint.qtd4 .btsTopo{padding: 0 10px; margin: 0 10px 0;} */
+#pagePrint.qtd4 .btsTopo .containerLeft{transform: scale(.5); transform-origin: 50% 0; margin: 0;}
+#pagePrint.qtd4 .contMes .dias>div  {height: 40px; font-size: 16px; }
+
+#pagePrint.qtd4 .infoMesVol, 
+#pagePrint.qtd4 .infoMes  { height: 160px; margin: 5px 0;/*  flex-direction:row; */ }
 #pagePrint.qtd4 .infoMes  .cor{ width: 15px; height: 15px;}
-#pagePrint.qtd4 .infoMes .diaEvento .txtEvento{font-size: 12px;}
-#pagePrint.qtd4 .infoMes .diaEvento{width: 50%; padding: 0; margin-bottom: 5px; }
+#pagePrint.qtd4 .infoMesVol .cor{width: 20px; height: 20px !important; margin: 0;}
+
+#pagePrint.qtd4 .infoMesVol .diaEvento .txtEvento,
+#pagePrint.qtd4 .infoMes .diaEvento .txtEvento{font-size: 12px; line-height: 16px; margin-left: 5px;}
+
+#pagePrint.qtd4 .infoMes .diaEvento{width: 100%; padding: 0; margin-bottom: 5px; align-items: start;}
+#pagePrint.qtd4 .infoMesVol .diaEvento{padding: 0; margin-bottom: 5px; align-items: start;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #pagePrint.qtd6 .cont  { padding: 0 60px 30px;}
 #pagePrint.qtd6 .btsTopo{left: 50px;}

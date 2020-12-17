@@ -94,7 +94,7 @@
                     <div class="titulo">' + dataListar[i].titulo + '</div>\
                     <div>' + (dataListar[i].dia_letivo != 0 ? 'Sim' : 'Não') + '</div>\
                     <div class="bts">\
-                        <button class="btEditar" >Editar</button>\
+                        <button class="btEditar" >Visualizar</button>\
                         <button class="btExcluir" >X</button>\
                     </div>\
                 </li>');

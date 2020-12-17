@@ -86,7 +86,7 @@
             var obj = $('<li>\
                 <div class="titulo">' + dataListar[i].usuario.nome + '</div>\
                 <div class="bts">\
-                    <button class="btEditar" >Editar</button>\
+                    <button class="btEditar" >Visualizar</button>\
                     <button class="btExcluir" >X</button>\
                 </div>\
             </li>');

@@ -240,6 +240,7 @@ function pageAdcionar(obj) {
         if (obj.tipo_usuario) $('select[name="tipo_usuario"] option[value="' + obj.tipo_usuario.id + '"]').attr('selected', 'selected');
 
         if (page == 'usuario') {
+            $('.formAdicionar .btEnviar ').hide();
             $('.formAdicionar input ').prop({ readonly: true });
             $('.formAdicionar select').prop({ disabled: true });
             if (obj.instituicao && obj.instituicao.id) {
@@ -249,12 +250,21 @@ function pageAdcionar(obj) {
             }
         }
         if (page == 'calendario') {
-            console.log(obj)
+            $('.formAdicionar .btEnviar ').hide();
+            $('.formAdicionar input ').prop({ readonly: true });
+            $('.formAdicionar select').prop({ disabled: true });
             $('.formAdicionar input[name="nome_instituicao"]').val(obj.usuario.instituicao.nome);
             $('.formAdicionar input[name="email_professor"]').val(obj.usuario.email);
         }
+        if (page == 'evento') {
+            $('.formAdicionar .btEnviar ').hide();
+            $('.formAdicionar input ').prop({ readonly: true });
+            $('.formAdicionar select').prop({ disabled: true });
+            
+        }
     } else {
 
+        $('.formAdicionar .btEnviar ').show();
         $('.formAdicionar input ').prop({ readonly: false });
         $('.formAdicionar select').prop({ disabled: false });
         $('.formAdicionar input[name="dia_letivo"]').removeAttr('checked');
