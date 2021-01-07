@@ -39,12 +39,12 @@
 						<li>
 							<label for="login_professor">Login</label>
 							<input type="text" name="usuario" id="login_professor" class="obgt campoLogin"
-								value="" />
+								value="thiago" />
 						</li>
 						<li>
 							<label for="senha_professor">Senha</label>
 							<input type="password" name="senha" id="senha_professor" class="obgt campoLogin"
-								value="" />
+								value="ftd" />
 						</li>
 					</ul>
 					<button class="iniciar btBase"><span>Entrar</span></button>
@@ -69,10 +69,11 @@
 						calendário sugerido para sua instituição de ensino.</p>
 					<div class="contCalendarios">
 						<div class="tit"></div>
-					<div class="bts"></div>
+						<div class="bts"></div>
 					</div>
 				</div>
 				<div class="iniciar btBase"><span>Criar Calendario</span></div>
+				<div class="btBase btVoltar"><span>voltar</span></div>
 			</div>
 		</div>
 
@@ -165,6 +166,7 @@
 					</ul>
 				</form>
 				<div class="iniciar btBase"><span>Continuar</span></div>
+				<div class="btBase btVoltar"><span>voltar</span></div>
 			</div>
 		</div>
 
@@ -179,97 +181,67 @@
 				</p>
 				<div class="containerTexto fioTop">
 					<div class="tiposVol">
-						<div class="selectVol t0" data-tipo="1">
-							<div class="titulo"><span class="num">1.</span>Regular: utilizo a coleção conforme sugerida
-								pelo FTD Sistema de Ensino.</div>
-							<div class="cont">
+						Selecione os volumes que serão usados.
+						<br><br>
+						<div class="form">
+							<div>
 								<p>
-									1º ano → <input type="text" name="v1" value="1" maxlength="2" readonly /> a
-									<input type="text" name="v2" value="12" maxlength="2" />
+									1º ano → <input type="text" name="v1" value="1" data-value="1" maxlength="2"
+										readonly />
+									a
+									<input type="text" name="v2" value="12" data-value="12" maxlength="2" />
 								</p>
 								<p>
-									2º ano → <input type="text" name="v3" value="13" maxlength="2" /> a
-									<input type="text" name="v4" value="24" maxlength="2" />
+									2º ano → <input type="text" name="v3" value="13" data-value="13" readonly
+										maxlength="2" /> a
+									<input type="text" name="v4" value="24" data-value="24" maxlength="2" />
 								</p>
-								<p>
-									3º ano → <input type="text" name="v5" value="25" maxlength="2" /> a
-									<input type="text" name="v6" value="36" readonly maxlength="2" />
+								<p class="ano3">
+									<span>
+										3º ano → <input type="text" name="v5" value="25" data-value="25" readonly
+											maxlength="2" /> a
+										<input type="text" name="v6" value="36" data-value="36" readonly
+											maxlength="2" />
+									</span>
+									<span>
+										3º ano → <input type="text" name="v5" value="25" data-value="25" readonly
+											maxlength="2" /> a
+										<input type="text" name="v6" value="36" data-value="36" readonly
+											maxlength="2" /> +
+										Revisão Semestral*
+										<br>
+										<em class="comentAsterisco">* A divisão de volumes se daria no 1º semestre,
+											enquanto
+											no 2º ficaria o todo o RS.</em>
+									</span>
+									<span>
+										3º ano → Revisão Anual
+									</span>
 								</p>
-							</div>
-						</div>
-						<div class="selectVol off">
-							<div class="titulo"><span class="num">2.</span>Regular: utilizo tota a coleção do FTD
-								Sistema de ensino com</div>
-							<div class="cont">
-								<div class="selectVol s2  t2" data-tipo="2">
-									<div class="titulo"><span class="num">a)</span>Revisão Anual na 3ª série</div>
-									<div class="cont">
-										<p>
-											1º ano → <input type="text" name="v1" value="1" readonly maxlength="2" /> a
-											<input type="text" name="v2" value="18" maxlength="2" />
-										</p>
-										<p>
-											2º ano → <input type="text" name="v3" value="19" maxlength="2" /> a
-											<input type="text" name="v4" value="36" readonly maxlength="2" />
-										</p>
-										<p>
-											3º ano → Revisão Anual
-										</p>
-									</div>
-								</div>
-								<div class="selectVol s2 t1" data-tipo="3">
-									<div class="titulo"><span class="num">b)</span>Revisão Semestral no 3º ano.</div>
-									<div class="cont">
-										<p>
-											1º ano → <input type="text" name="v1" value="1" readonly maxlength="2" /> a
-											<input type="text" name="v2" value="12" maxlength="2" />
-										</p>
-										<p>
-											2º ano → <input type="text" name="v3" value="13" maxlength="2" /> a
-											<input type="text" name="v4" value="24" maxlength="2" />
-										</p>
-										<p>
-											3º ano → <input type="text" name="v5" value="25" maxlength="2" /> a
-											<input type="text" name="v6" value="36" readonly maxlength="2" /> +
-											Revisão Semestral*
-										</p>
-										<p class="comentAsterisco">
-											* A divisão de volumes se daria no 1º semestre, enquanto no 2º ficaria o
-											todo o RS.
-										</p>
-									</div>
-								</div>
 							</div>
 						</div>
 
-						<div class="selectVol">
-							<div class="titulo"><span class="num">3.</span>Não desejo sugestão de uso da coleção.
-								calendário apenas com os eventos internos e do FTD Sistema de Ensino.</div>
+						<div class="checks">
+							<div class="btCheck t0" data-tipo="1">
+								<span>Coleção sugeriada</span>
+							</div>
+							<div class="btCheck t1" data-tipo="2">
+								<span>Revisao Semestral no 3º ano</span>
+							</div>
+							<div class="btCheck t2" data-tipo="3">
+								<span>Revisao Anual no 3º ano</span>
+							</div>
+							<div class="btCheck t3" data-tipo="4">
+								<span>Não usar o sugerido</span>
+							</div>
 						</div>
+
 
 					</div>
-					<!--ol>
-						<li data-capitulos="12">
-							Adoção de 12 capítulos por ano (anos regulares):
-							<p>1º ano → C1 a C12</p>
-							<p>2º ano → C13 a C24</p>
-							<p>3º ano → C25 a C36</p>
-						</li>
-						<li data-capitulos="18">
-							Adoção de 18 capítulos por ano (3 séries em 2 anos):
-							<p>1º ano → C1 a C18 </p>
-							<p>2º ano → C19 a C36</p>
-						</li>
-					</ol>
-					<strong>Personalizada (adoção parcial do material)</strong>
-					<ol start=3>
-						<li data-capitulos="0">
-							Adoção de capítulos avulsos
-							<p>sem sugestão de para distribuição dos capítulo</p>
-						</li>
-					</ol-->
+
 				</div>
 				<div class="iniciar btBase"><span>Continuar</span></div>
+				<div class="btBase btVoltar"><span>voltar</span></div>
 			</div>
 		</div>
 
@@ -370,12 +342,12 @@
 		</div>
 
 		<div class="novoEvento">
-			<div class="contEvt">
+			<div class="contEvt fioTop">
 				<ul class="contForm">
 					<li>
 						<label>Data:</label>
 						<div class="adicionar">
-							<p>início: <span class="dIni"></span> - Final: <span class="dFim"></span></p>
+							<p>início: <span class="dIni"></span> <br> Final: <span class="dFim"></span></p>
 						</div>
 						<div class="editar">
 							<p>início: <input type="text" value="" class="dtInicio"></p>
@@ -387,21 +359,20 @@
 						<input type="text" class="tituloEvt" name="tituloEvt" id="">
 					</li>
 					<li>
-						<label>Descricao</label>
-						<textarea name="descEvt" cols="30" rows="10"></textarea>
+						<label>Haverá aula</label>
 					</li>
 					<li>
-						<label>Haverá aula</label>
 						<input name="dia_letivo" type="radio" data-value="1" /> sim
 						<input name="dia_letivo" type="radio" data-value="0" /> não
 					</li>
 
 					<li>
-						<button class="btExcluir">Excluir</button>
-						<button class="btEvento">Salvar</button>
+						<button class="btExcluir btBase btVoltar"><span>Excluir</span></button>
+						<button class="btEvento btBase"><span>Salvar</span></button>
 					</li>
 				</ul>
-				<button class="btCancelar">x</button>
+
+				<div class="btCancelar btBase"><span>x</span></div>
 			</div>
 		</div>
 
@@ -423,6 +394,17 @@
 				</div>
 				<div class="iniciar gerar btBase"><span>gerar</span></div>
 				<div class="btX btBase"><span>Voltar</span></div>
+			</div>
+		</div>
+
+		<div class="alertaMsgm">
+			<div class="contMsgm fioTop">
+				<div class="msgm">
+					Esta data é um Feriado e não é considerada um dia letivo. <br>
+					Deseja incluir o evento mesmo assim?
+				</div>
+				<button class="btCancelar btBase btVoltar"><span>Não</span></button>
+				<button class="btOk btBase"><span>Sim</span></button>
 			</div>
 		</div>
 

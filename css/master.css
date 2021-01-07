@@ -65,16 +65,16 @@
 html {overflow: scroll;}
 
 * {border:0; margin:0; padding:0; }
-#stage {display:block; min-width: 1024px; width:100%; min-height:100vh; position:absolute; background-color: #ededed;}
+#stage {display:block; min-width: 1024px; width:100%; min-height:100%; position:absolute; background-color: #ededed;}
 #stage #console{display:block; width:100%; height:100px; overflow:hidden; position:absolute; top:0; left:0; pointer-events:none; z-index:100000; font-size:20px;}
 #stage.print{width: 2500px; height: 2500px; }
 
-.page {display:flex; width:1024px; overflow:hidden; position:absolute; box-sizing: border-box; font-family: Montserrat; font-size: 20px; z-index: 3;  left: 0; right: 0; margin: 10px auto;  min-height: 100vh;}
+.page {display:flex; width:1024px; overflow:hidden; position:absolute; box-sizing: border-box; font-family: Montserrat; font-size: 20px; z-index: 3;  left: 0; right: 0; margin: 0px auto;  min-height: 100vh;}
 .page.hide {display: none; }
 
 .container {background-color: #fff; padding:20px; max-width: 980px; width: 100%; margin: 30px auto; position: relative; }
 
-.logoFTD{ width: 150px; height: 150px; position: absolute; left: 100px; top: 00px; background-image: url(../assets/imagens/logo.png); background-size: 100%;}
+.logoFTD{ width: 300px; height: 150px; position: absolute; left: 20px; top: 00px; background-image: url(../assets/imagens/logo-ftd.png); background-size: 100%;}
 .btsTopo .logoFTD { left: auto; right: 20px; width: 100px; height: 100px; display: none; }
 .container .header { width: 62vh; height: 50px; background-color: #0f3a5d; color: #fff; position: absolute; right: 0; top: 40px; text-align: right; font-size: 24px;}
 .container .header:after {content: ''; position: absolute; left: -30px; top:0; width: 80px; height: 100%; transform: skewX(50deg); background-color: #0f3a5d;}
@@ -96,6 +96,13 @@ html {overflow: scroll;}
 .btBase span { display: block; transform: skewX(-50deg); margin-left: -40px; font-variant: petite-caps; padding: 0 30px 0 0; }
 .btBase:before { content: ''; position: absolute; left: -40px; top: 15%; width: 100%; height: 70%; transform: skewX(0deg); background-color: rgb(233 81 18 / 95%); }
 .btBase:after { content: ''; position: absolute; right: 25px; top: 15%; width: 7px; height: 70%; transform: skewX(0deg); background-color: #e95112; }
+
+
+.btBase.btVoltar{ margin-left: 100px; margin-top: -69px;  transform: skewX(-50deg); text-align: right; border-left: 20px solid #0F3A5F; border-right: none;}
+.btBase.btVoltar span{transform: skewX(50deg); padding: 0 0 0 30px; margin-left: auto; margin-right: -40px;}
+.btBase.btVoltar:before {left: 40px;}
+.btBase.btVoltar:after {right: 25px;}
+.btBase.btVoltar:after {right: 125px;}
 
 .fioTop:before {content: ''; position: absolute; right: 10px; top: 10px; width: 80%; height: 2px; background-color: #e95112; }
 .fioTop:after {content: ''; position: absolute; left: 10px; bottom: 10px; width: 80%; height: 2px; background-color: #e95112; }
@@ -124,9 +131,10 @@ html {overflow: scroll;}
 #dadosGestor .formInstituicao .containerData { display: flex; }
 #dadosGestor input.txt{border: 2px solid #666; line-height: 30px; padding: 0 3px; border-radius: 4px; margin:5px 0 10px; width: 290px;}
 #dadosGestor input.data{border: 2px solid #666; line-height: 30px; padding: 0 3px; border-radius: 4px; margin:5px 10px 10px 0; width: 120px;}
+#dadosGestor input.erro{background-color: #ff7f7f;}
 #dadosGestor select{border: 2px solid #666; line-height: 30px; padding: 5px 3px; border-radius: 4px; margin:5px 10px 10px 0; width: 120px;}
 
-#dadosGestor li{margin-bottom: 5px; list-style: none; display: flex;}
+#dadosGestor li{margin-bottom: 5px; list-style: none; display: flex; align-items: baseline;}
 #dadosGestor li label{display: block; width: 200px; text-align: right; margin-right: 20px;}
 #dadosGestor .iniciar{margin-right: 100px;margin-top: -30px;}
 
@@ -140,12 +148,22 @@ html {overflow: scroll;}
 #configCalendario .selectVol{display: flex; flex-direction: column; margin-bottom: 15px; }
 #configCalendario .selectVol .titulo{cursor: pointer; padding-left: 20px; }
 #configCalendario .selectVol.on>.titulo{color: #e95112;}
-#configCalendario .selectVol .titulo .num{width: 20px; display: inline-block; margin-left: -20px;}
-#configCalendario .selectVol .cont{display: none; margin-left: 20px; }
-#configCalendario .selectVol .comentAsterisco{font-size: 11px; font-style: italic;}
-#configCalendario .selectVol input{border: 2px solid #666; line-height: 30px; padding: 0 3px; border-radius: 4px; margin:0 10px ; width: 60px;}
 #configCalendario .selectVol.off>.titulo{ cursor: default; }
-#configCalendario .selectVol.off>.cont{display: block ;}
+/* #configCalendario .selectVol.off>.cont{display: block ;} */
+
+#configCalendario .titulo .num{width: 20px; display: inline-block; margin-left: -20px;}
+#configCalendario .form{border-radius:20px; border:2px solid #0f3a5d; padding:0 20px; margin-bottom: 20px; }
+#configCalendario .form input.erro{background-color: #ff7f7f;}
+#configCalendario .comentAsterisco{font-size: 11px; font-style: italic;}
+#configCalendario .ano3>span{display: none; }
+#configCalendario .ano3>span.on{display: block; }
+#configCalendario input{border: 2px solid #666; line-height: 30px; padding: 0 3px; border-radius: 4px; margin:0 10px ; width: 60px;}
+#configCalendario .checks{margin:  0;}
+#configCalendario .checks .btCheck{float: left; clear:both; margin-bottom: 5px; position: relative; padding-left: 30px; cursor: pointer; }
+#configCalendario .checks .btCheck span{position: relative; }
+#configCalendario .checks .btCheck span:before{ content: ''; position: absolute; left: -25px; width: 20px; height: 20px; background-color: rgb(56, 56, 56); border-radius: 50%; }
+#configCalendario .checks .btCheck.on span:before{ background-color: #e95112; }
+
 
 #calendario { position: relative; display:block; background-color: #fff;}
 
@@ -169,27 +187,7 @@ html {overflow: scroll;}
 
 .contMes .tableheader .nomeMes span {display: block;position: absolute;}
 
-/* .contMes .tableheader .nomeMes .tarja {
-  content: '';
-  width: 452px;
-  height: 44px;
-  left: 0;
-  bottom: -10px;
-  position: absolute;
-  background-image: url(../assets/imagens/tarjaMes.png);
-  background-repeat: no-repeat;
-} */
-/* .contMes .tableheader .nomeMes:after {
-  content: '';
-  border-left: 3px solid #e95112;
-  border-right: 3px solid #e95112;
-  width: 370px;
-  height: 25px;
-  transform: skewX(50deg); 
-  left: -8px;
-  bottom: 0;
-  position: absolute;;
-} */
+
 .contMes .tableheader .nomeMes {
   position: relative;
   font-family: Harabara;
@@ -234,9 +232,13 @@ html {overflow: scroll;}
 .contMes .dias .diaUtil{ }
 .contMes .dias .diasRecesso{background-color:#f7ecdb; }
 .evt1{background-color: #d1dda4  !important}
-.evt2{background-color: #fbb0e9 !important;}
+.evt2.corProf1{background-color: #fbb0e9 !important;}
+.evt2.corProf2{background-color: #e67dcd !important;}
+.evt2.corProf3{background-color: #883875 !important;}
+.evt2.corProf4{background-color: #4e2c46 !important;}
+.evt2.corProf5{background-color: #6b6069 !important;}
 .evt3{background-color: #a3d3e5 !important}
-.evt4{background-color: #ffbeb0 !important}
+.evt4{/* background-color: #ffbeb0 !important */ flex: 0 !important; }
 .evt5{background-color: #bf62fd !important}
 
 .evt4::before{ width: 25px; height: 25px; position: absolute; left: 5px; bottom:1px; background-image: url(../assets/imagens/logo.png); background-size: 100%; content: '';}
@@ -244,20 +246,23 @@ html {overflow: scroll;}
 .diaEvento .evt4:before {bottom: 0;left: 0px; width: 100%; height: 100%;}
 
 .infoMes .diaEvento .evt6{ position: relative; margin: 0; left: 0; border: none !important; }
-.vols .evt6{margin-top: 2px; margin-right: 5px; width: 25px; height: 20px !important;}
+.vols .evt6{margin-top: -3px; margin-left: 3px; width: 25px; height: 20px !important; text-indent: 12px;}
 
 .evt6{
   width: 30px;
   height: 25px !important;
-  background-image: url(../assets/imagens/livro.svg);
+  background-image: url(../assets/imagens/livro.png);
   background-size: 100%;
   background-repeat: no-repeat;
   text-align: center;
   font-size: 10px;
-  line-height: 17px;
+  line-height: 25px;
   font-weight: bold;
   color: #0f3a5d;
 }
+
+#calendario .foraMes .evts,
+#calendario .foraMes .vols {display: none;}
 
 .drag{background-color: #f00 !important;}
 .contMes .dias .sabado.drag,
@@ -268,7 +273,7 @@ html {overflow: scroll;}
 .infoMes {margin:5px 0px 0 ; /* height: 250px; */ position: relative; display: flex; flex-wrap: wrap; flex-direction: column; width: 70%; }
 .infoMesVol .diaEvento,
 .infoMes .diaEvento { padding: 10px 10px 0 10px; display: flex; box-sizing: border-box; cursor: pointer; align-items: start;}
-.infoMesVol .diaEvento .cor{width: 26px; height: 30px; box-sizing: border-box; background-position: top;}
+.infoMesVol .diaEvento .cor{width: 36px; height: 30px; box-sizing: border-box; background-position: top;     margin-right: -20px;}
 .infoMes .diaEvento .cor{width: 26px; height: 26px; box-sizing: border-box; border: 1px solid #0f3a5d; border-radius: 20%; margin: 2px;}
 .infoMesVol .diaEvento .txtEvento,
 .infoMes .diaEvento .txtEvento{ width: calc(100% - 40px); margin-left: 10px; font-family: 'Montserrat'; font-size: 14px; line-height: 20px;  }
@@ -283,14 +288,30 @@ html {overflow: scroll;}
 .mark {background-color: #ff0; }
 
 .novoEvento {position: absolute; top: 0; right: 0; left: 0; bottom: 0; background-color: rgba(0,0,0,.7); display: none; z-index: 10; }
-.novoEvento .contEvt{position: absolute; top: 0; right: 0; left: 0; bottom: 0; width: 300px; height: 500px; background-color: #fff; margin: auto;}
-.novoEvento .contForm{display: flex; flex-direction: column; margin: 20px; }
+.novoEvento .contEvt{position: absolute; top: 0; right: 0; left: 0; bottom: 0; width: 500px; height: 500px; background-color: #ffebcf; margin: auto; font-family: 'Montserrat'; }
+.novoEvento .contForm{display: flex; flex-direction: column; margin: 50px 130px; }
 .novoEvento .contForm li{margin-bottom: 5px; list-style: none;}
-.novoEvento .contForm li label{display: block;}
+.novoEvento .contForm li label{ display: inline-block; vertical-align: middle;}
+.novoEvento .contForm li label.desc{vertical-align: top;}
+.novoEvento .contForm li .dIni,
+.novoEvento .contForm li .dFim {font-weight: bold; }
 .novoEvento .contForm li input,
-.novoEvento .contForm li textarea{border: 1px solid #000;}
-.novoEvento .contForm li button{cursor: pointer; padding: 5px 8px; cursor: pointer; background-color: #333; color: #fff;}
-.novoEvento .btCancelar{width: 30px; height: 30px; line-height: 30px; text-align: center; box-sizing: border-box; background-color: #000; color: #fff; cursor: pointer; position: absolute; top: 10px ; right: 10px; border-radius: 50%;}
+.novoEvento .contForm li textarea{border: 2px solid #666;  padding: 0 3px; border-radius: 4px; margin: 5px 0 10px;}
+.novoEvento .contForm li input {line-height: 30px; }
+.novoEvento .contForm li .btEvento{ position: absolute; right: -30px; bottom: -35px; z-index: 3; }
+.novoEvento .contForm li .btExcluir{ position: absolute; left: -130px; bottom: -35px; z-index: 3; }
+.novoEvento .btCancelar{ position: absolute; top: 0; right: -30px; padding: 10px 30px; border-right: 10px solid #0f3a5d; }
+.novoEvento .btCancelar:before{left: -20px; }
+.novoEvento .btCancelar:after{ right: 5px; }
+.novoEvento .btCancelar span{ padding: 0 20px 0 0; margin-left: -30px; }
+.novoEvento .btExcluir:after { right:135px; }
+
+.alertaMsgm {position: absolute; top: 0; right: 0; left: 0; bottom: 0; background-color: rgba(0,0,0,.7); display: none; z-index: 10; }
+.alertaMsgm .contMsgm{position: absolute; top: 0; right: 0; left: 0; bottom: 0; width: 450px; height: 250px; background-color: #ffebcf; margin: auto; font-family: 'Montserrat'; }
+.alertaMsgm .contMsgm .msgm{ margin: 70px 30px 0; text-align: center; font-size: 18px; font-weight: bold; }
+.alertaMsgm .contMsgm .btOk{ position: absolute; right: -30px; bottom: -35px; z-index: 3; }
+.alertaMsgm .contMsgm .btCancelar{ position: absolute; left: -130px; bottom: -35px; z-index: 3; }
+.alertaMsgm .contMsgm .btCancelar:after { right:90px; }
 
 
 .btsTopo {
@@ -551,8 +572,15 @@ html {overflow: scroll;}
 /* #configPaginas .btX{position: absolute; top: 10px; right: 10px; border-radius: 50%; background-color: #ddd; color: #000; font-weight: bold; width: 30px; height: 30px; text-align: center; line-height: 30px; font-size: 20px;  cursor: pointer; } */
 #configPaginas select{border: 2px solid #666; line-height: 30px; padding: 0 3px; border-radius: 4px; margin:0 auto ; width: 100px; height: 40px; }
 #configPaginas .iniciar{ margin-right: 100px; margin-top: -30px;}
-#configPaginas .btX{ margin-left: 100px; margin-top: -60px;  transform: skewX(-50deg);}
-#configPaginas .btX span{  transform: skewX(50deg);}
+
+#configPaginas .btX{ margin-left: 100px; margin-top: -69px;  transform: skewX(-50deg); text-align: right; border-left: 20px solid #0F3A5F; border-right: none;}
+#configPaginas .btX span{transform: skewX(50deg); padding: 0 0 0 30px; margin-left: auto; margin-right: -40px;}
+#configPaginas .btX:before {left: 40px;}
+#configPaginas .btX:after {right: 125px;}
+
+/* #configPaginas .btX{ margin-left: 100px; margin-top: -60px;  transform: skewX(-50deg);}
+#configPaginas .btX span{  transform: skewX(50deg);} */
+
 
 
 

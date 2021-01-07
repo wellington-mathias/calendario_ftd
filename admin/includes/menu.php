@@ -10,6 +10,9 @@
             <a href="../admin/eventos_ftd.php">Eventos FTD</a>
         </li>
         <li>
+            <a href="../admin/eventos_simulado.php">Simulados</a>
+        </li>
+        <li>
             <a href="../admin/eventos.php">Eventos Prof.</a>
         </li>
         <li>

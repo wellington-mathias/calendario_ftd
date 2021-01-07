@@ -37,10 +37,6 @@
                             <input type="text" value="" name="dt_fim" placeholder="dd/mm/aaaa" class="inputDate obgt" maxlength="10" />
                         </li>
                         <li>
-                            <label for="descricao">Descrição</label>
-                            <textarea name="descricao" value=""></textarea>
-                        </li>
-                        <li>
                             <label for="uf">UF</label>
                             <select name="uf" class="selectUf"></select>
                         </li>
