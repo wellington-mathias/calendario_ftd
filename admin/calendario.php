@@ -31,11 +31,11 @@
                             <label for="nome_instituicao">Email Professor</label>
                             <input type="text" value="" name="email_professor" placeholder="Email" class="" />
                         </li>
-                        <li>
+                        <!--li>
                             <label for="logo">Logo</label>
                             <input type="file" value="" name="logo"  />
                             <div class="contLogo"></div>
-                        </li>
+                        </li-->
                         <li>
                             <label for="dt_inicio_ano_letivo">Inicio Ano Letivo *</label>
                             <input type="text" value="" name="dt_inicio_ano_letivo" placeholder="dd/mm/aaaa" class="inputDate obgt" maxlength="10" />
@@ -67,8 +67,7 @@
 
                 <ul class="lista">
                     <li>
-                        <div>Criado em</div>
-                        <div class="titulo">Professor</div>
+                        <div class="titulo">Criado por</div>
                         <div class="bts"></div>
                     </li>
                 </ul>
@@ -80,20 +79,19 @@
 </body>
 <script>
     function complete(data) {
-        dataListar = data.calendarios;
-        /* console.log(dataListar) */
+        if(data.calendarios) dataListar = data.calendarios;
+        
         $('.lista li:gt(0)').remove();
         for (var i in dataListar) {
             var obj = $('<li>\
-                <div>' + dataListar[i].dt_criacao + '</div>\
-                <div class="titulo">' + dataListar[i].professor + '</div>\
+                <div class="titulo">' + dataListar[i].usuario.nome + '</div>\
                 <div class="bts">\
-                    <button class="btEditar" >Editar</button>\
+                    <button class="btEditar" >Visualizar</button>\
                     <button class="btExcluir" >X</button>\
                 </div>\
             </li>');
             $('.lista').append(obj);
-            obj[0].usuario = dataListar[i];
+            obj[0].obj = dataListar[i];
         }
         if ($('.lista li').length == 1) {
             $('.lista').append('<li> <div>Nenhum calendario cadastrado</div> </li>');
@@ -105,7 +103,8 @@
     var dataListar = [];
     var page = 'calendario';
     function listar() {
-        dispatch('GET', '/api/'+page+'/read.php', '', complete);
+        dataListar = [];
+        dispatch('GET', '/api/'+page+'/read.php', '', complete  );
     }
     listar();
     

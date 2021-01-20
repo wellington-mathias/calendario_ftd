@@ -1,3 +1,14 @@
+@font-face {
+  font-family: 'Harabara';
+  src: url('fonts/Harabara.eot');
+  src: url('fonts/Harabara.ttf');
+}
+
+@font-face {
+  font-family: 'Montserrat-Light';
+  src: url('fonts/Montserrat-Light.eot');
+  src: url('fonts/Montserrat-Light.ttf');
+}
 
 @font-face {
   font-family: 'Montserrat';
@@ -51,53 +62,167 @@
 }
 
 
+html {overflow: scroll;}
 
 * {border:0; margin:0; padding:0; }
-#stage {display:block; min-width: 1024px; width:100%; min-height:100vh; overflow:hidden; position:absolute; background-color: #ededed;}
+#stage {display:block; min-width: 1024px; width:100%; min-height:100%; position:absolute; background-color: #ededed;}
 #stage #console{display:block; width:100%; height:100px; overflow:hidden; position:absolute; top:0; left:0; pointer-events:none; z-index:100000; font-size:20px;}
 #stage.print{width: 2500px; height: 2500px; }
 
-.page {display:flex; width:1024px; min-height:100vh; overflow:hidden; position:absolute; box-sizing: border-box; font-family: Montserrat; font-size: 20px; z-index: 3;  left: 0; right: 0; margin: auto;}
+.page {display:flex; width:1024px; overflow:hidden; position:absolute; box-sizing: border-box; font-family: Montserrat; font-size: 20px; z-index: 3;  left: 0; right: 0; margin: 0px auto;  min-height: 100vh;}
 .page.hide {display: none; }
-#abertura {background-color: #ededed; align-items: center; justify-content: center;}
-.container {background-color: #fff; padding:20px; width: 640px; position: relative; }
+
+.container {background-color: #fff; padding:20px; max-width: 980px; width: 100%; margin: 30px auto; position: relative; }
+
+.logoFTD{ width: 300px; height: 150px; position: absolute; left: 20px; top: 00px; background-image: url(../assets/imagens/logo-ftd.png); background-size: 100%;}
+.btsTopo .logoFTD { left: auto; right: 20px; width: 100px; height: 100px; display: none; }
+.container .header { width: 62vh; height: 50px; background-color: #0f3a5d; color: #fff; position: absolute; right: 0; top: 40px; text-align: right; font-size: 24px;}
+.container .header:after {content: ''; position: absolute; left: -30px; top:0; width: 80px; height: 100%; transform: skewX(50deg); background-color: #0f3a5d;}
+.container .header:before { content: ''; position: absolute; left: -50px; top: -20%; width: 7px; height: 140%; transform: skewX(50deg); background-color: #e95112;}
+.container .header p{margin:0 5px}
+.container .header span{font-size: 50px;}
+
+.container .bemvindo { height: 40px; background-color: #0f3a5d; color: #fff; position: absolute; left: 0; top: 150px; text-align: left; line-height: 40px; text-indent: 20px; z-index: 1; padding-right: 65px; }
+
 .container p{margin: 10px 0;}
 .container ol{margin: 0 10px;}
-.container .bemvindo {font-size: 24px;}
-.container .iniciar {padding: 5px 20px; background-color: #ccc; display: block; margin: 60px auto; text-align: center; font-size: 24px; font-weight: bold; border: 1px solid; cursor: pointer;}
+
+
+
+.tarjaLeft:before { content: ''; position: absolute; right: -40px; top: 0; width: 3px; height: 100%; transform: skewX(50deg); background-color: #e95112; }
+.tarjaLeft:after {content: ''; position: absolute; right: -30px; top:0; width: 80px; height: 100%; transform: skewX(50deg); background-color: #0f3a5d;}
+
+.btBase { padding: 10px 40px; background-color: #0f3a5d; display: table; margin: 20px auto; text-align: left; font-size: 24px; font-weight: bold; border-right: 20px solid #0f3a5d; cursor: pointer; color: #fff; font-family: Montserrat; transform: skewX(50deg); pointer-events: auto;}
+.btBase span { display: block; transform: skewX(-50deg); margin-left: -40px; font-variant: petite-caps; padding: 0 30px 0 0; }
+.btBase:before { content: ''; position: absolute; left: -40px; top: 15%; width: 100%; height: 70%; transform: skewX(0deg); background-color: rgb(233 81 18 / 95%); }
+.btBase:after { content: ''; position: absolute; right: 25px; top: 15%; width: 7px; height: 70%; transform: skewX(0deg); background-color: #e95112; }
+
+
+.btBase.btVoltar{ margin-left: 100px; margin-top: -69px;  transform: skewX(-50deg); text-align: right; border-left: 20px solid #0F3A5F; border-right: none;}
+.btBase.btVoltar span{transform: skewX(50deg); padding: 0 0 0 30px; margin-left: auto; margin-right: -40px;}
+.btBase.btVoltar:before {left: 40px;}
+.btBase.btVoltar:after {right: 25px;}
+.btBase.btVoltar:after {right: 125px;}
+
+.fioTop:before {content: ''; position: absolute; right: 10px; top: 10px; width: 80%; height: 2px; background-color: #e95112; }
+.fioTop:after {content: ''; position: absolute; left: 10px; bottom: 10px; width: 80%; height: 2px; background-color: #e95112; }
+
+#telaLogin {background-color: #ededed; align-items: center; justify-content: center;}
+#telaLogin .camposForm { display: flex; flex-direction: column; margin: 210px auto 0; background: #ffebcf; border-radius: 0; border: 0px solid #e95112;  position: relative;  align-items: center; justify-content: center; width: 550px; height: 330px; }
+#telaLogin .camposForm li{ list-style: none; display: flex; flex-direction: column; width: 250px; }
+#telaLogin .camposForm li.error{ color: rgb(212, 0, 0); display: none; }
+#telaLogin .camposForm li .campoLogin{border: 2px solid #666; line-height: 30px; padding: 0 3px; border-radius: 4px; margin:5px 0 10px; }
+#telaLogin .camposForm li .campoLogin.erro{border-color: rgb(212, 0, 0);}
+#telaLogin .iniciar{right: -210px;margin-top: -30px; position: relative; }
+
+#abertura {background-color: #ededed; align-items: center; justify-content: center;}
+#abertura .containerTexto { display: flex; flex-direction: column; margin: 210px 130px 0; background: #ffebcf; border-radius: 0; border: 0px solid #e95112; padding:80px 10%; position: relative; font-size: 18px;}
+#abertura .iniciar{margin-right: 100px;margin-top: -30px;}
+
+
+#abertura .contCalendarios {display: none; }
+#abertura .contCalendarios .tit{margin: 10px 0 5px; color: #000; font-weight: bold; }
+#abertura .contCalendarios .bts{ display: flex; flex-wrap: wrap; }
+#abertura .contCalendarios .btCalendario{ background-color: #0f3a5d; color: #fff; padding: 3px 5px; cursor: pointer; margin: 0 3px 3px 0; }
+
 
 #dadosGestor {background-color: #ededed; font-size: 16px; align-items: center; justify-content: center;}
-#dadosGestor label{margin-top: 10px;}
-#dadosGestor input.txt{border: 1px solid #000; width: 227px; height: 25px; padding: 0 3px;}
-#dadosGestor input.data{border: 1px solid #000; width: 150px; height: 25px; padding: 0 3px;}
-select{border: 1px solid #000; width: 100px; height: 25px;}
-#dadosGestor li{margin-bottom: 5px; list-style: none;}
-#dadosGestor li label{display: block;}
+#dadosGestor .formInstituicao { display: flex; flex-direction: column; margin: 210px 130px 0; background: #ffebcf; border-radius: 0; border: 0px solid #e95112; padding:60px 10%; position: relative; }
+#dadosGestor .formInstituicao .containerData { display: flex; }
+#dadosGestor input.txt{border: 2px solid #666; line-height: 30px; padding: 0 3px; border-radius: 4px; margin:5px 0 10px; width: 290px;}
+#dadosGestor input.data{border: 2px solid #666; line-height: 30px; padding: 0 3px; border-radius: 4px; margin:5px 10px 10px 0; width: 120px;}
+#dadosGestor input.erro{background-color: #ff7f7f;}
+#dadosGestor select{border: 2px solid #666; line-height: 30px; padding: 5px 3px; border-radius: 4px; margin:5px 10px 10px 0; width: 120px;}
+
+#dadosGestor li{margin-bottom: 5px; list-style: none; display: flex; align-items: baseline;}
+#dadosGestor li label{display: block; width: 200px; text-align: right; margin-right: 20px;}
+#dadosGestor .iniciar{margin-right: 100px;margin-top: -30px;}
 
 
-#configCalendario {padding: 5% 18%; background-color: #ededed;}
-#configCalendario li{ margin-top:20px; cursor: pointer;}
-#configCalendario li:hover{color: #ff6600;}
-#configCalendario li.selecionada{color: #ff6600;}
-#configCalendario strong{ margin-top:20px; display: block;}
-#configCalendario ol{ margin-left:40px}
+#configPaginas .containerTexto,
+#configCalendario .containerTexto { display: flex; flex-direction: column; margin: 210px 120px 0; background: #ffebcf; border-radius: 0; border: 0px solid #e95112; padding:60px 8%; position: relative; font-size: 18px;}
+#configCalendario { align-items: center; justify-content: center; background-color: #ededed;}
 #configCalendario .container .gerar {padding: 5px 20px; background-color: #ccc; display: block; margin: 60px 200px; text-align: center; font-size: 24px; font-weight: bold; border: 1px solid; cursor: pointer;}
+#configCalendario .iniciar{margin-right: 100px;margin-top: -30px;}
 
-#calendario { position: relative; display:block}
+#configCalendario .selectVol{display: flex; flex-direction: column; margin-bottom: 15px; }
+#configCalendario .selectVol .titulo{cursor: pointer; padding-left: 20px; }
+#configCalendario .selectVol.on>.titulo{color: #e95112;}
+#configCalendario .selectVol.off>.titulo{ cursor: default; }
+/* #configCalendario .selectVol.off>.cont{display: block ;} */
+
+#configCalendario .titulo .num{width: 20px; display: inline-block; margin-left: -20px;}
+#configCalendario .form{border-radius:20px; border:2px solid #0f3a5d; padding:0 20px; margin-bottom: 20px; }
+#configCalendario .form input.erro{background-color: #ff7f7f;}
+#configCalendario .comentAsterisco{font-size: 11px; font-style: italic;}
+#configCalendario .ano3>span{display: none; }
+#configCalendario .ano3>span.on{display: block; }
+#configCalendario input{border: 2px solid #666; line-height: 30px; padding: 0 3px; border-radius: 4px; margin:0 10px ; width: 60px;}
+#configCalendario .checks{margin:  0;}
+#configCalendario .checks .btCheck{float: left; clear:both; margin-bottom: 5px; position: relative; padding-left: 30px; cursor: pointer; }
+#configCalendario .checks .btCheck span{position: relative; }
+#configCalendario .checks .btCheck span:before{ content: ''; position: absolute; left: -25px; width: 20px; height: 20px; background-color: rgb(56, 56, 56); border-radius: 50%; }
+#configCalendario .checks .btCheck.on span:before{ background-color: #e95112; }
+
+
+#calendario { position: relative; display:block; background-color: #fff;}
 
 #calendario>.copyMes {display: none;}
-.ano {margin:150px 20px 0; height: 410px; position: relative; }
+.ano {margin:20px 20px 0; position: relative; }
 .ano>.contMes {position: absolute; top: 0; left: 0; right: 0;}
-.contMes {display: grid; color: #000;   font-size: 20px; font-family: Montserrat;  background-color: #666; grid-gap: 1px; padding: 1px; }
-.contMes .dias {display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr ; grid-gap: 1px; }
+.contMes {display: grid; color: #000;   font-size: 20px; font-family: Montserrat;  background-color: #fff; grid-gap: 3px; padding: 1px; margin-top: 0px;}
+.contMes .dias {display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr ; grid-gap: 3px; }
 .hide {display: none }
-.contMes .tableheader {grid-template-columns: 1fr  ;  font-weight: bold;}
-.contMes .tableheader>div { background-color: #d6d6d6 !important;}
-.contMes .dias>div{display: flex; align-items: center; justify-content: center; height: 50px; line-height: 20px; background-color: #fff; padding: 0; cursor: pointer; position: relative;}
+
+
+.contMes .tableheader {
+  display: grid;
+  grid-template-columns: 1fr;
+  font-weight: bold;
+  height: 130px;
+  color: #0f3a5d;
+  margin-bottom: 30px;
+}
+.contMes .tableheader.dias>div {display: flex; align-items: center; justify-content: center; height: 50px; line-height: 20px; background-color: #fff; padding: 0; cursor: pointer; position: relative; border:none}
+
+.contMes .tableheader .nomeMes span {display: block;position: absolute;}
+
+
+.contMes .tableheader .nomeMes {
+  position: relative;
+  font-family: Harabara;
+  font-size: 56px;
+  /* letter-spacing: 3px;   */
+  text-align: center;
+  justify-self: center;
+  width: 452px;
+  align-self: end;
+  background-image: url(../assets/imagens/tarjaMes.png);
+  background-position: center 16px;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  height: 54px !important;
+}
+
+.contMes .tableheader .nomeAno {
+  position: relative;
+  font-family: Montserrat-Light;
+  font-size: 34px;
+  text-align: center;
+  width: 250px;
+  justify-self: center;
+  align-self: start;
+      background: none !important;
+
+}
+
+/* .contMes .tableheader>div { background-color: #d6d6d6 !important;} */
+.contMes .dias>div{display: flex; align-items: center; justify-content: center; height: 50px; line-height: 20px; background-color: #fff; padding: 0; cursor: pointer; position: relative; border:1px solid #ccc}
 .contMes .dias .dia>div{position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: flex-end; justify-content: flex-end; }
 .contMes .dias .dia .txt{z-index: 2; user-select: none; line-height: 140%; width: 95%;}
 .contMes .dias .dia .evts{display: flex; flex-wrap: nowrap; }
 .contMes .dias .dia .evts>div{flex:1; height:100%; box-sizing: border-box;  }
+.contMes .dias .dia .vols{display: flex; align-items: flex-start; justify-content: flex-start; padding: 0 0px; }
 .contMes .dias .sabado,
 .contMes .dias .domingo{color: #f00; background-color: #eee; }
 .contMes .dias .foraMes{background-color: #eee; color: #999;}
@@ -105,118 +230,357 @@ select{border: 1px solid #000; width: 100px; height: 25px;}
 .contMes .dias .foraMes.sabado,
 .contMes .dias .foraMes.domingo{color: #f99;}
 .contMes .dias .diaUtil{ }
-.contMes .dias .diasRecesso{background-color:#f5f4d3; }
-.evt1{background-color: #86eada !important}
-.evt2{background-color: #fbb0e9 !important;}
-.evt3{background-color: #ffbf00 !important}
-.evt4{background-color: #62cdfd !important}
-.evt5{background-color: rgb(202, 91, 184) !important;}
+.contMes .dias .diasRecesso{background-color:#f7ecdb; }
+.evt1{background-color: #d1dda4  !important}
+.evt2.corProf1{background-color: #fbb0e9 !important;}
+.evt2.corProf2{background-color: #e67dcd !important;}
+.evt2.corProf3{background-color: #883875 !important;}
+.evt2.corProf4{background-color: #4e2c46 !important;}
+.evt2.corProf5{background-color: #6b6069 !important;}
+.evt3{background-color: #a3d3e5 !important}
+.evt4{/* background-color: #ffbeb0 !important */ flex: 0 !important; }
+.evt5{background-color: #bf62fd !important}
+
+.evt4::before{ width: 25px; height: 25px; position: absolute; left: 5px; bottom:1px; background-image: url(../assets/imagens/logo.png); background-size: 100%; content: '';}
+.diaEvento .evt4{background-color: transparent !important; border:none !important; position: relative; width: 30px !important; height: 30px !important; margin: 0 !important;}
+.diaEvento .evt4:before {bottom: 0;left: 0px; width: 100%; height: 100%;}
+
+.infoMes .diaEvento .evt6{ position: relative; margin: 0; left: 0; border: none !important; }
+.vols .evt6{margin-top: -3px; margin-left: 3px; width: 25px; height: 20px !important; text-indent: 12px;}
+
+.evt6{
+  width: 30px;
+  height: 25px !important;
+  background-image: url(../assets/imagens/livro.png);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  text-align: center;
+  font-size: 10px;
+  line-height: 25px;
+  font-weight: bold;
+  color: #0f3a5d;
+}
+
+#calendario .foraMes .evts,
+#calendario .foraMes .vols {display: none;}
+
 .drag{background-color: #f00 !important;}
 .contMes .dias .sabado.drag,
 .contMes .dias .domingo.drag{color: #000;}
 
-.infoMes {margin:5px 0px 0 ; height: 250px; position: relative; display: flex; flex-wrap: wrap; flex-direction: column; }
-.infoMes .diaEvento { width: 50%; padding: 10px; display: flex; box-sizing: border-box; cursor: pointer; align-items: center;}
-.infoMes .diaEvento .cor{width: 30px; height: 30px; box-sizing: border-box;border: 1px solid #333;  }
+.infos {display: flex;}
+.infoMesVol {margin:5px 0px 0 ; /* height: 250px; */ position: relative; display: flex; flex-direction: column; width: 30%; }
+.infoMes {margin:5px 0px 0 ; /* height: 250px; */ position: relative; display: flex; flex-wrap: wrap; flex-direction: column; width: 70%; }
+.infoMesVol .diaEvento,
+.infoMes .diaEvento { padding: 10px 10px 0 10px; display: flex; box-sizing: border-box; cursor: pointer; align-items: start;}
+.infoMesVol .diaEvento .cor{width: 36px; height: 30px; box-sizing: border-box; background-position: top;     margin-right: -20px;}
+.infoMes .diaEvento .cor{width: 26px; height: 26px; box-sizing: border-box; border: 1px solid #0f3a5d; border-radius: 20%; margin: 2px;}
+.infoMesVol .diaEvento .txtEvento,
 .infoMes .diaEvento .txtEvento{ width: calc(100% - 40px); margin-left: 10px; font-family: 'Montserrat'; font-size: 14px; line-height: 20px;  }
 
 
-.setaEsq {position: absolute; bottom: 20px; left: 50px; width: 80px; height: 20px; cursor: pointer; background-color: rgba(0,0,0,.5);}
-.setaEsq:before {content: ''; position: absolute; display: block; top: -10px; left: -20px; width: 0; height: 0; border-right: 40px solid rgba(0,0,0,.5); border-top: 20px solid transparent;border-bottom: 20px solid transparent;}
-.setaDir {position: absolute; bottom: 20px; right: 50px; width: 80px; height: 20px; cursor: pointer; background-color: rgba(0,0,0,.5);}
-.setaDir:after {content: ''; position: absolute; display: block; top: -10px; right: -20px; width: 0; height: 0; border-left: 40px solid rgba(0,0,0,.5); border-top: 20px solid transparent;border-bottom: 20px solid transparent;}
+.setaEsq {position: absolute; display: block; top: 350px; left: 20px; width: 73px; height: 47px; transform:scaleX(-1); background-image: url(../assets/imagens/seta.png); cursor: pointer;}
+.setaDir {position: absolute; display: block; top: 350px; right: 20px; width: 73px; height: 47px; background-image: url(../assets/imagens/seta.png); cursor: pointer; }
+
+/* .setaDir {position: absolute; top: 350px; right: 50px; width: 80px; height: 20px; cursor: pointer; background-color: rgba(0,0,0,.5);}
+.setaDir:after {content: ''; position: absolute; display: block; top: -10px; right: -20px; width: 0; height: 0; border-left: 40px solid rgba(0,0,0,.5); border-top: 20px solid transparent;border-bottom: 20px solid transparent;} */
 
 .mark {background-color: #ff0; }
 
 .novoEvento {position: absolute; top: 0; right: 0; left: 0; bottom: 0; background-color: rgba(0,0,0,.7); display: none; z-index: 10; }
-.novoEvento .contEvt{position: absolute; top: 0; right: 0; left: 0; bottom: 0; width: 300px; height: 500px; background-color: #fff; margin: auto;}
-.novoEvento .contForm{display: flex; flex-direction: column; margin: 20px; }
+.novoEvento .contEvt{position: absolute; top: 0; right: 0; left: 0; bottom: 0; width: 500px; height: 500px; background-color: #ffebcf; margin: auto; font-family: 'Montserrat'; }
+.novoEvento .contForm{display: flex; flex-direction: column; margin: 50px 130px; }
 .novoEvento .contForm li{margin-bottom: 5px; list-style: none;}
-.novoEvento .contForm li label{display: block;}
+.novoEvento .contForm li label{ display: inline-block; vertical-align: middle;}
+.novoEvento .contForm li label.desc{vertical-align: top;}
+.novoEvento .contForm li .dIni,
+.novoEvento .contForm li .dFim {font-weight: bold; }
 .novoEvento .contForm li input,
-.novoEvento .contForm li textarea{border: 1px solid #000;}
-.novoEvento .contForm li button{cursor: pointer; padding: 5px 8px; cursor: pointer; background-color: #333; color: #fff;}
-.novoEvento .btCancelar{width: 30px; height: 30px; line-height: 30px; text-align: center; box-sizing: border-box; background-color: #000; color: #fff; cursor: pointer; position: absolute; top: 10px ; right: 10px; border-radius: 50%;}
+.novoEvento .contForm li textarea{border: 2px solid #666;  padding: 0 3px; border-radius: 4px; margin: 5px 0 10px;}
+.novoEvento .contForm li input {line-height: 30px; }
+.novoEvento .contForm li .btEvento{ position: absolute; right: -30px; bottom: -35px; z-index: 3; }
+.novoEvento .contForm li .btExcluir{ position: absolute; left: -130px; bottom: -35px; z-index: 3; }
+.novoEvento .btCancelar{ position: absolute; top: 0; right: -30px; padding: 10px 30px; border-right: 10px solid #0f3a5d; }
+.novoEvento .btCancelar:before{left: -20px; }
+.novoEvento .btCancelar:after{ right: 5px; }
+.novoEvento .btCancelar span{ padding: 0 20px 0 0; margin-left: -30px; }
+.novoEvento .btExcluir:after { right:135px; }
+
+.alertaMsgm {position: absolute; top: 0; right: 0; left: 0; bottom: 0; background-color: rgba(0,0,0,.7); display: none; z-index: 10; }
+.alertaMsgm .contMsgm{position: absolute; top: 0; right: 0; left: 0; bottom: 0; width: 450px; height: 250px; background-color: #ffebcf; margin: auto; font-family: 'Montserrat'; }
+.alertaMsgm .contMsgm .msgm{ margin: 70px 30px 0; text-align: center; font-size: 18px; font-weight: bold; }
+.alertaMsgm .contMsgm .btOk{ position: absolute; right: -30px; bottom: -35px; z-index: 3; }
+.alertaMsgm .contMsgm .btCancelar{ position: absolute; left: -130px; bottom: -35px; z-index: 3; }
+.alertaMsgm .contMsgm .btCancelar:after { right:90px; }
 
 
-.btsTopo {position: absolute; top: 10px; left: 10px; display: flex; align-items: center; }
-.btGerarCalendario { padding: 5px 10px; background-color: #ff6600; color: #fff; cursor: pointer; margin-right: 10px; width: 130px; float: right; font-size: 16px; text-align: center; font-weight: bold;}
-.btEditar { padding: 5px 10px; background-color: #ff6600; color: #fff; cursor: pointer; margin-right: 10px; width: 130px; float: right; font-size: 16px; text-align: center; font-weight: bold;}
-.tituloEscola { float: left; color: #000; width: 560px; font-weight: bold; font-size: 24px; font-family: 'Montserrat'; font-weight: bold;}
-#logoEscola { width: 100px; height: 100px; float: left; text-align: center; line-height: 100px;  margin: 10px; background-size: contain; background-color: #fff; position: relative; border: 1px solid #000; font-size: 20px; overflow: hidden; }
-#logoEscola img{max-width: 100%; max-height: 100%; position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; }
+.btsTopo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: self-end;
+  width: 100%;
+  justify-content: space-between;
+  pointer-events: none;
+}
 
-.contMes .dias.semana>div {background-color: #d6d6d6;}
-.contMes .dias.semana strong { display: none;}
+.btsTopo .containerLeft{
+  display: flex;
+  flex-direction: column;
+  max-height: 150px;
+  overflow: hidden;
+}
+
+.btsTopo .containerRight{
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.containerRight .btBase {
+  width: 130px;
+  font-size: 16px;
+  margin: 0px -90px 5px 0;
+}
+
+/* .btGerarCalendario { padding: 5px 10px; background-color: #ff6600; color: #fff; cursor: pointer; margin-right: 10px; width: 130px; float: right; font-size: 16px; text-align: center; font-weight: bold;} */
+/* .btEditar { padding: 5px 10px; background-color: #ff6600; color: #fff; cursor: pointer; margin-right: 10px; width: 130px; float: right; font-size: 16px; text-align: center; font-weight: bold;} */
+
+.tituloEscola { 
+  float: left;
+  color: #000;
+  width: 200px;
+  font-size: 16px;
+  font-family: 'Montserrat';
+  font-weight: bold;
+  text-align: center;
+  margin:0 10px
+}
+#logoEscola {
+  width: 200px;
+  height: 80px;
+  float: left;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px 10px;
+  /* font-size: 20px; */
+  display: flex;
+}
+#logoEscola img{max-width: 100%; max-height: 100%; }
+
+.copyMes{width: 80%; margin: 0 10%;}
+.contMes .dias.semana>div {background-color: #d4d4d4; font-size: 18px;}
+.contMes .dias.semana>div:first-child {background-color: #bfbfbf;}
+.contMes .dias.semana>div:last-child {background-color: #bfbfbf;}
+.contMes .dias.semana strong { display: none; font-family: 'Montserrat-Light';font-weight: normal;}
 .contMes .dias.semana strong:first-child { display: inline;}
 
 #pagePrint {width: 1146px; height: 1620px; transform: scale(1); background-color: #fff; transform-origin: 0 0;}
+#pagePrint .btsTopo .logoFTD {
+  display: block;
+  right: -10px;
+  top: 0;
+  width: 140px;
+  height: 140px;
+  transform-origin: 0 100%;
+}
+#pagePrint .foraMes .vols {display: none;}
+#pagePrint .tableheader {margin-top: 0; margin-bottom: 0;}
 #pagePrint.qtd1  {height: 1146px; width: 1620px;}
 #pagePrint.qtd4  {height: 1146px; width: 1620px;}
 
 #pagePrint .ano  { margin: 20px 75px 0; display: flex; flex-wrap: wrap; height: auto;  justify-content:space-between;}
-#pagePrint .cont  { position: absolute; width: 100%; height: 100%; display: flex; flex-wrap: wrap; justify-content: space-between; margin: 0 0 0; box-sizing: border-box; padding: 135px 100px 30px; }
+#pagePrint .cont  { position: absolute; width: 100%; height: 100%; display: flex; flex-wrap: wrap; justify-content: space-between; margin: 0 0 0; box-sizing: border-box; padding: 0px 100px 30px; background-color: #fff;}
 #pagePrint .cont #logoEscola { border: 0; background-color: transparent; font-size: 0; }
-#pagePrint .copyMes  {transform-origin: 0 0;  width: 884px; }
+#pagePrint .copyMes  {transform-origin: 0 0;  width: 934px; margin: 0;}
 #pagePrint #cont2  { position: absolute; width: 100%; height: 100%;  overflow-y: scroll; }
 
 /* #pagePrint.qtd1 .cont  { width: 1550px; height: 1000px} */
-#pagePrint.qtd1 .copyMes  {transform: scale(1.58); transform-origin: 0 0;}
+#pagePrint.qtd1 .copyMes  {transform: scale(1.50); transform-origin: 0 0;}
 /* #pagePrint.qtd1 .contMes .dias>div  { font-size: 15px; } */
 #pagePrint.qtd1 .infoMes  { height: 220px; margin: 5px 0;/*  flex-direction:row; */ }
 #pagePrint.qtd1 .infoMes .diaEvento {padding: 5px 0;}
-#pagePrint.qtd1 .btsTopo{left: 90px;}
+#pagePrint.qtd1 .btsTopo{width: calc(100% - 220px); margin-left: 90px;}
+#pagePrint.qtd1 .btsTopo .logoFTD{width: 160px; height: 160px;}
+#pagePrint.qtd1 .evt4::before {width: 27px; height: 27px; left: 2px;}
 
 
-#pagePrint.qtd2 .cont  {padding: 135px 60px 30px;}
-#pagePrint.qtd2 .copyMes  {transform:scale(1.15)}
+#pagePrint.qtd2 .cont  {padding: 0 60px 30px;}
+#pagePrint.qtd2 .copyMes:nth-child(2){border-top: 2px solid #0f3a5d}
+#pagePrint.qtd2 .copyMes  {transform:scale(1.10)}
 /* #pagePrint.qtd2 .contMes .dias>div  {height: 45px; font-size: 15px; } */
-#pagePrint.qtd2 .infoMes  { height: 220px; margin: 5px 0; /* flex-direction:row; */ }
-#pagePrint.qtd2 .infoMes  .cor{ width: 20px; height: 20px;}
-#pagePrint.qtd2 .btsTopo{left: 50px;}
-#pagePrint.qtd2 .infoMes .diaEvento .txtEvento{font-size: 16px;}
+#pagePrint.qtd2 .infoMes { height: 220px; margin: 5px 0; /* flex-direction:row; */ }
+#pagePrint.qtd2 .infoMes .cor{ width: 20px !important; height: 20px !important;}
+#pagePrint.qtd2 .infoMes .cor.evt4{ width: 24px !important; height: 24px !important;}
+#pagePrint.qtd2 .btsTopo{transform: scale(.9); left: 0; top: -10px;}
+#pagePrint.qtd2 .infoMes .diaEvento .txtEvento{font-size: 10px; line-height: 14px; margin-left: 5px;}
 #pagePrint.qtd2 .infoMes .diaEvento{width: 50%; padding: 0; margin: 5px 0; }
 
-#pagePrint.qtd4 .cont  { justify-content: space-around; padding: 135px 50px 30px;}
-#pagePrint.qtd4 .btsTopo{left: 55px;}
-#pagePrint.qtd4 .copyMes  {width: 541px; margin: 0; transform: scale(1.35); transform-origin: 50% 0;}
-#pagePrint.qtd4 .contMes .dias>div  {height: 28px; font-size: 12px; }
-#pagePrint.qtd4 .infoMes  { height: 120px; margin: 5px 0;/*  flex-direction:row; */ }
-#pagePrint.qtd4 .infoMes  .cor{ width: 15px; height: 15px;}
-#pagePrint.qtd4 .infoMes .diaEvento .txtEvento{font-size: 12px;}
-#pagePrint.qtd4 .infoMes .diaEvento{width: 50%; padding: 0; margin-bottom: 5px; }
+#pagePrint.qtd2 .contMes .dias .dia .evts>div.evt4:before {width: 26px; height: 26px; left: 5px; }
 
-#pagePrint.qtd6 .cont  { padding: 135px 60px 30px;}
-#pagePrint.qtd6 .btsTopo{left: 50px;}
-#pagePrint.qtd6 .copyMes  { width: 500px; margin: 0 0 10px; }
+
+
+
+
+
+#pagePrint.qtd4 .btsTopo .logoFTD{
+  transform: scale(.5);
+  transform-origin: 0 0;
+  right: 5px;  
+}
+
+#pagePrint.qtd4 .cont  { justify-content: space-around; padding: 20px 50px 50px; }
+#pagePrint.qtd4 .copyMes  {width: 700px; margin: 0; transform: scale(1); transform-origin: 50% 0;}
+#pagePrint.qtd4 .copyMes:nth-child(3){border-top: 2px solid #0f3a5d; padding-top:10px;}
+#pagePrint.qtd4 .copyMes:nth-child(4){border-top: 2px solid #0f3a5d; padding-top:10px;}
+
+#pagePrint.qtd4 .tableheader { margin-top: 0px; margin-bottom: 10px; height: 60px;} 
+#pagePrint.qtd4 .contMes .dias .nomeMes {
+  height: 30px !important;
+  font-size: 24px !important;
+  background-size: 100%;
+  width: 240px;
+  background-position: 0 10px;  
+}
+#pagePrint.qtd4 .contMes .dias .nomeAno { align-items: start; height: 30px; }
+
+#pagePrint.qtd4 .contMes .evt6 {width: 20px; height: 16px !important; font-size: 8px; line-height: 13px; }
+#pagePrint.qtd4 .contMes .dia .evt4::before {width: 20px; height: 20px !important;}
+
+/* #pagePrint.qtd4 .btsTopo{padding: 0 10px; margin: 0 10px 0;} */
+#pagePrint.qtd4 .btsTopo .containerLeft{transform: scale(.5); transform-origin: 50% 0; margin: 0;}
+#pagePrint.qtd4 .contMes .dias>div  {height: 40px; font-size: 16px; }
+
+#pagePrint.qtd4 .infoMesVol, 
+#pagePrint.qtd4 .infoMes { height: 160px; margin: 5px 0;/*  flex-direction:row; */ }
+#pagePrint.qtd4 .infoMes .cor{ width: 15px !important; height: 15px !important;}
+#pagePrint.qtd4 .infoMes .cor.evt4 {width: 17px !important; height: 17px !important; }
+#pagePrint.qtd4 .infoMesVol .cor{width: 20px; height: 16px !important; margin: 0;}
+
+#pagePrint.qtd4 .infoMesVol .diaEvento .txtEvento,
+#pagePrint.qtd4 .infoMes .diaEvento .txtEvento{font-size: 12px; line-height: 16px; margin-left: 5px;}
+
+#pagePrint.qtd4 .infoMes .diaEvento{width: 100%; padding: 0; margin-bottom: 5px; align-items: start;}
+#pagePrint.qtd4 .contMes .dias .dia .vols{padding-left: 2px;}
+#pagePrint.qtd4 .infoMesVol .diaEvento{padding: 0; margin-bottom: 5px; align-items: start;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+#pagePrint.qtd6 .cont  { padding: 0 40px 30px;}
+#pagePrint.qtd6 .btsTopo{transform: scale(.93);top: 0;transform-origin: 50% 0;left: 0;}
+#pagePrint.qtd6 .btsTopo .containerLeft{transform: scale(.7); transform-origin: 0;}
+#pagePrint.qtd6 .btsTopo .containerLeft{transform: scale(.7); transform-origin: 0;}
+#pagePrint.qtd6 .btsTopo .containerRight{transform: scale(.6);}
+#pagePrint.qtd6 .copyMes  { width: 525px; margin: 0 0 10px; }
+#pagePrint.qtd6 .tableheader{height: 80px; margin-top: 30px; border-top: 2px solid #0f3a5d;}
+#pagePrint.qtd6 .tableheader:nth-child(3),
+#pagePrint.qtd6 .tableheader:nth-child(4),
+#pagePrint.qtd6 .tableheader:nth-child(5),
+#pagePrint.qtd6 .tableheader:nth-child(6){border-top: 2px solid #0f3a5d;}
+#pagePrint.qtd6 .contMes .tableheader .nomeMes {font-size: 26px !important;width: 200px;height: 33px !important;}
+#pagePrint.qtd6 .contMes .tableheader .nomeAno {height: 20px;font-size: 15px;}
+#pagePrint.qtd6 .contMes .dias.semana strong {font-weight: bold;}
+
+
+
+
 #pagePrint.qtd6 .contMes .dias>div  {height: 30px; font-size: 12px; }
-#pagePrint.qtd6 .infoMes  { height: 220px; margin: 5px 0; /* flex-direction:row; */ }
+#pagePrint.qtd6 .infoMes  { /* height: 220px; */ margin: 5px 0; /* flex-direction:row; */ }
 #pagePrint.qtd6 .infoMes  .cor{ width: 15px; height: 15px;}
-#pagePrint.qtd6 .infoMes .diaEvento .txtEvento{line-height: 18px;}
+/* #pagePrint.qtd6 .infoMes .diaEvento .txtEvento{line-height: 18px;} */
 #pagePrint.qtd6 .infoMes .diaEvento{width: 50%; padding: 0; margin-bottom: 5px;  align-items: flex-start;}
+#pagePrint.qtd6 .contMes .evt6 {width: 17px;font-size: 7px;line-height: 11px;font-weight: bold;margin: 1px;}
 
-#pagePrint.qtd12 .cont  { padding: 135px 50px 30px;}
-#pagePrint.qtd12 .btsTopo{left: 50px;}
-#pagePrint.qtd12 .copyMes  { width: 330px; margin: 0 0 20px;  }
-#pagePrint.qtd12 .contMes .dias>div  {height: 20px; font-size: 12px;}
-#pagePrint.qtd12 .infoMes  { height: 220px; margin: 5px 0; /* flex-direction:row; */ align-items: flex-start;}
-#pagePrint.qtd12 .infoMes  .cor{ width: 15px; height: 15px;}
-#pagePrint.qtd12 .infoMes .diaEvento .txtEvento{font-size: 12px; line-height: 18px;}
+
+
+
+
+
+#pagePrint.qtd6 .infoMesVol .diaEvento .txtEvento, 
+#pagePrint.qtd6 .infoMes .diaEvento .txtEvento {
+  width: calc(100% - 0px);
+  margin-left: 10px;
+  font-family: 'Montserrat';
+  font-size: 10px;
+  line-height: 16px;
+}
+
+#pagePrint.qtd6 .evt4::before {
+  width: 15px;
+  height: 15px;
+  left: 2px;
+  bottom: 2px;
+}
+
+
+
+
+
+
+
+
+#pagePrint.qtd12 .cont { padding: 0 30px 30px;}
+#pagePrint.qtd12 .copyMes { width: 340px; margin: 0 0 20px;  border-top:2px solid #0f3a5d}
+#pagePrint.qtd12 .copyMes:nth-child(1)  {border-top:none}
+#pagePrint.qtd12 .copyMes:nth-child(2)  {border-top:none}
+#pagePrint.qtd12 .copyMes:nth-child(3)  {border-top:none}
+
+#pagePrint.qtd12 .cont .contMes .dias { grid-gap: 1px;}
+#pagePrint.qtd12 .contMes .dias>div  {height: 20px; font-size: 10px; width: 45px;}
+
+#pagePrint.qtd12 .btsTopo{left: 50px; display: none;}
+#pagePrint.qtd12 .vols .evt6 {margin-top: 1px;margin-left: 1px;width: 11px;color: transparent; display: none;}
+#pagePrint.qtd12 .vols .evt6:nth-child(1) {display: block;}
+#pagePrint.qtd12 .infoMes  .cor{ width: 10px !important; height: 10px !important;}
+
+#pagePrint.qtd12 .tableheader{height: 80px; margin-top: 0px;}
+#pagePrint.qtd12 .tableheader:nth-child(6){border-top: 2px solid #0f3a5d;}
+#pagePrint.qtd12 .contMes .tableheader .nomeMes {font-size: 22px !important;width: 160px;height: 30px !important;}
+#pagePrint.qtd12 .contMes .tableheader .nomeAno {height: 20px;font-size: 14px;}
+
+#pagePrint.qtd12 .evt4::before { width: 10px; height: 10px; left: 2px; bottom: 0;}
+
+#pagePrint.qtd12 .infoMesVol .diaEvento .txtEvento, 
+#pagePrint.qtd12 .infoMes .diaEvento .txtEvento { width: 100%; margin-left: 5px; font-family: 'Montserrat'; font-size: 10px; line-height: 12px;}
+#pagePrint.qtd12 .infoMesVol .diaEvento .cor.evt6 { width: 15px; }
+
+
+#pagePrint.qtd12 .infoMes  { margin: 5px 0;align-items: flex-start;}
+#pagePrint.qtd12 .infoMesVol  {width: 40%;}
+#pagePrint.qtd12 .infoMes .diaEvento .txtEvento{font-size: 10px; line-height: 12px;}
+#pagePrint.qtd12 .infoMesVol .diaEvento, 
 #pagePrint.qtd12 .infoMes .diaEvento{width: 100%; padding: 0; margin-bottom: 5px; }
 
 #pagePrint.qtd12 .contMes .dias.semana strong { display: inline;}
 #pagePrint.qtd12 .contMes .dias.semana strong:first-child { display: none;}
 
 
-#telaLogin {background-color: #ededed; align-items: center; justify-content: center;}
-#telaLogin .camposForm {display: flex; flex-direction: column; padding: 30px; align-items: center; }
-#telaLogin .camposForm li{list-style: none; display: flex; flex-direction: column; width: 250px;  }
-#telaLogin .camposForm li .campoLogin{border: 2px solid #666; line-height: 30px; padding: 0 3px; border-radius: 4px; margin:5px 0 10px; }
-#telaLogin .camposForm li .campoLogin.erro{border-color: rgb(212, 0, 0);}
-
 
 #configPaginas { align-items: center; justify-content: center;}
-#configPaginas .btX{position: absolute; top: 10px; right: 10px; border-radius: 50%; background-color: #ddd; color: #000; font-weight: bold; width: 30px; height: 30px; text-align: center; line-height: 30px; font-size: 20px;  cursor: pointer; }
+/* #configPaginas .btX{position: absolute; top: 10px; right: 10px; border-radius: 50%; background-color: #ddd; color: #000; font-weight: bold; width: 30px; height: 30px; text-align: center; line-height: 30px; font-size: 20px;  cursor: pointer; } */
+#configPaginas select{border: 2px solid #666; line-height: 30px; padding: 0 3px; border-radius: 4px; margin:0 auto ; width: 100px; height: 40px; }
+#configPaginas .iniciar{ margin-right: 100px; margin-top: -30px;}
+
+#configPaginas .btX{ margin-left: 100px; margin-top: -69px;  transform: skewX(-50deg); text-align: right; border-left: 20px solid #0F3A5F; border-right: none;}
+#configPaginas .btX span{transform: skewX(50deg); padding: 0 0 0 30px; margin-left: auto; margin-right: -40px;}
+#configPaginas .btX:before {left: 40px;}
+#configPaginas .btX:after {right: 125px;}
+
+/* #configPaginas .btX{ margin-left: 100px; margin-top: -60px;  transform: skewX(-50deg);}
+#configPaginas .btX span{  transform: skewX(50deg);} */
+
 
 
 
@@ -225,6 +589,5 @@ select{border: 1px solid #000; width: 100px; height: 25px;}
 #loading .sprite {width: 300px; height: 300px; border: 50px solid #000; border-radius: 50%; animation: loading2 1.5s  linear infinite; color: #fff; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 20px; }
 #loading .ponteiro {position: absolute; top: 50%; left: 50%; width: 148px;height: 0; transform-origin: 0 0; animation: loading 1.5s  linear infinite; }
 #loading .ponteiro:after { content: ''; position: absolute; left:100%; width: 50px; height: 50px; background-color: #ddd; border-radius: 50%; filter:blur(3px) drop-shadow(1px -14px 5px #fff); }
-
 
 

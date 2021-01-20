@@ -37,10 +37,6 @@
                             <input type="text" value="" name="dt_fim" placeholder="dd/mm/aaaa" class="inputDate obgt" maxlength="10" />
                         </li>
                         <li>
-                            <label for="descricao">Descrição</label>
-                            <textarea name="descricao" value=""></textarea>
-                        </li>
-                        <li>
                             <label for="uf">UF</label>
                             <select name="uf" class="selectUf"></select>
                         </li>
@@ -82,7 +78,7 @@
 </body>
 <script>
     function complete(data) {
-        dataListar = data.eventos;
+        if(data.eventos) dataListar = data.eventos;
 
         $('.lista li:gt(0)').remove();
         for (var i in dataListar) {
@@ -94,12 +90,12 @@
                     <div class="titulo">' + dataListar[i].titulo + '</div>\
                     <div>' + (dataListar[i].dia_letivo != 0 ? 'Sim' : 'Não') + '</div>\
                     <div class="bts">\
-                        <button class="btEditar" >Editar</button>\
+                        <button class="btEditar" >Visualizar</button>\
                         <button class="btExcluir" >X</button>\
                     </div>\
                 </li>');
                 $('.lista').append(obj);
-                obj[0].evento = dataListar[i];
+                obj[0].obj = dataListar[i];
             }
         }
         if ($('.lista li').length == 1) {
@@ -112,7 +108,8 @@
     var page = 'evento';
 
     function listar() {
-        dispatch('GET', '/api/' + page + '/read.php', '', complete);
+        dataListar = [];
+        dispatch('GET', '/api/' + page + '/read.php', '', complete  );
     }
     listar();
 </script>

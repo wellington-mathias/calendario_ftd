@@ -15,14 +15,14 @@
         <div class="cont ">
             <div class="adicionar">
                 <div class="topo">
-                    <h1>Eventos FTD</h1>
+                    <h1>Simulados</h1>
                     <div class="btVoltarEditar">Voltar </div>
                 </div>
 
 
                 <form class="formAdicionar" method="" action="">
                     <input type="hidden" name="id" value="" />
-                    <input type="hidden" name="tipo_evento" value="4" />
+                    <input type="hidden" name="tipo_evento" value="5" />
                     <ul class="camposAdicionar">
                         <li>
                             <label for="titulo">Titulo *</label>
@@ -59,7 +59,7 @@
                 <div class="filter">
                 </div>
                 <div class="topo">
-                    <h1>Eventos FTD</h1>
+                    <h1>Simulados</h1>
                     <div class="btAdicionar">Adicionar + </div>
                 </div>
 
@@ -111,7 +111,7 @@
     function listar() {
         load = 0;
         dataListar = [];
-        dispatch('GET', '/api/' + page + '/read.php?tipo_evento=4', '', complete );
+        dispatch('GET', '/api/' + page + '/read.php?tipo_evento=5', '', complete );
     }
     listar();
     

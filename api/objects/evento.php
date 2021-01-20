@@ -278,7 +278,7 @@ class Evento extends CrudObject {
         $stmt = $this->conn->prepare($query);
 
         if (!is_null($evento_tipo_id)) $stmt->bindParam(":evento_tipo_id", $evento_tipo_id);
-        if (!is_null($uf) && !empty($evento_tipo_id) && (strcmp($evento_tipo_id, "NULL") == 0)) $stmt->bindParam(":uf", $uf);
+        if (!is_null($uf) && !empty($uf) && strcmp($uf, "NULL") != 0) $stmt->bindParam(":uf", $uf);
         if (!is_null($calendario_id)) $stmt->bindParam(":calendario_id", $calendario_id);
         if (!is_null($dia_letivo)) $stmt->bindParam(":dia_letivo", $dia_letivo);
 

@@ -111,7 +111,7 @@ function validateUsername($usuario) {
 
     if (!empty($usuario->login_ftd)) {
         if (empty($usuario->instituicao->id) || !is_numeric($usuario->instituicao->id)) {
-            send_message(503, array("message" => "Unable to create usuario. Instituicao is required"));
+            //send_message(503, array("message" => "Unable to create usuario. Instituicao is required"));
         }
 
         $user = $usuario->login("SITE", $usuario->login_ftd);

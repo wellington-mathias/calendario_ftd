@@ -41,6 +41,7 @@ body { background-color: #d6d6d6;}
 #content.login {height: 100vh; align-items: center; justify-content: center;}
 .contLogin {width: 90%; max-width: 400px;  background-color: #fff; border-radius: 15px; padding: 25px; }
 .contLogin li{ list-style: none; margin-bottom: 10px; font-weight: bold; }
+.contLogin li.error{ color:rgb(172, 0, 0); display: none; }
 .contLogin li input{border: 2px solid #ddd; background-color: #fff; line-height: 35px; width: 100%; border-radius: 7px; margin: 3px 0; transition: all .3s; padding: 0 4px; min-height: 35px;}
 .contLogin li .obgt.erro{border: 2px solid rgb(172, 0, 0); }
 .contLogin li button { align-self: center; border-radius: 5px; width: 150px; height: 35px; background-color: #d0750d; cursor: pointer; font-weight: bold;}

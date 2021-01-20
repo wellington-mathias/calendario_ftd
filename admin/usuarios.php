@@ -23,18 +23,39 @@
                 <form class="formAdicionar" method="" action="">
                     <input type="hidden" name="id" value="" />
                     <input type="hidden" name="tipo_usuario" value="" />
+                    <input type="hidden" value="" name="id_instituicao" />
                     <ul class="camposAdicionar">
                         <li>
                             <label for="nome">Nome</label>
-                            <input type="text" value="" name="nome" class=" obgt"  />
+                            <input type="text" value="" name="nome" class=" "  />
+                        </li>
+                        <li>
+                            <label for="nome">Email</label>
+                            <input type="text" value="" name="email" class=" "  />
                         </li>
                         <li>
                             <label for="nome">Login</label>
-                            <input type="text" value="" name="login" class=" obgt"  />
+                            <input type="text" value="" name="login" class=" "  />
                         </li>
                         <li>
                             <label for="senha">Senha</label>
-                            <input type="text" value="" name="password" class=" obgt"/>
+                            <input type="text" value="" name="password" class=" "/>
+                        </li>
+                        <li>
+                            <label for="nome">Login calendario</label>
+                            <input type="text" value="" name="login_ftd" class=" "  />
+                        </li>
+                        <li>
+                            <label for="senha">Senha calendario</label>
+                            <input type="text" value="" name="password_ftd" class=" "/>
+                        </li>
+                        <li>
+                            <label for="senha">Nome da instituição</label>
+                            <input type="text" value="" name="nome_instituicao" class=" "/>
+                        </li>
+                        <li>
+                            <label for="uf">UF</label>
+                            <select name="uf" class="selectUf"></select>
                         </li>
                         <li>
                             <label for="senha">Tipo Usuario</label>
@@ -56,8 +77,8 @@
 
                 <ul class="lista">
                     <li>
-                        <div>id</div>
                         <div class="titulo">Titulo</div>
+                        <div >Tipo</div>
                         <div class="bts"></div>
                     </li>
                 </ul>
@@ -74,15 +95,16 @@
         $('.lista li:gt(0)').remove();
         for (var i in dataListar) {
             var obj = $('<li>\
-                <div>' + dataListar[i].id + '</div>\
                 <div class="titulo">' + dataListar[i].nome + '</div>\
+                <div >' + dataListar[i].tipo_usuario.descricao + '</div>\
                 <div class="bts">\
-                    <button class="btEditar" >Editar</button>\
+                    <div></div>\
+                    <button class="btEditar" >visualizar</button>\
                     <button class="btExcluir" >X</button>\
                 </div>\
             </li>');
             $('.lista').append(obj);
-            obj[0].usuario = dataListar[i];
+            obj[0].obj = dataListar[i];
         }
         if ($('.lista li').length == 1) {
             $('.lista').append('<li> <div>Nenhum usuario cadastrado</div> </li>');
@@ -94,6 +116,7 @@
     var dataListar = [];
     var page = 'usuario';
     function listar() {
+        dataListar = [];
         dispatch('GET', '/api/'+page+'/read.php', '', complete);
     }
     listar();

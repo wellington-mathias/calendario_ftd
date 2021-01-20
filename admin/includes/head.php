@@ -3,4 +3,3 @@
 <script type="text/javascript" src="../js/TweenMax.min.js"></script>
 <script type="text/javascript" src="../js/action_ajax.js"></script>
 <script type="text/javascript" src="js/funcoes.js"></script>
-<script type="text/javascript" src="data_listar.js"></script>
