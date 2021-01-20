@@ -257,9 +257,15 @@ function pageAdcionar(obj) {
             $('.formAdicionar input[name="email_professor"]').val(obj.usuario.email);
         }
         if (page == 'evento') {
-            $('.formAdicionar .btEnviar ').hide();
-            $('.formAdicionar input ').prop({ readonly: true });
-            $('.formAdicionar select').prop({ disabled: true });
+            if( $('.btEditar:first').html() == 'Visualizar' ){
+                $('.formAdicionar .btEnviar ').hide();
+                $('.formAdicionar input ').prop({ readonly: true });
+                $('.formAdicionar select').prop({ disabled: true });
+            } else {
+                $('.formAdicionar .btEnviar').show();
+                $('.formAdicionar input ').prop({ readonly: false });
+                $('.formAdicionar select').prop({ disabled: false });
+            }
             
         }
     } else {

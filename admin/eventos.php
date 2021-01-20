@@ -44,8 +44,8 @@
                             <label for="">Dia letivo</label>
                             <div class="contRadio">
                                 <select name="dia_letivo" class="selectDia">
-                                    <option value="1" >Sim</option>
-                                    <option value="0" >Não</option>
+                                    <option value="1">Sim</option>
+                                    <option value="0">Não</option>
                                 </select>
                             </div>
                         </li>
@@ -78,14 +78,13 @@
 </body>
 <script>
     function complete(data) {
-        if(data.eventos) dataListar = data.eventos;
+        if (data.eventos) dataListar = data.eventos;
 
         $('.lista li:gt(0)').remove();
         for (var i in dataListar) {
 
-            if (dataListar[i].tipo_evento.id == 2 || dataListar[i].tipo_evento.id == 5 ) {
-                var dt = dataListar[i].dt_inicio.split('-');
-                var obj = $('<li>\
+            var dt = dataListar[i].dt_inicio.split('-');
+            var obj = $('<li>\
                     <div>' + (dt[2] + '/' + dt[1] + '/' + dt[0]) + '</div>\
                     <div class="titulo">' + dataListar[i].titulo + '</div>\
                     <div>' + (dataListar[i].dia_letivo != 0 ? 'Sim' : 'Não') + '</div>\
@@ -94,9 +93,9 @@
                         <button class="btExcluir" >X</button>\
                     </div>\
                 </li>');
-                $('.lista').append(obj);
-                obj[0].obj = dataListar[i];
-            }
+            $('.lista').append(obj);
+            obj[0].obj = dataListar[i];
+
         }
         if ($('.lista li').length == 1) {
             $('.lista').append('<li> <div>Nenhum evento cadastrado</div> </li>');
@@ -109,7 +108,7 @@
 
     function listar() {
         dataListar = [];
-        dispatch('GET', '/api/' + page + '/read.php', '', complete  );
+        dispatch('GET', '/api/' + page + '/read.php?tipo_evento=2', '', complete);
     }
     listar();
 </script>

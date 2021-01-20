@@ -39,12 +39,12 @@
 						<li>
 							<label for="login_professor">Login</label>
 							<input type="text" name="usuario" id="login_professor" class="obgt campoLogin"
-								value="thiago" />
+								value="talles" />
 						</li>
 						<li>
 							<label for="senha_professor">Senha</label>
 							<input type="password" name="senha" id="senha_professor" class="obgt campoLogin"
-								value="ftd" />
+								value="123" />
 						</li>
 					</ul>
 					<button class="iniciar btBase"><span>Entrar</span></button>
@@ -181,7 +181,7 @@
 				</p>
 				<div class="containerTexto fioTop">
 					<div class="tiposVol">
-						Selecione os volumes que serão usados.
+						Informe os volumes que serão utilizados em cada ano letivo:
 						<br><br>
 						<div class="form">
 							<div>
@@ -223,16 +223,16 @@
 
 						<div class="checks">
 							<div class="btCheck t0" data-tipo="1">
-								<span>Coleção sugeriada</span>
+								<span>Sem Revisão</span>
 							</div>
 							<div class="btCheck t1" data-tipo="2">
-								<span>Revisao Semestral no 3º ano</span>
+								<span>Com Revisão Semestral no 3º ano</span>
 							</div>
 							<div class="btCheck t2" data-tipo="3">
-								<span>Revisao Anual no 3º ano</span>
+								<span>Com Revisao Anual no 3º ano</span>
 							</div>
 							<div class="btCheck t3" data-tipo="4">
-								<span>Não usar o sugerido</span>
+								<span>Não fazer a distribuição dos volumes</span>
 							</div>
 						</div>
 
@@ -245,7 +245,15 @@
 			</div>
 		</div>
 
+		<div id="tutorial" class="page">
+			<div class="cursor"></div>
+			<div class="mensagem m1">Clique sobre uma data para cadastrar um evento</div>
+			<div class="mensagem m2">Preencha o formulário com os dados referentes ao evento.</div>
+			<div class="mensagem m3">Para cadastrar um evento com mais de um dia, clique e arraste o mouse até a data desejada.</div>
+			<div class="mensagem m4">Clique sobre os eventos cadastrados para editar ou excluir.</div>
 
+			<div class="continuar btBase"><span>Continuar</span></div>
+		</div>
 
 		<div id="calendario" class="page">
 			<div class="copyMes">
@@ -320,6 +328,7 @@
 			</div>
 
 			<div class="ano"></div>
+			<div class="btTutorial btBase"><span>?</span></div>
 			<div class="setaEsq"></div>
 			<div class="setaDir"></div>
 			<div class="btsTopo">
@@ -358,14 +367,16 @@
 						<label>Titulo do evento</label>
 						<input type="text" class="tituloEvt" name="tituloEvt" id="">
 					</li>
-					<li>
+					<li class="simulado">
+						<div class="check"></div> Prova Simulado 
+					</li>
+					<li class="haveraAula">
 						<label>Haverá aula</label>
 					</li>
-					<li>
-						<input name="dia_letivo" type="radio" data-value="1" /> sim
-						<input name="dia_letivo" type="radio" data-value="0" /> não
+					<li class="haveraAula">
+						<input name="dia_letivo" class="haveraAula a1" type="radio" data-value="1" /> sim
+						<input name="dia_letivo" class="haveraAula a0" type="radio" data-value="0" /> não
 					</li>
-
 					<li>
 						<button class="btExcluir btBase btVoltar"><span>Excluir</span></button>
 						<button class="btEvento btBase"><span>Salvar</span></button>

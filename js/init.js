@@ -38,6 +38,19 @@ $(document).ready(function () {
 	login();
 	//abertura();
 
+
+	$('#abertura .btVoltar').off().on('click',function(){
+		$('.page').hide();
+		login();
+	})
+	$('#dadosGestor .btVoltar').off().on('click',function(){
+		$('.page').hide();
+		abertura();
+	})
+	$('#configCalendario .btVoltar').off().on('click',function(){
+		$('.page').hide();
+		page2();
+	})
 });
 
 
@@ -52,7 +65,7 @@ function login() {
 		evt.preventDefault();
 		return false;
 	})
-		.trigger('submit')
+	//.trigger('submit')
 }
 
 function submitFormLogin(form) {
@@ -204,7 +217,7 @@ function abertura() {
 			page2();
 		}
 	})
-		.trigger('click');
+	//.trigger('click');
 
 }
 
@@ -223,7 +236,7 @@ function page2() {
 		}
 
 	})
-		.trigger('click');
+	//.trigger('click');
 
 	$('#configCalendario .iniciar').off().on('click', function () {
 
@@ -339,7 +352,7 @@ function page2() {
 		var v4 = v3 - 1 + parseInt(objCalendario.qtde_volumes_2o_ano);
 		var v5 = v4 + 1;
 		var v6 = v5 - 1 + parseInt(objCalendario.qtde_volumes_3o_ano);
-		console.log(objCalendario.revisao_volume_3o_ano , '-', v1, v2, v3, v4, v5, v6);
+		//console.log(objCalendario.revisao_volume_3o_ano , '-', v1, v2, v3, v4, v5, v6);
 		$('#configCalendario .form').find('input[name="v1"]').val(v1);
 		$('#configCalendario .form').find('input[name="v2"]').val(v2);
 		$('#configCalendario .form').find('input[name="v3"]').val(v3);
@@ -527,7 +540,7 @@ function dividirCapitulos() {
 	if ($('#configCalendario .checks .btCheck.on').attr('data-tipo') != 4) {
 		qtdDias();
 
-		
+
 		var v1 = parseInt($('#configCalendario .form input[name="v1"]').val());
 		var v2 = parseInt($('#configCalendario .form input[name="v2"]').val());
 		var v3 = parseInt($('#configCalendario .form input[name="v3"]').val());
@@ -540,8 +553,8 @@ function dividirCapitulos() {
 			var v5 = 0;
 			var v6 = 0;
 		}
-		
-		console.log(v1, v2, v3, v4, v5, v6);
+
+		//console.log(v1, v2, v3, v4, v5, v6);
 		evtsVolumes(v1, v2, v3, v4, v5, v6);
 
 	} else {
@@ -560,12 +573,12 @@ function evtsVolumes(v1, v2, v3, v4, v5, v6) {
 	objCalendario.qtde_volumes_1o_ano = (v2 - v1 + 1);
 	objCalendario.qtde_volumes_2o_ano = (v4 - v3 + 1);
 
-	
+
 	if ($('#configCalendario .checks .btCheck.on').attr('data-tipo') == 2) {
 		objCalendario.qtde_volumes_3o_ano = 0;
-	} 
-	
-	objCalendario.revisao_volume_3o_ano = ($('#configCalendario .checks .btCheck.on').attr('data-tipo')-1);
+	}
+
+	objCalendario.revisao_volume_3o_ano = ($('#configCalendario .checks .btCheck.on').attr('data-tipo') - 1);
 
 	var diaDiv = arDias.length / (v2 - v1 + 1);
 	for (var i = 0; i < (v2 - v1 + 1); i++) {
@@ -884,8 +897,115 @@ function calendario() {
 	}
 
 
-	$('#calendario').fadeIn(500);
+	$('#calendario').fadeIn(500, function(){
+		// $stepTuto = 0
+		// tutorial($stepTuto);
+	
+		$('#tutorial .continuar').off().on('click',function(){
+			tutorial($stepTuto);
+		})
 
+		$('.btTutorial').off().on('click',function(){
+			$stepTuto = 0
+			tutorial($stepTuto);
+		})
+	});
+
+}
+// #tutorial .cursor.p1{top:320; left: 500;}
+// #tutorial .cursor.p2{top:600; left: 680;}
+// #tutorial .cursor.p3{top:320; left: 500;}
+// #tutorial .cursor.p3{top:320; left: 730;}
+// #tutorial .cursor.p3{top:330; left: 690;}
+// #tutorial .cursor.p3{top:390; left: 670;}
+
+function tutorial(passo){
+	$stepTuto++
+	$('#tutorial').fadeIn(500);
+	$('#tutorial .mensagem').hide();
+	$('.btsTopo, .setaDir, .setaEsq, .btTutorial').hide();
+
+	var mes = $('.copyMes:visible').index() + 1;
+	var obj = $('.copyMes:visible .quarta:eq(2)');
+	var dia = $('.copyMes:visible .quarta:eq(2) .txt').text()*1;
+	console.log(dia, mes)
+	var evento = ''
+	
+	switch(passo){
+		case 0:
+			var t = obj.offset().top - $('.ano').offset().top + 40;
+			var l = obj.offset().left - $('.ano').offset().left + 70;
+			TweenMax.fromTo($('.cursor'),1.3, {top:300, left:1200},{top:t, left:l})
+			$('#tutorial .m1').delay(1000).fadeIn(500);
+		break;
+		case 1:
+			obj.trigger('click')
+			TweenMax.to($('.cursor'),.7,{top:450, left:520, onComplete:function(){
+				TweenMax.to($('.cursor'),.7, {delay:1, top:330, left:700})
+			}})
+			$('#tutorial .m2').delay(700).fadeIn(500, function(){
+				$('.tituloEvt').val('Reunião Professores')
+			});
+		break;
+		case 2:
+			$('.btCancelar').trigger('click');
+			var t = obj.offset().top - $('.ano').offset().top + 40;
+			var l = obj.offset().left - $('.ano').offset().left + 70;
+						
+			TweenMax.fromTo($('.cursor'),1.3,{top:330, left:700}, {top:t, left:l, onComplete:function(){
+				TweenMax.to($('.cursor'),1.3, {delay:.2,top:370, left:l+200})
+				console.log(dia, dia+1, dia+2, mes)
+				setTimeout(function(){classDrag($('.dia'+dia+'.diaM'+mes), $('.dia'+dia+'.diaM'+mes));},000)
+				setTimeout(function(){classDrag($('.dia'+dia+'.diaM'+mes), $('.dia'+(dia+1)+'.diaM'+mes));},500)
+				setTimeout(function(){classDrag($('.dia'+dia+'.diaM'+mes), $('.dia'+(dia+2)+'.diaM'+mes));},1000)
+			}})
+			$('#tutorial .m3').delay(1000).fadeIn(500, function(){});
+		break;
+		case 3:
+			addEvento(dia, mes, dia+2, mes);
+			TweenMax.to($('.cursor'),1, {top:450, left:520, onComplete:function(){
+				$('.tituloEvt').val('Evento tutorial');
+				TweenMax.to($('.cursor'),1, {delay:.3,top:670, left:600, onComplete:function(){
+				}})
+			}})
+		break;
+		case 4:
+			$('.btEvento').trigger('click');
+			setTimeout(function(){
+
+			$('.copyMes:visible .infoMes .diaEvento .txtEvento span').each(function(){
+				var str = $(this).text();
+				if(str == 'Evento tutorial'){
+					evento = $(this).parent().parent()
+					// $(evento).attr('class')
+				}
+			})
+
+			var t = $(evento).offset().top - $('.ano').offset().top + 40;
+			var l = $(evento).offset().left - $('.ano').offset().left + 70;
+			console.log(t, l)
+
+			TweenMax.to($('.cursor'),1, {delay:.5, top:t, left:l});
+			$('#tutorial .m4').delay(1000).fadeIn(500, function(){});
+		},500)
+		break;
+		case 5:
+			$('.copyMes:visible .infoMes .diaEvento .txtEvento span').each(function(){
+				var str = $(this).text();
+				if(str == 'Evento tutorial'){
+					evento = $(this).parent().parent()
+				}
+			})
+			$(evento).trigger('click');
+			TweenMax.to($('.cursor'),1, {top:670, left:400});
+		break;
+		case 6:
+			$('.btExcluir ').trigger('click');
+			TweenMax.fromTo($('.cursor'),1, {top:670, left:400}, {top:500, left:-100});
+			$('#tutorial').delay(500).fadeOut();
+			$('.btsTopo, .setaDir, .setaEsq, .btTutorial').fadeIn()
+		break;
+	}
 }
 
 function evtsCalendario() {
@@ -910,15 +1030,18 @@ function evtsCalendario() {
 
 	$('.ano .dias.numDias>div').not('.blockClick').off().on('click', function (evt) {
 		var msgm = '';
+		var simulado = false;
 		if ($(this).find('.evt3').length > 0 || $(this).hasClass('diasRecesso')) {
 			msgm = 'Esta data é um Feriado e não é considerada um dia letivo.  <br> Deseja incluir o evento mesmo assim? ';
-		} else if ($(this).find('.evts').find('div').length > 0) {
+		} else if ($(this).find('.evt2').length > 0 || $(this).find('.evt4').length > 0) {
 			msgm = 'Está data já tem um evento agendado. <br>Deseja incluir outro evento mesmo assim? ';
+		} else if ($(this).find('.evt5').length > 0) {
+			simulado = true;
 		}
 		var d = this.dataDia;
 		var m = this.dataMes;
 		msgmAlerta(msgm, function () {
-			addEvento(d, m, d, m);
+			addEvento(d, m, d, m, simulado);
 		})
 		evt.preventDefault();
 	})
@@ -975,7 +1098,7 @@ function evtsCalendario() {
 	})
 }
 
-function addEvento(dia, mes, diaF, mesF) {
+function addEvento(dia, mes, diaF, mesF, simulado) {
 	$('.novoEvento').fadeIn();
 	$('.novoEvento .tituloEvt').val('');
 	$('.novoEvento .dIni').text(dia + '/' + mes + '/' + anoAtual);
@@ -983,6 +1106,23 @@ function addEvento(dia, mes, diaF, mesF) {
 
 	$('.novoEvento .contForm .editar').hide();
 	$('.novoEvento .contForm .adicionar').show();
+	$('.novoEvento .haveraAula').show();
+	$('.novoEvento .haveraAula.a1').prop({ checked: true });
+
+	if (simulado) {
+		$('.novoEvento .simulado').removeClass('on').show();
+		$('.novoEvento .simulado').off().on('click', function () {
+			$(this).toggleClass('on');
+			if ($(this).hasClass('on')) {
+				$('.novoEvento .haveraAula').hide();
+				$('.novoEvento .haveraAula.a1').prop({ checked: true });
+			} else {
+				$('.novoEvento .haveraAula').show();
+			}
+		})
+	} else {
+		$('.novoEvento .contForm .simulado').hide();
+	}
 
 	$('.novoEvento .btEvento').off().on('click', function () {
 
@@ -991,14 +1131,15 @@ function addEvento(dia, mes, diaF, mesF) {
 			dt_inicio: dia + '/' + mes + '/' + anoAtual,
 			dt_fim: diaF + '/' + mesF + '/' + anoAtual,
 			dia_letivo: !!parseInt($('.novoEvento input[name="dia_letivo"]:checked').attr('data-value')),
+			simulado: ($('.novoEvento .simulado').hasClass('on') ? 1 : 0),
 			tipo_evento: {
 				id: 2,
 				descricao: null
 			},
-			descricao: null,
+			descricao: ($('.novoEvento .simulado').hasClass('on') ? 1 : 0),
 			uf: uf
 		}
-		
+
 
 		$('.ano .numDias>div.drag').removeClass('drag');
 		evtsProf.push(obj);
@@ -1030,10 +1171,27 @@ function edtEvento(dia) {
 	$('.novoEvento .tituloEvt').val(obj.titulo);
 	$('.novoEvento .dtInicio').val(obj.dt_inicio);
 	$('.novoEvento .dtFim').val(obj.dt_fim);
-	
+
 
 	$('.novoEvento .contForm .editar').show();
 	$('.novoEvento .contForm .adicionar').hide();
+
+	if (obj.descricao == '1') {
+		$('.novoEvento .simulado').addClass('on').show();
+		$('.novoEvento .haveraAula').hide();
+		$('.novoEvento .simulado').off().on('click', function () {
+			$(this).toggleClass('on');
+			if ($(this).hasClass('on')) {
+				$('.novoEvento .haveraAula').hide();
+				$('.novoEvento .haveraAula.a1').prop({ checked: true });
+			} else {
+				$('.novoEvento .haveraAula').show();
+			}
+		})
+	} else {
+		$('.novoEvento .contForm .simulado').hide();
+	}
+
 
 	$('.novoEvento .btEvento').off().on('click', function () {
 		dia.evento = '';
@@ -1044,6 +1202,8 @@ function edtEvento(dia) {
 		obj.dt_fim = $('.novoEvento .dtFim').val();
 		obj.titulo = $('.novoEvento .tituloEvt').val();
 		obj.dia_letivo = !!parseInt($('.novoEvento input[name="dia_letivo"]:checked').attr('data-value'));
+		obj.simulado = ($('.novoEvento .simulado').hasClass('on') ? 1 : 0);
+		obj.descricao = ($('.novoEvento .simulado').hasClass('on') ? 1 : 0);
 
 
 		dispatch('POST', '/api/evento/update.php', convertToSave(obj), function (data) {
@@ -1120,7 +1280,8 @@ function updateEventos() {
 
 	$('.ano .copyMes .dia .evts').html('');
 	$('.ano .copyMes .infoMes').html('');
-	//$('.ano .copyMes .infoMesVol').html('');
+
+
 	var ar = [
 		evtsIni,  //0
 		evtsProf, //1
@@ -1141,7 +1302,8 @@ function updateEventos() {
 			var diaI = $('.ano .numDias .dia' + parseInt(dtI[0]) + '.diaM' + parseInt(dtI[1]));
 			var diaF = $('.ano .numDias .dia' + parseInt(dtF[0]) + '.diaM' + parseInt(dtF[1]));
 
-			if (dtI != dtF) {
+			//console.log (dtI , dtF , dtI != dtF , evt.descricao == '1' );
+			if (evt.dt_inicio != evt.dt_fim) {
 
 				const diffTime = Math.abs(dt1 - dt2);
 				const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -1152,22 +1314,32 @@ function updateEventos() {
 
 					if (evt.tipo_evento.id == 2) {
 						d.find('.evts').append('<div class="evt' + evt.tipo_evento.id + ' corProf' + $arCores[dt1.getMonth()] + '"></div>');
+					} else if (evt.tipo_evento.id == 5) {
+						if (i > 0) {
+							d.find('.evts').append('<div class="evt' + evt.tipo_evento.id + ' semico "></div>');
+						} else {
+							d.find('.evts').append('<div class="evt' + evt.tipo_evento.id + ' "></div>');
+						}
 					} else {
 						d.find('.evts').append('<div class="evt' + evt.tipo_evento.id + '"></div>');
+						d.removeClass('diaLetivo');
 					}
-					d.removeClass('diaLetivo');
 					if (!evt.dia_letivo) d[0].dia_letivo = false;
 				}
 
 			} else {
-
+				var d = $('.ano .numDias .dia' + parseInt(dt1.getDate()) + '.diaM' + parseInt(dt1.getMonth() + 1));
 				if (evt.tipo_evento.id == 2) {
-					d.find('.evts').append('<div class="evt' + evt.tipo_evento.id + ' corProf' + $arCores[dt1.getMonth()] + '"></div>');
+					if (evt.descricao == '1') {
+						d.find('.evts').append('<div class="evt' + evt.tipo_evento.id + ' provaSimulado"></div>');
+					} else {
+						d.find('.evts').append('<div class="evt' + evt.tipo_evento.id + ' corProf' + $arCores[dt1.getMonth()] + '"></div>');
+					}
 				} else {
 					d.find('.evts').append('<div class="evt' + evt.tipo_evento.id + '"></div>');
+					diaI.removeClass('diaLetivo');
 				}
 
-				diaI.removeClass('diaLetivo');
 				if (!evt.dia_letivo) diaI[0].dia_letivo = false;
 			}
 
@@ -1179,9 +1351,16 @@ function updateEventos() {
 			} else {
 				var txt = '<strong>' + evt.dt_inicio + '</strong>' + '<br /><span>' + evt.titulo + '</span>';
 			}
-			var divEvt = $('<div class="diaEvento" data-dia="' + parseInt(dtI[0]) + '" >\
-				<div class="cor evt' + evt.tipo_evento.id + ' corProf' + $arCores[dt1.getMonth()] + '"></div>\
-				<div class="txtEvento">'+ txt + '</div></div>');
+			if (evt.tipo_evento.id == 2 && evt.descricao == '1') {
+				var divEvt = $('<div class="diaEvento" data-dia="' + parseInt(dtI[0]) + '" >\
+					<div class="cor evt' + evt.tipo_evento.id + ' provaSimulado"></div>\
+					<div class="txtEvento">'+ txt + '</div></div>');
+			} else {
+				var divEvt = $('<div class="diaEvento" data-dia="' + parseInt(dtI[0]) + '" >\
+					<div class="cor evt' + evt.tipo_evento.id + ' corProf' + $arCores[dt1.getMonth()] + '"></div>\
+					<div class="txtEvento">'+ txt + '</div></div>');
+
+			}
 
 			if (evt.tipo_evento.id == 2) {
 				$arCores[dt1.getMonth()] = ($arCores[dt1.getMonth()] == 5 ? 1 : $arCores[dt1.getMonth()] + 1);
@@ -1194,17 +1373,15 @@ function updateEventos() {
 			}
 
 			if (dt1.getMonth() != dt2.getMonth()) {
-				//var txt = '<strong>' + parseInt(dtI[0]) + '/' + parseInt(dtI[1]) + ' - ' + parseInt(dtF[0]) + '/' + parseInt(dtF[1]) + '</strong>' + '<br />' + evt.titulo;
+
 				var txt = '<strong>' + evt.dt_inicio + ' - ' + evt.dt_fim + '</strong>' + '<br /><span>' + evt.titulo + '</span>';
 				var divEvt = $('<div class="diaEvento" data-dia="' + parseInt(dtI[0]) + '" >\
 					<div class="cor evt' + evt.tipo_evento.id + '"></div>\
 					<div class="txtEvento">'+ txt + '</div></div>');
 
-				/* if (m == 5) {
-					$('.ano .mes' + (dt2.getMonth() + 1) + ' .infoMesVol').append(divEvt);
-				} else { */
+
 				$('.ano .mes' + (dt2.getMonth() + 1) + ' .infoMes').append(divEvt);
-				//}
+
 				if (clickEdita) {
 					divEvt[0].evento = evt;
 					divEvt[0].contEvt = ar[m];
@@ -1264,15 +1441,7 @@ function updateVolumes() {
 
 	}
 
-	$('.ano .infoMes').each(function () {
-		$(this).find('.diaEvento').sort(function (a, b) {
-			if (parseInt($(a).attr('data-dia')) < parseInt($(b).attr('data-dia'))) {
-				return -1;
-			} else {
-				return 1;
-			}
-		}).appendTo($(this));
-	})
+
 
 	$('.ano .infoMesVol').each(function () {
 		$(this).find('.diaEvento').sort(function (a, b) {
@@ -1353,9 +1522,6 @@ function updateVolumes() {
 
 }
 
-function ordenarDivs(attr) {
-
-}
 
 function classDrag(obj1, obj2) {
 	$('.ano .numDias>div').removeClass('drag');

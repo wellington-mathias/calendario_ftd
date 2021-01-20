@@ -77,13 +77,12 @@
     </div>
 </body>
 <script>
-    
     function complete(data) {
-        if(data.eventos) dataListar = data.eventos;
+        if (data.eventos) dataListar = data.eventos;
 
         $('.lista li:gt(0)').remove();
         for (var i in dataListar) {
-            
+
             var dt = dataListar[i].dt_inicio.split('-');
             var obj = $('<li>\
                         <div>' + (dt[2] + '/' + dt[1] + '/' + dt[0]) + '</div>\
@@ -95,7 +94,7 @@
                     </li>');
             $('.lista').append(obj);
             obj[0].obj = dataListar[i];
-            
+
         }
         if ($('.lista li').length == 1) {
             $('.lista').append('<li> <div>Nenhum evento cadastrado</div> </li>');
@@ -111,10 +110,9 @@
     function listar() {
         load = 0;
         dataListar = [];
-        dispatch('GET', '/api/' + page + '/read.php?tipo_evento=4', '', complete );
+        dispatch('GET', '/api/' + page + '/read.php?tipo_evento=4', '', complete);
     }
     listar();
-    
 </script>
 
 </html>
