@@ -6,6 +6,7 @@ class Instituicao extends CrudObject {
     public $id;
     public $nome;
     public $logo;
+    public $logo_content_type;
     public $uf;
     public $dt_criacao;
     public $dt_alteracao;
@@ -21,18 +22,19 @@ class Instituicao extends CrudObject {
                     SET
                         nome = :nome,
                         logo = :logo,
+                        logo_content_type = :logo_content_type,
                         uf = :uf";
 
         $stmt = $this->conn->prepare($query);
 
         // sanitize
         $this->nome = htmlspecialchars(strip_tags($this->nome));
-        $this->logo = htmlspecialchars(strip_tags($this->logo));
         $this->uf = strtoupper(htmlspecialchars(strip_tags($this->uf)));
 
         // bind values
         $stmt->bindParam(":nome", $this->nome);
         $stmt->bindParam(":logo", $this->logo);
+        $stmt->bindParam(":logo_content_type", $this->logo_content_type);
         $stmt->bindParam(":uf", $this->uf);
 
         // execute query
@@ -52,6 +54,7 @@ class Instituicao extends CrudObject {
                     u.id,
                     u.nome,
                     u.logo,
+                    u.logo_content_type,
                     u.uf,
                     u.dt_criacao,
                     u.dt_alteracao
@@ -82,7 +85,8 @@ class Instituicao extends CrudObject {
 
                 $instituicao->id = $id;
                 $instituicao->nome = html_entity_decode($nome);
-                $instituicao->logo = html_entity_decode($logo);
+                $instituicao->logo = base64_encode($logo);
+                $instituicao->logo_content_type = $logo_content_type;
                 $instituicao->uf = strtoupper(html_entity_decode($uf));
                 $instituicao->dt_criacao = $dt_criacao;
                 $instituicao->dt_alteracao = $dt_alteracao;
@@ -101,6 +105,7 @@ class Instituicao extends CrudObject {
                     u.id,
                     u.nome,
                     u.logo,
+                    u.logo_content_type,
                     u.uf,
                     u.dt_criacao,
                     u.dt_alteracao
@@ -132,7 +137,8 @@ class Instituicao extends CrudObject {
             extract($row);
 
             $this->nome = html_entity_decode($nome);
-            $this->logo = html_entity_decode($logo);
+            $this->logo = base64_encode($logo);
+            $this->logo_content_type = $logo_content_type;
             $this->uf = strtoupper(html_entity_decode($uf));
             $this->dt_criacao = $dt_criacao;
             $this->dt_alteracao = $dt_alteracao;
@@ -148,6 +154,7 @@ class Instituicao extends CrudObject {
                     SET
                         nome = :nome,
                         logo = :logo,
+                        logo_content_type = :logo_content_type,
                         uf = :uf
                     WHERE id = :id";
     
@@ -157,13 +164,13 @@ class Instituicao extends CrudObject {
     
         // sanitize
         $this->nome = htmlspecialchars(strip_tags($this->nome));
-        $this->logo = htmlspecialchars(strip_tags($this->logo));
         $this->uf = strtoupper(htmlspecialchars(strip_tags($this->uf)));
         $this->id = (int) htmlspecialchars(strip_tags($this->id));
 
         // bind values
         $stmt->bindParam(":nome", $this->nome);
         $stmt->bindParam(":logo", $this->logo);
+        $stmt->bindParam(":logo_content_type", $this->logo_content_type);
         $stmt->bindParam(":uf", $this->uf);
         $stmt->bindParam(":id", $this->id);
 

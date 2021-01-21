@@ -39,6 +39,44 @@ class Utilities{
         // json format
         return $paging_arr;
     }
-  
+    
+    public function validateErrorMessage($file) {
+        switch ($file['error']) {
+            case 1:
+                return "O arquivo enviado excede o limite maximo permitido pela plataforma";
+            case 2:
+                return "O arquivo enviado excede o limite maximo permitido pelo sistema";
+            case 3:
+                return "O upload do arquivo foi feito parcialmente";
+            case 4:
+                return "Nenhum arquivo foi enviado";
+            case 6:
+                return "Pasta temporaria ausente";
+            case 7:
+                return "Falha ao escrever o arquivo em disco";
+            case 8:
+                return "Uma extensão do PHP interrompeu o upload do arquivo";
+            default:
+                return "Erro inesperado ao enviar o arquivo (Codigo: " . $file['error'] . ")";
+        }
+    }
+    
+    public function validateFileType($type, $validTypes) {
+        foreach ($validTypes as $validType) {
+            if (strcasecmp($type, $validType) == 0) {
+             return true;
+            }
+        }
+    
+        return false;
+    }
+    
+    public function validateFileSize($size, $validSize) {
+        if ($size <= $validSize) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 ?>

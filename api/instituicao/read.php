@@ -44,7 +44,7 @@ function readAll() {
             $instituicao_item = array(
                 "id" => $instituicao->id,
                 "nome" => $instituicao->nome,
-                "logo" => $instituicao->logo,
+                "logo" => "data:" . $instituicao->logo_content_type . ";base64," .  base64_encode($instituicao->logo),
                 "uf" => $instituicao->uf,
                 "dt_criacao" => $instituicao->dt_criacao,
                 "dt_alteracao" => $instituicao->dt_alteracao
@@ -88,7 +88,7 @@ function readOne() {
             $instituicao_item = array(
                 "id" => $instituicao->id,
                 "nome" => $instituicao->nome,
-                "logo" => $instituicao->logo,
+                "logo" => "data:" . $instituicao->logo_content_type . ";base64," .  $instituicao->logo,
                 "uf" => $instituicao->uf,
                 "dt_criacao" => $instituicao->dt_criacao,
                 "dt_alteracao" => $instituicao->dt_alteracao

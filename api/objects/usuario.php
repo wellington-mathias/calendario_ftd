@@ -83,6 +83,7 @@ class Usuario extends CrudObject {
                     c.id AS instituicao_id,
                     c.nome AS instituicao_nome,
                     c.logo AS instituicao_logo,
+                    c.logo_content_type AS instituicao_logo_content_type,
                     c.uf AS instituicao_uf,
                     c.dt_criacao AS instituicao_dt_criacao,
                     c.dt_alteracao AS instituicao_dt_alteracao
@@ -128,7 +129,8 @@ class Usuario extends CrudObject {
                     $usuario->instituicao = new Instituicao();
                     $usuario->instituicao->id = $instituicao_id;
                     $usuario->instituicao->nome = html_entity_decode($instituicao_nome);
-                    $usuario->instituicao->logo = html_entity_decode($instituicao_logo);
+                    $usuario->instituicao->logo = base64_encode($instituicao_logo);
+                    $usuario->instituicao->logo_content_type = $instituicao_logo_content_type;
                     $usuario->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
                     $usuario->instituicao->dt_criacao = $instituicao_dt_criacao;
                     $usuario->instituicao->dt_alteracao = $instituicao_dt_alteracao;
@@ -155,6 +157,7 @@ class Usuario extends CrudObject {
                     c.id AS instituicao_id,
                     c.nome AS instituicao_nome,
                     c.logo AS instituicao_logo,
+                    c.logo_content_type AS instituicao_logo_content_type,
                     c.uf AS instituicao_uf,
                     c.dt_criacao AS instituicao_dt_criacao,
                     c.dt_alteracao AS instituicao_dt_alteracao
@@ -202,13 +205,14 @@ class Usuario extends CrudObject {
                 $this->instituicao = new Instituicao();
                 $this->instituicao->id = $instituicao_id;
                 $this->instituicao->nome = html_entity_decode($instituicao_nome);
-                $this->instituicao->logo = html_entity_decode($instituicao_logo);
+                $this->instituicao->logo = base64_encode($instituicao_logo);
+                $this->instituicao->logo_content_type = $instituicao_logo_content_type;
                 $this->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
                 $this->instituicao->dt_criacao = $instituicao_dt_criacao;
                 $this->instituicao->dt_alteracao = $instituicao_dt_alteracao;
             }
         }
-        
+
         return $this;
     }
 
@@ -226,6 +230,7 @@ class Usuario extends CrudObject {
                     c.id AS instituicao_id,
                     c.nome AS instituicao_nome,
                     c.logo AS instituicao_logo,
+                    c.logo_content_type AS instituicao_logo_content_type,
                     c.uf AS instituicao_uf,
                     c.dt_criacao AS instituicao_dt_criacao,
                     c.dt_alteracao AS instituicao_dt_alteracao
@@ -278,7 +283,8 @@ class Usuario extends CrudObject {
                     $usuario->instituicao = new Instituicao();
                     $usuario->instituicao->id = $instituicao_id;
                     $usuario->instituicao->nome = html_entity_decode($instituicao_nome);
-                    $usuario->instituicao->logo = html_entity_decode($instituicao_logo);
+                    $usuario->instituicao->logo = base64_encode($instituicao_logo);
+                    $usuario->instituicao->logo_content_type = $instituicao_logo_content_type;
                     $usuario->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
                     $usuario->instituicao->dt_criacao = $instituicao_dt_criacao;
                     $usuario->instituicao->dt_alteracao = $instituicao_dt_alteracao;
@@ -369,6 +375,7 @@ class Usuario extends CrudObject {
                                 c.id AS instituicao_id,
                                 c.nome AS instituicao_nome,
                                 c.logo AS instituicao_logo,
+                                c.logo_content_type AS instituicao_logo_content_type,
                                 c.uf AS instituicao_uf,
                                 c.dt_criacao AS instituicao_dt_criacao,
                                 c.dt_alteracao AS instituicao_dt_alteracao
@@ -397,6 +404,7 @@ class Usuario extends CrudObject {
                                 c.id AS instituicao_id,
                                 c.nome AS instituicao_nome,
                                 c.logo AS instituicao_logo,
+                                c.logo_content_type AS instituicao_logo_content_type,
                                 c.uf AS instituicao_uf,
                                 c.dt_criacao AS instituicao_dt_criacao,
                                 c.dt_alteracao AS instituicao_dt_alteracao
@@ -453,7 +461,8 @@ class Usuario extends CrudObject {
                 $this->instituicao = new Instituicao();
                 $this->instituicao->id = $instituicao_id;
                 $this->instituicao->nome = html_entity_decode($instituicao_nome);
-                $this->instituicao->logo = html_entity_decode($instituicao_logo);
+                $this->instituicao->logo = base64_encode($instituicao_logo);
+                $this->instituicao->logo_content_type = $instituicao_logo_content_type;
                 $this->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
                 $this->instituicao->dt_criacao = $instituicao_dt_criacao;
                 $this->instituicao->dt_alteracao = $instituicao_dt_alteracao;

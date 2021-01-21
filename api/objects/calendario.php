@@ -105,6 +105,7 @@ class Calendario extends CrudObject {
                         d.id AS instituicao_id,
                         d.nome AS instituicao_nome,
                         d.logo AS instituicao_logo,
+                        d.logo_content_type AS instituicao_logo_content_type,
                         d.uf AS instituicao_uf,
                         d.dt_criacao AS instituicao_dt_criacao,
                         d.dt_alteracao AS instituicao_dt_alteracao
@@ -163,7 +164,8 @@ class Calendario extends CrudObject {
                 $calendario->usuario->instituicao = new Instituicao();
                 $calendario->usuario->instituicao->id = $instituicao_id;
                 $calendario->usuario->instituicao->nome = html_entity_decode($instituicao_nome);
-                $calendario->usuario->instituicao->logo = html_entity_decode($instituicao_logo);
+                $calendario->usuario->instituicao->logo = base64_encode($instituicao_logo);
+                $calendario->usuario->instituicao->logo_content_type = $instituicao_logo_content_type;
                 $calendario->usuario->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
                 $calendario->usuario->instituicao->dt_criacao = $instituicao_dt_criacao;
                 $calendario->usuario->instituicao->dt_alteracao = $instituicao_dt_alteracao;
@@ -201,6 +203,7 @@ class Calendario extends CrudObject {
                     d.id AS instituicao_id,
                     d.nome AS instituicao_nome,
                     d.logo AS instituicao_logo,
+                    d.logo_content_type AS instituicao_logo_content_type,
                     d.uf AS instituicao_uf,
                     d.dt_criacao AS instituicao_dt_criacao,
                     d.dt_alteracao AS instituicao_dt_alteracao
@@ -260,7 +263,8 @@ class Calendario extends CrudObject {
             $this->usuario->instituicao = new Instituicao();
             $this->usuario->instituicao->id = $instituicao_id;
             $this->usuario->instituicao->nome = html_entity_decode($instituicao_nome);
-            $this->usuario->instituicao->logo = html_entity_decode($instituicao_logo);
+            $this->usuario->instituicao->logo = base64_encode($instituicao_logo);
+            $this->usuario->instituicao->logo_content_type = $instituicao_logo_content_type;
             $this->usuario->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
             $this->usuario->instituicao->dt_criacao = $instituicao_dt_criacao;
             $this->usuario->instituicao->dt_alteracao = $instituicao_dt_alteracao;
@@ -295,6 +299,7 @@ class Calendario extends CrudObject {
                         d.id AS instituicao_id,
                         d.nome AS instituicao_nome,
                         d.logo AS instituicao_logo,
+                        d.logo_content_type AS instituicao_logo_content_type,
                         d.uf AS instituicao_uf,
                         d.dt_criacao AS instituicao_dt_criacao,
                         d.dt_alteracao AS instituicao_dt_alteracao
@@ -360,7 +365,8 @@ class Calendario extends CrudObject {
                 $calendario->usuario->instituicao = new Instituicao();
                 $calendario->usuario->instituicao->id = $instituicao_id;
                 $calendario->usuario->instituicao->nome = html_entity_decode($instituicao_nome);
-                $calendario->usuario->instituicao->logo = html_entity_decode($instituicao_logo);
+                $calendario->usuario->instituicao->logo = base64_encode($instituicao_logo);
+                $calendario->usuario->instituicao->logo_content_type = $instituicao_logo_content_type;
                 $calendario->usuario->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
                 $calendario->usuario->instituicao->dt_criacao = $instituicao_dt_criacao;
                 $calendario->usuario->instituicao->dt_alteracao = $instituicao_dt_alteracao;
