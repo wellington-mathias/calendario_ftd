@@ -15,7 +15,7 @@ include_once '../objects/instituicao.php';
 include_once '../shared/utilities.php';
 
 // get data
-$data = json_decode($_POST["json_data"]);
+$data = json_decode('{"nome":"' . trim($_POST["nome"]) . '","uf":"' . trim($_POST["uf"]) . '"}');
 $upload_name = "logo";
 
 // make sure data is not empty
