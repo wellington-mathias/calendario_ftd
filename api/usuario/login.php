@@ -115,7 +115,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                     $response["usuario"]["instituicao"] = array(
                         "id" => $usuario->instituicao->id,
                         "nome" => $usuario->instituicao->nome,
-                        "logo" => $usuario->instituicao->logo,
+                        "logo" => $usuario->instituicao->logo_content_type . $usuario->instituicao->logo,
                         "uf" => $usuario->instituicao->uf,
                         "dt_criacao" => $usuario->instituicao->dt_criacao,
                         "dt_alteracao" => $usuario->instituicao->dt_alteracao

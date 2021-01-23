@@ -28,8 +28,8 @@ class Instituicao extends CrudObject {
         $stmt = $this->conn->prepare($query);
 
         // sanitize
-        $this->nome = htmlspecialchars(strip_tags($this->nome));
-        $this->uf = strtoupper(htmlspecialchars(strip_tags($this->uf)));
+        if (!is_null($this->nome)) $this->nome = htmlspecialchars(strip_tags($this->nome));
+        if (!is_null($this->uf)) $this->uf = strtoupper(htmlspecialchars(strip_tags($this->uf)));
 
         // bind values
         $stmt->bindParam(":nome", $this->nome);
@@ -85,8 +85,8 @@ class Instituicao extends CrudObject {
 
                 $instituicao->id = $id;
                 $instituicao->nome = html_entity_decode($nome);
-                $instituicao->logo = base64_encode($logo);
-                $instituicao->logo_content_type = $logo_content_type;
+                $instituicao->logo = (is_null($logo)) ? null : "base64," .  base64_encode($logo);
+                $instituicao->logo_content_type = (is_null($logo_content_type)) ? null : "data:" . $logo_content_type . ";";
                 $instituicao->uf = strtoupper(html_entity_decode($uf));
                 $instituicao->dt_criacao = $dt_criacao;
                 $instituicao->dt_alteracao = $dt_alteracao;
@@ -137,8 +137,8 @@ class Instituicao extends CrudObject {
             extract($row);
 
             $this->nome = html_entity_decode($nome);
-            $this->logo = base64_encode($logo);
-            $this->logo_content_type = $logo_content_type;
+            $this->logo = (is_null($logo)) ? null : "base64," .  base64_encode($logo);
+            $this->logo_content_type = (is_null($logo_content_type)) ? null : "data:" . $logo_content_type . ";";
             $this->uf = strtoupper(html_entity_decode($uf));
             $this->dt_criacao = $dt_criacao;
             $this->dt_alteracao = $dt_alteracao;
@@ -150,33 +150,56 @@ class Instituicao extends CrudObject {
     // update method
     function update() {
         // update query
-        $query = "UPDATE instituicao
-                    SET
-                        nome = :nome,
-                        logo = :logo,
-                        logo_content_type = :logo_content_type,
-                        uf = :uf
-                    WHERE id = :id";
-    
-        //echo $query;
-        // prepare query statement
-        $stmt = $this->conn->prepare($query);
-    
-        // sanitize
-        $this->nome = htmlspecialchars(strip_tags($this->nome));
-        $this->uf = strtoupper(htmlspecialchars(strip_tags($this->uf)));
-        $this->id = (int) htmlspecialchars(strip_tags($this->id));
+        $doUpdate = !is_null($this->nome) || !is_null($this->uf) || !is_null($this->logo);
+        $queryData = "";
 
-        // bind values
-        $stmt->bindParam(":nome", $this->nome);
-        $stmt->bindParam(":logo", $this->logo);
-        $stmt->bindParam(":logo_content_type", $this->logo_content_type);
-        $stmt->bindParam(":uf", $this->uf);
-        $stmt->bindParam(":id", $this->id);
+        if ($doUpdate) {
+            if (!is_null($this->nome)) {
+                $queryData .= strlen($queryData) > 0 ? ", nome = :nome" : "nome = :nome";
+            }
+    
+            if (!is_null($this->uf)) {
+                $queryData .= strlen($queryData) > 0 ? ", uf = :uf" : "uf = :uf";
+            }
+    
+            if (!is_null($this->logo)) {
+                $queryData .= strlen($queryData) > 0 ? ", logo = :logo" : "logo = :logo";
+            }
 
-        // execute the query
-        if(!$stmt->execute()) {
-            return false;
+            if (!is_null($this->logo_content_type)) {
+                $queryData .= strlen($queryData) > 0 ? ", logo_content_type = :logo_content_type" : "logo_content_type = :logo_content_type";
+            }
+
+            $query = "UPDATE instituicao SET " . $queryData . " WHERE id = :id";
+
+            // prepare query statement
+            $stmt = $this->conn->prepare($query);
+
+            // bind values
+            if (!is_null($this->nome)) {
+                $this->nome = htmlspecialchars(strip_tags($this->nome));
+                $stmt->bindParam(":nome", $this->nome);
+            }
+
+            if (!is_null($this->uf)) {
+                $this->uf = strtoupper(htmlspecialchars(strip_tags($this->uf)));
+                $stmt->bindParam(":uf", $this->uf);
+            }
+
+            if (!is_null($this->logo)) {
+                $stmt->bindParam(":logo", $this->logo);
+            }
+
+            if (!is_null($this->logo_content_type)) {
+                $stmt->bindParam(":logo_content_type", $this->logo_content_type);
+            }
+            
+            $stmt->bindParam(":id", $this->id);
+
+            // execute the query
+            if(!$stmt->execute()) {
+                return false;
+            }
         }
     
         return true;

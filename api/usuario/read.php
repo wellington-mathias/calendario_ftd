@@ -129,7 +129,7 @@ function getDataAsArray($dataAsObject) {
         $dataAsArray["instituicao"] = array(
             "id" => $dataAsObject->instituicao->id,
             "nome" => $dataAsObject->instituicao->nome,
-            "logo" => "data:" . $dataAsObject->instituicao->logo_content_type . ";base64," .  $dataAsObject->instituicao->logo,
+            "logo" => $dataAsObject->instituicao->logo_content_type .  $dataAsObject->instituicao->logo,
             "uf" => $dataAsObject->instituicao->uf,
             "dt_criacao" => $dataAsObject->instituicao->dt_criacao,
             "dt_alteracao" => $dataAsObject->instituicao->dt_alteracao

@@ -14,33 +14,27 @@ if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "POST") {
 include_once '../objects/instituicao.php';
 include_once '../shared/utilities.php';
 
-// get data
-$data = json_decode('{"id":"' . trim($_POST["id"]) . '","nome":"' . trim($_POST["nome"]) . '","uf":"' . trim($_POST["uf"]) . '"}');
-$upload_name = "logo";
+// prepare object
+$obj = new Instituicao();
 
-// make sure data is not empty
-$data_incomplete = empty($data->nome) || empty($data->uf) || empty($_FILES[$upload_name]) || empty($data->id);
+// set instituicao property values
+$obj->id = empty($_POST["id"]) ? 0 : trim($_POST["id"]);
 
-if ($data_incomplete) {
-    send_message(400, array("message" => "Unable to create Instituicao. Data is incomplete."));
+if ($obj->id == 0) {
+    send_message(400, array("message" => "Unable to update Instituicao. ID is required."));
 } else {
-    $file = $_FILES[$upload_name];
+    $obj->nome = empty($_POST["nome"]) ? null : trim($_POST["nome"]);
+    $obj->uf = empty($_POST["uf"]) ? null : trim($_POST["uf"]);
 
-    validateUpload($file);
+    $file = validateUpload("logo");
 
-    $file_content = file_get_contents($file['tmp_name']);
-
-    // prepare object
-    $obj = new Instituicao();
-
-    // set ID property to be edited
-    $obj->id = $data->id;
-    
-    // set property values
-    $obj->nome = $data->nome;
-    $obj->logo = file_get_contents($file['tmp_name']);
-    $obj->logo_content_type = $file['type'];
-    $obj->uf = $data->uf;
+    if (is_null($file)) {
+        $obj->logo = null;
+        $obj->logo_content_type = null;
+    } else {
+        $obj->logo = file_get_contents($file['tmp_name']);
+        $obj->logo_content_type = $file['type'];
+    }
     
     // update the object
     if (!$obj->update()) {
@@ -64,36 +58,40 @@ function send_message($http_code, $response_data) {
     exit();
 }
 
-function emptyUpload($filename) {
-    if (empty($_FILES[$filename])) {
-        return true;
-    }
-
-    return false;
-}
-
-function validateUpload($file) {
+function validateUpload($filename) {
     $utilities = new Utilities();
 
-    $hasError = false;
-    $errorMessage = null;
+    if ($utilities->emptyUpload($filename)) {
+        return null;
+    } else {
+        $hasError = false;
+        $errorMessage = null;
 
-    if ($file['error'] != 0) {
-        $hasError = true;
-        $errorMessage = $utilities->validateErrorMessage($file);
-    }  else if (!$utilities->validateFileType($file['type'], array("image/jpeg", "image/png", "image/gif"))) {
-        $hasError = true;
-        $errorMessage = "O formato de arquivo '" . $file['type']  . "' e invalido";
-    } else if (!$utilities->validateFileSize($file['size'], 2048000)) {
-        $hasError = true;
-        $errorMessage = "O arquivo enviado excede o limite maximo permitido de 2MB";
-    } else if (!file_exists($file["tmp_name"]) || !is_uploaded_file($file["tmp_name"])) {
-        $hasError = true;
-        $errorMessage = "Falha ao obter dados do arquivo";
-    }
+        $file = $_FILES[$filename];
 
-    if ($hasError) {
-        send_message(400, array("message" => $errorMessage));
+        if ($file['error'] == 4) {
+            return null;
+        } else {
+            if ($file['error'] != 0) {
+                $hasError = true;
+                $errorMessage = $utilities->validateErrorMessage($file);
+            }  else if (!$utilities->validateFileType($file['type'], array("image/jpeg", "image/png", "image/gif"))) {
+                $hasError = true;
+                $errorMessage = "O formato de arquivo '" . $file['type']  . "' e invalido";
+            } else if (!$utilities->validateFileSize($file['size'], 512000)) {
+                $hasError = true;
+                $errorMessage = "O arquivo enviado excede o limite maximo permitido de 500KB";
+            } else if (!file_exists($file["tmp_name"]) || !is_uploaded_file($file["tmp_name"])) {
+                $hasError = true;
+                $errorMessage = "Falha ao obter dados do arquivo";
+            }
+
+            if ($hasError) {
+                send_message(400, array("message" => $errorMessage));
+            }
+
+            return $file;
+        }
     }
 }
 ?>

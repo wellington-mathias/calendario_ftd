@@ -129,8 +129,8 @@ class Usuario extends CrudObject {
                     $usuario->instituicao = new Instituicao();
                     $usuario->instituicao->id = $instituicao_id;
                     $usuario->instituicao->nome = html_entity_decode($instituicao_nome);
-                    $usuario->instituicao->logo = base64_encode($instituicao_logo);
-                    $usuario->instituicao->logo_content_type = $instituicao_logo_content_type;
+                    $usuario->instituicao->logo = (is_null($instituicao_logo)) ? null : "base64," .  base64_encode($instituicao_logo);
+                    $usuario->instituicao->logo_content_type = (is_null($instituicao_logo_content_type)) ? null : "data:" . $instituicao_logo_content_type . ";";
                     $usuario->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
                     $usuario->instituicao->dt_criacao = $instituicao_dt_criacao;
                     $usuario->instituicao->dt_alteracao = $instituicao_dt_alteracao;
@@ -205,8 +205,8 @@ class Usuario extends CrudObject {
                 $this->instituicao = new Instituicao();
                 $this->instituicao->id = $instituicao_id;
                 $this->instituicao->nome = html_entity_decode($instituicao_nome);
-                $this->instituicao->logo = base64_encode($instituicao_logo);
-                $this->instituicao->logo_content_type = $instituicao_logo_content_type;
+                $this->instituicao->logo = (is_null($instituicao_logo)) ? null : "base64," .  base64_encode($instituicao_logo);
+                $this->instituicao->logo_content_type = (is_null($instituicao_logo_content_type)) ? null : "data:" . $instituicao_logo_content_type . ";";
                 $this->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
                 $this->instituicao->dt_criacao = $instituicao_dt_criacao;
                 $this->instituicao->dt_alteracao = $instituicao_dt_alteracao;
@@ -283,8 +283,8 @@ class Usuario extends CrudObject {
                     $usuario->instituicao = new Instituicao();
                     $usuario->instituicao->id = $instituicao_id;
                     $usuario->instituicao->nome = html_entity_decode($instituicao_nome);
-                    $usuario->instituicao->logo = base64_encode($instituicao_logo);
-                    $usuario->instituicao->logo_content_type = $instituicao_logo_content_type;
+                    $usuario->instituicao->logo = (is_null($instituicao_logo)) ? null : "base64," .  base64_encode($instituicao_logo);
+                    $usuario->instituicao->logo_content_type = (is_null($instituicao_logo_content_type)) ? null : "data:" . $instituicao_logo_content_type . ";";
                     $usuario->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
                     $usuario->instituicao->dt_criacao = $instituicao_dt_criacao;
                     $usuario->instituicao->dt_alteracao = $instituicao_dt_alteracao;
@@ -461,8 +461,8 @@ class Usuario extends CrudObject {
                 $this->instituicao = new Instituicao();
                 $this->instituicao->id = $instituicao_id;
                 $this->instituicao->nome = html_entity_decode($instituicao_nome);
-                $this->instituicao->logo = base64_encode($instituicao_logo);
-                $this->instituicao->logo_content_type = $instituicao_logo_content_type;
+                $this->instituicao->logo = (is_null($instituicao_logo)) ? null : "base64," .  base64_encode($instituicao_logo);
+                $this->instituicao->logo_content_type = (is_null($instituicao_logo_content_type)) ? null : "data:" . $instituicao_logo_content_type . ";";
                 $this->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
                 $this->instituicao->dt_criacao = $instituicao_dt_criacao;
                 $this->instituicao->dt_alteracao = $instituicao_dt_alteracao;

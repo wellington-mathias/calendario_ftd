@@ -39,6 +39,14 @@ class Utilities{
         // json format
         return $paging_arr;
     }
+
+    public function emptyUpload($filename) {
+        if (empty($_FILES[$filename])) {
+            return true;
+        }
+    
+        return false;
+    }
     
     public function validateErrorMessage($file) {
         switch ($file['error']) {

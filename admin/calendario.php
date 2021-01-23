@@ -4,14 +4,13 @@
 <head>
     <meta charset="utf-8">
     <title>Admin - Calendario</title>
-    <? include('includes/head.php'); ?>
 </head>
 
 <body>
 
     <div id="content">
 
-        <? include('includes/menu.php'); ?>
+        <?php include('includes/menu.php'); ?>
         <div class="cont ">
             <div class="adicionar">
                 <div class="topo">
