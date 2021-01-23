@@ -38,7 +38,7 @@ class Usuario extends CrudObject {
         $stmt = $this->conn->prepare($query);
 
         // sanitize
-        $this->nome = htmlspecialchars(strip_tags($this->nome));
+        $this->nome = (is_null ($this->nome)) ? null : htmlspecialchars(strip_tags($this->nome));
         $this->email = (is_null ($this->email)) ? null : htmlspecialchars(strip_tags($this->email));
         $this->login = (is_null ($this->login)) ? null : htmlspecialchars(strip_tags($this->login));
         $this->senha = (is_null ($this->senha)) ? null : password_hash(htmlspecialchars(strip_tags($this->senha)), PASSWORD_DEFAULT);
@@ -114,7 +114,7 @@ class Usuario extends CrudObject {
 
                 $usuario = new Usuario();
                 $usuario->id = $id;
-                $usuario->nome = html_entity_decode($nome);
+                $usuario->nome = (is_null ($nome)) ? null: html_entity_decode($nome);
                 $usuario->email = (is_null ($email)) ? null: html_entity_decode($email);
                 $usuario->dt_criacao = $dt_criacao;
                 $usuario->dt_alteracao = $dt_alteracao;
@@ -128,10 +128,10 @@ class Usuario extends CrudObject {
                 } else {
                     $usuario->instituicao = new Instituicao();
                     $usuario->instituicao->id = $instituicao_id;
-                    $usuario->instituicao->nome = html_entity_decode($instituicao_nome);
+                    $usuario->instituicao->nome = (is_null($instituicao_nome)) ? null : html_entity_decode($instituicao_nome);
                     $usuario->instituicao->logo = (is_null($instituicao_logo)) ? null : "base64," .  base64_encode($instituicao_logo);
                     $usuario->instituicao->logo_content_type = (is_null($instituicao_logo_content_type)) ? null : "data:" . $instituicao_logo_content_type . ";";
-                    $usuario->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
+                    $usuario->instituicao->uf = (is_null($instituicao_uf)) ? null : strtoupper(html_entity_decode($instituicao_uf));
                     $usuario->instituicao->dt_criacao = $instituicao_dt_criacao;
                     $usuario->instituicao->dt_alteracao = $instituicao_dt_alteracao;
                 }
@@ -190,7 +190,7 @@ class Usuario extends CrudObject {
 
             extract($row);
 
-            $this->nome = html_entity_decode($nome);
+            $this->nome = (is_null ($nome)) ? null: html_entity_decode($nome);
             $this->email = (is_null ($email)) ? null: html_entity_decode($email);
             $this->dt_criacao = $dt_criacao;
             $this->dt_alteracao = $dt_alteracao;
@@ -204,10 +204,10 @@ class Usuario extends CrudObject {
             } else {
                 $this->instituicao = new Instituicao();
                 $this->instituicao->id = $instituicao_id;
-                $this->instituicao->nome = html_entity_decode($instituicao_nome);
+                $this->instituicao->nome = (is_null($instituicao_nome)) ? null : html_entity_decode($instituicao_nome);
                 $this->instituicao->logo = (is_null($instituicao_logo)) ? null : "base64," .  base64_encode($instituicao_logo);
                 $this->instituicao->logo_content_type = (is_null($instituicao_logo_content_type)) ? null : "data:" . $instituicao_logo_content_type . ";";
-                $this->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
+                $this->instituicao->uf = (is_null($instituicao_uf)) ? null : strtoupper(html_entity_decode($instituicao_uf));
                 $this->instituicao->dt_criacao = $instituicao_dt_criacao;
                 $this->instituicao->dt_alteracao = $instituicao_dt_alteracao;
             }
@@ -268,7 +268,7 @@ class Usuario extends CrudObject {
 
                 $usuario = new Usuario();
                 $usuario->id = $id;
-                $usuario->nome = html_entity_decode($nome);
+                $usuario->nome = (is_null ($nome)) ? null: html_entity_decode($nome);
                 $usuario->email = (is_null ($email)) ? null: html_entity_decode($email);
                 $usuario->dt_criacao = $dt_criacao;
                 $usuario->dt_alteracao = $dt_alteracao;
@@ -282,10 +282,10 @@ class Usuario extends CrudObject {
                 } else {
                     $usuario->instituicao = new Instituicao();
                     $usuario->instituicao->id = $instituicao_id;
-                    $usuario->instituicao->nome = html_entity_decode($instituicao_nome);
+                    $usuario->instituicao->nome = (is_null($instituicao_nome)) ? null : html_entity_decode($instituicao_nome);
                     $usuario->instituicao->logo = (is_null($instituicao_logo)) ? null : "base64," .  base64_encode($instituicao_logo);
                     $usuario->instituicao->logo_content_type = (is_null($instituicao_logo_content_type)) ? null : "data:" . $instituicao_logo_content_type . ";";
-                    $usuario->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
+                    $usuario->instituicao->uf = (is_null($instituicao_uf)) ? null : strtoupper(html_entity_decode($instituicao_uf));
                     $usuario->instituicao->dt_criacao = $instituicao_dt_criacao;
                     $usuario->instituicao->dt_alteracao = $instituicao_dt_alteracao;
                 }
@@ -313,7 +313,7 @@ class Usuario extends CrudObject {
         $stmt = $this->conn->prepare($query);
     
         // sanitize
-        $this->nome = htmlspecialchars(strip_tags($this->nome));
+        $this->nome = (is_null ($this->nome)) ? null : htmlspecialchars(strip_tags($this->nome));
         $this->email = (is_null ($this->email)) ? null : htmlspecialchars(strip_tags($this->email));
         $this->id = (int) htmlspecialchars(strip_tags($this->id));
         $this->tipo_usuario->id = (int) htmlspecialchars(strip_tags($this->tipo_usuario->id));
@@ -444,7 +444,7 @@ class Usuario extends CrudObject {
             extract($row);
 
             $this->id = $id;
-            $this->nome = html_entity_decode($nome);
+            $this->nome = (is_null ($nome)) ? null: html_entity_decode($nome);
             $this->email = (is_null ($email)) ? null: html_entity_decode($email);
             $this->login = $login;
             $this->senha = $senha;
@@ -460,10 +460,10 @@ class Usuario extends CrudObject {
             } else {
                 $this->instituicao = new Instituicao();
                 $this->instituicao->id = $instituicao_id;
-                $this->instituicao->nome = html_entity_decode($instituicao_nome);
+                $this->instituicao->nome = (is_null($instituicao_nome)) ? null : html_entity_decode($instituicao_nome);
                 $this->instituicao->logo = (is_null($instituicao_logo)) ? null : "base64," .  base64_encode($instituicao_logo);
                 $this->instituicao->logo_content_type = (is_null($instituicao_logo_content_type)) ? null : "data:" . $instituicao_logo_content_type . ";";
-                $this->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
+                $this->instituicao->uf = (is_null($instituicao_uf)) ? null : strtoupper(html_entity_decode($instituicao_uf));
                 $this->instituicao->dt_criacao = $instituicao_dt_criacao;
                 $this->instituicao->dt_alteracao = $instituicao_dt_alteracao;
             }

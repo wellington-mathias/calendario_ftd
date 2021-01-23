@@ -25,7 +25,7 @@ $usuario->instituicao = new Instituicao();
 // get data to be updated
 $data = json_decode(file_get_contents("php://input"));
 
-$data_incomplete = empty($data->id) && empty($data->nome);
+$data_incomplete = empty($data->id);
 
 if($data_incomplete) {
     // set response code - 400 bad request
@@ -38,7 +38,7 @@ if($data_incomplete) {
     $usuario->id = $data->id;
     
     // set property values
-    $usuario->nome = $data->nome;
+    $usuario->nome =  empty($data->nome) ? null : $data->nome;
     $usuario->email = empty($data->email) ? null : $data->email;
     $usuario->dt_alteracao = date('Y-m-d H:i:s');
     $usuario->tipo_usuario->id = $data->tipo_usuario->id;

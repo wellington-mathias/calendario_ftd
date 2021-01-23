@@ -19,7 +19,7 @@ include_once '../objects/instituicao.php';
 $data = json_decode(file_get_contents("php://input"));
   
 // make sure data is not empty
-$data_incomplete = empty($data->tipo_usuario) && empty($data->nome);
+$data_incomplete = empty($data->tipo_usuario);
 
 if (empty($data->login) && empty($data->password)) {
     $data_incomplete = $data_incomplete && (empty($data->login_ftd) && empty($data->login_ftd));
@@ -37,7 +37,7 @@ if($data_incomplete) {
     $usuario = new Usuario();
 
     // set usuario property values
-    $usuario->nome = $data->nome;
+    $usuario->nome = empty($data->nome) ? null : $data->nome;
     $usuario->email = empty($data->email) ? null : $data->email;
     $usuario->login = empty($data->login) ? null : $data->login;
     $usuario->senha = empty($data->password) ? null : $data->password; 
