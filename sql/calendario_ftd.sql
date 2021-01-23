@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 23-Jan-2021 às 21:17
+-- Tempo de geração: 23-Jan-2021 às 22:15
 -- Versão do servidor: 5.7.31
 -- versão do PHP: 7.4.9
 
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `calendario` (
   `dt_alteracao` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `usuario_id` int(10) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `calendario_usuario` (`usuario_id`)
+  KEY `calendario_usuario_id` (`usuario_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
@@ -160,8 +160,8 @@ CREATE TABLE IF NOT EXISTS `instituicao` (
 
 INSERT INTO `instituicao` (`id`, `nome`, `logo`, `logo_content_type`, `uf`, `dt_criacao`, `dt_alteracao`) VALUES
 (1, 'Colégio Davina Gasparini', NULL, NULL, 'SP', '2020-12-06 18:25:00', '2021-01-23 20:50:59'),
-(2, 'Colégio Santo Inácio', NULL, NULL, 'RJ', '2020-12-07 02:09:42', '2021-01-23 21:16:58'),
-(3, 'Colégio São Judas Tadeo', NULL, NULL, 'SP', '2021-01-22 22:26:34', '2021-01-23 21:01:54');
+(2, 'Colégio Santo Inácio', NULL, NULL, 'RJ', '2020-12-07 02:09:42', '2021-01-23 22:02:40'),
+(3, 'Colégio São Judas Tadeo', NULL, NULL, 'SP', '2021-01-22 22:26:34', '2021-01-23 22:13:03');
 
 -- --------------------------------------------------------
 
@@ -222,6 +222,12 @@ INSERT INTO `usuario_tipo` (`id`, `descricao`) VALUES
 --
 -- Restrições para despejos de tabelas
 --
+
+--
+-- Limitadores para a tabela `calendario`
+--
+ALTER TABLE `calendario`
+  ADD CONSTRAINT `calendario_usuario_id` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limitadores para a tabela `calendario_evento`
