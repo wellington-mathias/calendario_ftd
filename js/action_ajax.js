@@ -1,9 +1,10 @@
+var baseUrl = '/ftd/calendario/html';
+var baseUrl = '';
 function dispatch(method, url, data, callback,error) {
     $.ajax({
         method: method,
         type: method,
-        //url: '/ftd/calendario/html'+url,
-        url: url,
+        url: baseUrl + url,
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         data: JSON.stringify(data),

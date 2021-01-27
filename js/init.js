@@ -11,6 +11,7 @@ var simulados = [];
 var volumes = [];
 var evtsProf = [];
 var instituicao = {};
+var logoInstituicao = null;
 
 var dataEventos = [];
 var nomeMeses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
@@ -39,18 +40,20 @@ $(document).ready(function () {
 	//abertura();
 
 
-	$('#abertura .btVoltar').off().on('click',function(){
+	$('#abertura .btVoltar').off().on('click', function () {
 		$('.page').hide();
 		login();
 	})
-	$('#dadosGestor .btVoltar').off().on('click',function(){
+	$('#dadosGestor .btVoltar').off().on('click', function () {
 		$('.page').hide();
 		abertura();
 	})
-	$('#configCalendario .btVoltar').off().on('click',function(){
+	$('#configCalendario .btVoltar').off().on('click', function () {
 		$('.page').hide();
 		page2();
 	})
+
+	$('#iframe').contents().find('body').html('<form enctype="multipart/form-data" method="POST" action="/api/instituicao/update.php" ><input type="file" name="logo" value=""><input type="text" name="id" value="" ><input type="text" name="nome" value="" ><input type="text" name="uf" value="" ><button style="height:100%;" >Enviar</button></form>');
 });
 
 
@@ -108,15 +111,24 @@ function submitFormLogin(form) {
 
 function checkInstituicao() {
 	if (!dataUsuario.instituicao || !dataUsuario.instituicao.id) {
-		dispatch('PUT', '/api/instituicao/create.php', { nome: 'x', logo: 'x', uf: 'x' }, function (data) {
-			instituicao.id = data.id;
-			//console.log(data);
+
+		/* formData = new FormData();
+		formData.append('nome',  '' );
+		formData.append('uf',  '' );
+		formData.append('logo',  '' );
+	
+		var request = new XMLHttpRequest();
+		request.open("POST", "/api/instituicao/create.php");
+		request.send(formData); */
+		dispatch('POST', '/api/instituicao/create.php', { nome:'',if:'',logo:'' }, function (data) {
+			instituicao = {id:data.id};
+			dataUsuario.instituicao = instituicao;
 		});
 	} else {
 		instituicao = dataUsuario.instituicao;
-		//console.log(instituicao);
 	}
 }
+
 
 function sendCalendario(method, url) {
 	objCalendario.dt_inicio_ano_letivo = formatData2(inicioAno.dt_inicio);
@@ -140,13 +152,25 @@ function sendCalendario(method, url) {
 	dataUsuario.email = $('.emailProfessor').val();
 	dataUsuario.instituicao = instituicao;
 
-	//console.log(instituicao);
+
 	dispatch('POST', '/api/usuario/update.php', dataUsuario, function (data) {
-		//console.log(data);
 	});
-	dispatch('POST', '/api/instituicao/update.php', instituicao, function (data) {
-		//console.log(data);
-	});
+
+
+	$('.formInstituicao input[name="json_data"]').val(JSON.stringify(instituicao));
+
+	uploadFile();
+	/* 
+	
+	console.log({ logo:logoInstituicao , json_data:instituicao });
+	dispatch('POST', '/api/instituicao/update.php', { logo:logoInstituicao , "json_data":instituicao }, function (data) {
+		console.log(data);
+	}); */
+	if(logoInstituicao) {
+		$('#logoEscola').html('<img src="' + logoInstituicao + '" />').removeClass('off');
+	} else {
+		$('#logoEscola').html('<img src="' + dataUsuario.instituicao.logo + '" />').removeClass('off');
+	}
 
 }
 
@@ -897,15 +921,15 @@ function calendario() {
 	}
 
 
-	$('#calendario').fadeIn(500, function(){
+	$('#calendario').fadeIn(500, function () {
 		// $stepTuto = 0
 		// tutorial($stepTuto);
-	
-		$('#tutorial .continuar').off().on('click',function(){
+
+		$('#tutorial .continuar').off().on('click', function () {
 			tutorial($stepTuto);
 		})
 
-		$('.btTutorial').off().on('click',function(){
+		$('.btTutorial').off().on('click', function () {
 			$stepTuto = 0
 			tutorial($stepTuto);
 		})
@@ -919,7 +943,7 @@ function calendario() {
 // #tutorial .cursor.p3{top:330; left: 690;}
 // #tutorial .cursor.p3{top:390; left: 670;}
 
-function tutorial(passo){
+function tutorial(passo) {
 	$stepTuto++
 	$('#tutorial').fadeIn(500);
 	$('#tutorial .mensagem').hide();
@@ -927,84 +951,92 @@ function tutorial(passo){
 
 	var mes = $('.copyMes:visible').index() + 1;
 	var obj = $('.copyMes:visible .quarta:eq(2)');
-	var dia = $('.copyMes:visible .quarta:eq(2) .txt').text()*1;
+	var dia = $('.copyMes:visible .quarta:eq(2) .txt').text() * 1;
 	console.log(dia, mes)
 	var evento = ''
-	
-	switch(passo){
+
+	switch (passo) {
 		case 0:
 			var t = obj.offset().top - $('.ano').offset().top + 40;
 			var l = obj.offset().left - $('.ano').offset().left + 70;
-			TweenMax.fromTo($('.cursor'),1.3, {top:300, left:1200},{top:t, left:l})
+			TweenMax.fromTo($('.cursor'), 1.3, { top: 300, left: 1200 }, { top: t, left: l })
 			$('#tutorial .m1').delay(1000).fadeIn(500);
-		break;
+			break;
 		case 1:
 			obj.trigger('click')
-			TweenMax.to($('.cursor'),.7,{top:450, left:520, onComplete:function(){
-				TweenMax.to($('.cursor'),.7, {delay:1, top:330, left:700})
-			}})
-			$('#tutorial .m2').delay(700).fadeIn(500, function(){
+			TweenMax.to($('.cursor'), .7, {
+				top: 450, left: 520, onComplete: function () {
+					TweenMax.to($('.cursor'), .7, { delay: 1, top: 330, left: 700 })
+				}
+			})
+			$('#tutorial .m2').delay(700).fadeIn(500, function () {
 				$('.tituloEvt').val('Reunião Professores')
 			});
-		break;
+			break;
 		case 2:
 			$('.btCancelar').trigger('click');
 			var t = obj.offset().top - $('.ano').offset().top + 40;
 			var l = obj.offset().left - $('.ano').offset().left + 70;
-						
-			TweenMax.fromTo($('.cursor'),1.3,{top:330, left:700}, {top:t, left:l, onComplete:function(){
-				TweenMax.to($('.cursor'),1.3, {delay:.2,top:370, left:l+200})
-				console.log(dia, dia+1, dia+2, mes)
-				setTimeout(function(){classDrag($('.dia'+dia+'.diaM'+mes), $('.dia'+dia+'.diaM'+mes));},000)
-				setTimeout(function(){classDrag($('.dia'+dia+'.diaM'+mes), $('.dia'+(dia+1)+'.diaM'+mes));},500)
-				setTimeout(function(){classDrag($('.dia'+dia+'.diaM'+mes), $('.dia'+(dia+2)+'.diaM'+mes));},1000)
-			}})
-			$('#tutorial .m3').delay(1000).fadeIn(500, function(){});
-		break;
-		case 3:
-			addEvento(dia, mes, dia+2, mes);
-			TweenMax.to($('.cursor'),1, {top:450, left:520, onComplete:function(){
-				$('.tituloEvt').val('Evento tutorial');
-				TweenMax.to($('.cursor'),1, {delay:.3,top:670, left:600, onComplete:function(){
-				}})
-			}})
-		break;
-		case 4:
-			$('.btEvento').trigger('click');
-			setTimeout(function(){
 
-			$('.copyMes:visible .infoMes .diaEvento .txtEvento span').each(function(){
-				var str = $(this).text();
-				if(str == 'Evento tutorial'){
-					evento = $(this).parent().parent()
-					// $(evento).attr('class')
+			TweenMax.fromTo($('.cursor'), 1.3, { top: 330, left: 700 }, {
+				top: t, left: l, onComplete: function () {
+					TweenMax.to($('.cursor'), 1.3, { delay: .2, top: 370, left: l + 200 })
+					console.log(dia, dia + 1, dia + 2, mes)
+					setTimeout(function () { classDrag($('.dia' + dia + '.diaM' + mes), $('.dia' + dia + '.diaM' + mes)); }, 000)
+					setTimeout(function () { classDrag($('.dia' + dia + '.diaM' + mes), $('.dia' + (dia + 1) + '.diaM' + mes)); }, 500)
+					setTimeout(function () { classDrag($('.dia' + dia + '.diaM' + mes), $('.dia' + (dia + 2) + '.diaM' + mes)); }, 1000)
 				}
 			})
+			$('#tutorial .m3').delay(1000).fadeIn(500, function () { });
+			break;
+		case 3:
+			addEvento(dia, mes, dia + 2, mes);
+			TweenMax.to($('.cursor'), 1, {
+				top: 450, left: 520, onComplete: function () {
+					$('.tituloEvt').val('Evento tutorial');
+					TweenMax.to($('.cursor'), 1, {
+						delay: .3, top: 670, left: 600, onComplete: function () {
+						}
+					})
+				}
+			})
+			break;
+		case 4:
+			$('.btEvento').trigger('click');
+			setTimeout(function () {
 
-			var t = $(evento).offset().top - $('.ano').offset().top + 40;
-			var l = $(evento).offset().left - $('.ano').offset().left + 70;
-			console.log(t, l)
+				$('.copyMes:visible .infoMes .diaEvento .txtEvento span').each(function () {
+					var str = $(this).text();
+					if (str == 'Evento tutorial') {
+						evento = $(this).parent().parent()
+						// $(evento).attr('class')
+					}
+				})
 
-			TweenMax.to($('.cursor'),1, {delay:.5, top:t, left:l});
-			$('#tutorial .m4').delay(1000).fadeIn(500, function(){});
-		},500)
-		break;
+				var t = $(evento).offset().top - $('.ano').offset().top + 40;
+				var l = $(evento).offset().left - $('.ano').offset().left + 70;
+				console.log(t, l)
+
+				TweenMax.to($('.cursor'), 1, { delay: .5, top: t, left: l });
+				$('#tutorial .m4').delay(1000).fadeIn(500, function () { });
+			}, 500)
+			break;
 		case 5:
-			$('.copyMes:visible .infoMes .diaEvento .txtEvento span').each(function(){
+			$('.copyMes:visible .infoMes .diaEvento .txtEvento span').each(function () {
 				var str = $(this).text();
-				if(str == 'Evento tutorial'){
+				if (str == 'Evento tutorial') {
 					evento = $(this).parent().parent()
 				}
 			})
 			$(evento).trigger('click');
-			TweenMax.to($('.cursor'),1, {top:670, left:400});
-		break;
+			TweenMax.to($('.cursor'), 1, { top: 670, left: 400 });
+			break;
 		case 6:
 			$('.btExcluir ').trigger('click');
-			TweenMax.fromTo($('.cursor'),1, {top:670, left:400}, {top:500, left:-100});
+			TweenMax.fromTo($('.cursor'), 1, { top: 670, left: 400 }, { top: 500, left: -100 });
 			$('#tutorial').delay(500).fadeOut();
 			$('.btsTopo, .setaDir, .setaEsq, .btTutorial').fadeIn()
-		break;
+			break;
 	}
 }
 
@@ -1733,18 +1765,37 @@ function DragDrop(objDrag, objDrop) {
 
 function generateImage(input) {
 
+
 	if (input.files && input.files[0]) {
 		var reader = new FileReader();
 
 		reader.onload = function (e) {
 			$('#logoEscola').html('<img src="' + e.target.result + '" />').removeClass('off');
-			//instituicao.logo = e.target.result;
+			logoInstituicao = e.target.result;
 		};
-		instituicao.logo = input.files[0];
-
 		reader.readAsDataURL(input.files[0]);
+		console.log( input.files[0] );
+		dataUsuario.instituicao.logo = input.files[0]
 	}
+
 }
+var formData;
+function uploadFile() {
+	
+	// define new form
+	formData = new FormData();
+	formData.append('nome',  instituicao.nome );
+	formData.append('id',  instituicao.id );
+	formData.append('uf',  instituicao.uf );
+	formData.append('logo',  instituicao.logo );
+	console.log(  instituicao.logo );
+
+	var request = new XMLHttpRequest();
+	request.open("POST", baseUrl+"/api/instituicao/update.php");
+	request.send(formData);
+
+}
+
 
 function getFormData(form) {
 	var unindexed_array = form.serializeArray();

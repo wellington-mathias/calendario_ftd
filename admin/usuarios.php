@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Admin - Calendario</title>
     <? include('includes/head.php'); ?>
 </head>
 
@@ -34,19 +33,23 @@
                             <input type="text" value="" name="email" class=" "  />
                         </li>
                         <li>
-                            <label for="nome">Login</label>
+                            <label for="senha">Tipo Usuario</label>
+                            <select name="tipo_usuario" class="selectUser" ></select>
+                        </li>
+                        <li class="campos tipo1">
+                            <label for="nome">Login Admin</label>
                             <input type="text" value="" name="login" class=" "  />
                         </li>
-                        <li>
-                            <label for="senha">Senha</label>
+                        <li class="campos tipo1">
+                            <label for="senha">Senha Admin</label>
                             <input type="text" value="" name="password" class=" "/>
                         </li>
-                        <li>
-                            <label for="nome">Login calendario</label>
+                        <li class="campos tipo2">
+                            <label for="nome">Login Calendario</label>
                             <input type="text" value="" name="login_ftd" class=" "  />
                         </li>
-                        <li>
-                            <label for="senha">Senha calendario</label>
+                        <li class="campos tipo2">
+                            <label for="senha">Senha Calendario</label>
                             <input type="text" value="" name="password_ftd" class=" "/>
                         </li>
                         <li>
@@ -56,10 +59,6 @@
                         <li>
                             <label for="uf">UF</label>
                             <select name="uf" class="selectUf"></select>
-                        </li>
-                        <li>
-                            <label for="senha">Tipo Usuario</label>
-                            <select name="tipo_usuario" class="selectUser" ></select>
                         </li>
                         <li>
                             <button class="btEnviar">Enviar</button>
@@ -99,7 +98,7 @@
                 <div >' + dataListar[i].tipo_usuario.descricao + '</div>\
                 <div class="bts">\
                     <div></div>\
-                    <button class="btEditar" >visualizar</button>\
+                    <button class="btEditar" >Visualizar</button>\
                     <button class="btExcluir" >X</button>\
                 </div>\
             </li>');
@@ -123,7 +122,7 @@
 
     dispatch('GET', '/api/tipo_usuario/read.php', '', function(data){
         for(var i in data){
-            $('.selectUser').append('<option value="'+data[i].id+'" >'+ data[i].descricao +'</option>');
+            $('.selectUser').prepend('<option value="'+data[i].id+'" >'+ data[i].descricao +'</option>');
         }
     });
 </script>

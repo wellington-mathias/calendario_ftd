@@ -3,7 +3,6 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>Admin - Calendario</title>
     <? include('includes/head.php'); ?>
 </head>
 

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Admin - Calendario</title>
+    <? include('includes/head.php'); ?>
 </head>
 
 <body>
@@ -14,7 +14,7 @@
         <div class="cont ">
             <div class="adicionar">
                 <div class="topo">
-                    <h1>Calendario</h1>
+                    <h1>Calendário</h1>
                     <div class="btVoltarEditar">Voltar </div>
                 </div>
 
@@ -61,7 +61,7 @@
                 <div class="filter">
                 </div>
                 <div class="topo">
-                    <h1>Calendarios</h1>
+                    <h1>Calendários</h1>
                 </div>
 
                 <ul class="lista">
@@ -93,7 +93,7 @@
             obj[0].obj = dataListar[i];
         }
         if ($('.lista li').length == 1) {
-            $('.lista').append('<li> <div>Nenhum calendario cadastrado</div> </li>');
+            $('.lista').append('<li> <div>Nenhum calendário cadastrado</div> </li>');
         }
         
         creatEvents();

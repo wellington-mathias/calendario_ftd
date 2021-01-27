@@ -16,10 +16,10 @@
             <a href="../admin/eventos.php">Eventos Prof.</a>
         </li>
         <li>
-            <a href="../admin/calendario.php">Calendarios</a>
+            <a href="../admin/calendario.php">Calenários</a>
         </li>
         <li>
-            <a href="../admin/usuarios.php">Usuarios</a>
+            <a href="../admin/usuarios.php">Usuários</a>
         </li>
         <li>
             <a href="javascript:void(0);" class="btSair">Sair</a>

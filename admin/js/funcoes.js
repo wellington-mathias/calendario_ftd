@@ -46,8 +46,11 @@ function creatEvents() {
 
     $('.bts .btExcluir').off().on('click', function () {
         var evt = $(this).parent().parent()[0].obj;
-        $(this).parent().parent().remove();
-        dispatch('DELETE', '/api/' + page + '/delete.php', evt, pageListar);
+        var _this = $(this);
+        confirmar('Tem certeza que deseja excluir este registro?', function () {
+            _this.parent().parent().remove();
+            dispatch('DELETE', '/api/' + page + '/delete.php', evt, pageListar);
+        })
     })
 
     $('.bts .btEditar').off().on('click', function () {
@@ -76,8 +79,29 @@ function creatEvents() {
 
         $(this).val(val);
     });
+
+    $('select[name="tipo_usuario"]').off().on('change', function () {
+        var val = $(this).val();
+        $('form .campos').hide();
+        $('form .tipo' + val).show();
+    })
+    $('form .campos').hide();
+    $('form .tipo1').show();
+
 }
 
+
+function confirmar(txt,func) {
+    $('body').append('<div class="msgExcluir"><div class="cont"><div class="txt">'+txt+'</div><div class="btSim">Sim</div><div class="btNao">Não</div></div> </div>');
+    
+    $('.msgExcluir .btSim').off().on('click',function(){
+        $('.msgExcluir').remove();
+        func();
+    })
+    $('.msgExcluir .btNao').off().on('click',function(){
+        $('.msgExcluir').remove();
+    })
+}
 
 function submitForm(form) {
     if ($('.inputDate[name="dt_fim"]').val() == '') {
@@ -101,37 +125,56 @@ function submitForm(form) {
     }
 
     var data = getFormData($(form));
-    if ($(form).attr('action').match('evento') != null) {
-        data.tipo_evento = {
-            id: data.tipo_evento,
-            descricao: ''
-        }
-        data = convertToSave(data);
-    } else if ($(form).attr('action').match('usuario') != null) {
 
-        data.instituicao = {
-            id: $('.formAdicionar input[name="id_instituicao"]').val(),
-            uf: $('.selectUf').val(),
-            nome: $('.formAdicionar input[name="nome_instituicao"]').val()
-        };
+    if ($(form).attr('action').match('usuario') != null) {
+
         data.tipo_usuario = {
             id: $(form).find('select[name="tipo_usuario"]').val(),
             descricao: null,
         }
+
+        data.instituicao = {
+            id: $('.formAdicionar input[name="id_instituicao"]').val(),
+            uf: $('.selectUf').val(),
+            nome: $('.formAdicionar input[name="nome_instituicao"]').val(),
+            logo: 'x'
+        };
+        if (data.instituicao.nome == '') data.instituicao.nome = 'x';
+        if (data.instituicao.uf == '') data.instituicao.uf = 'x';
+        if (data.instituicao.logo == '') data.instituicao.logo = 'x';
         if (data.instituicao.id) {
+
             dispatch('POST', '/api/instituicao/update.php', data.instituicao, function (data) {
             });
+        } else {
+
+            data.instituicao = null;
+            dispatch($(form).attr('method'), $(form).attr('action'), data, function (data) {
+                listar();
+                pageListar();
+            });
+
         }
 
-    } else if ($(form).attr('action').match('calendario') != null) {
 
+
+    } else {
+
+        if ($(form).attr('action').match('evento') != null) {
+            data.tipo_evento = {
+                id: data.tipo_evento,
+                descricao: ''
+            }
+            data = convertToSave(data);
+        } else if ($(form).attr('action').match('calendario') != null) {
+
+        }
+
+        dispatch($(form).attr('method'), $(form).attr('action'), data, function (data) {
+            listar();
+            pageListar();
+        });
     }
-
-    dispatch($(form).attr('method'), $(form).attr('action'), data, function (data) {
-        listar();
-        pageListar();
-    });
-
 
     return false;
 }
@@ -239,6 +282,11 @@ function pageAdcionar(obj) {
         if (obj.tipo_evento) $('select[name="tipo_evento"] option[value="' + obj.tipo_evento.id + '"]').attr('selected', 'selected');
         if (obj.tipo_usuario) $('select[name="tipo_usuario"] option[value="' + obj.tipo_usuario.id + '"]').attr('selected', 'selected');
 
+        $('form .campos').hide();
+        $('form .tipo' + obj.tipo_usuario.id).show();
+
+        console.log(obj);
+
         if (page == 'usuario') {
             $('.formAdicionar .btEnviar ').hide();
             $('.formAdicionar input ').prop({ readonly: true });
@@ -257,7 +305,7 @@ function pageAdcionar(obj) {
             $('.formAdicionar input[name="email_professor"]').val(obj.usuario.email);
         }
         if (page == 'evento') {
-            if( $('.btEditar:first').html() == 'Visualizar' ){
+            if ($('.btEditar:first').html() == 'Visualizar') {
                 $('.formAdicionar .btEnviar ').hide();
                 $('.formAdicionar input ').prop({ readonly: true });
                 $('.formAdicionar select').prop({ disabled: true });
@@ -266,7 +314,7 @@ function pageAdcionar(obj) {
                 $('.formAdicionar input ').prop({ readonly: false });
                 $('.formAdicionar select').prop({ disabled: false });
             }
-            
+
         }
     } else {
 
@@ -280,6 +328,7 @@ function pageAdcionar(obj) {
         $('select[name="tipo_evento"] option:first').attr('selected', 'selected');
         $('select[name="tipo_usuario"] option:first').attr('selected', 'selected');
     }
+
     $('.cont .listar').slideUp(300);
     $('.cont .adicionar').slideDown(300);
 }
