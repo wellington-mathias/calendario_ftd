@@ -1,3 +1,4 @@
+var prod = false;
 var scale = 1;
 
 var inicioAno = fimAno = inicioRecesso = fimRecesso = {};
@@ -12,10 +13,12 @@ var volumes = [];
 var evtsProf = [];
 var instituicao = {};
 var logoInstituicao = null;
+var userFTD = null;
+var novaInst = false;
 
 var dataEventos = [];
 var nomeMeses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-var nomeDias = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"];
+var nomeDias = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
 
 var dtHj = new Date();
 var anoAtual = dtHj.getFullYear();
@@ -27,37 +30,151 @@ var objCalendario = {
 	ano_referencia: anoAtual,
 };
 
+var params = new URLSearchParams(window.location.search);
 
 $(document).ready(function () {
 	$('.txtAno').html(anoAtual);
 
-	logOut();
 
 	$('.page').hide();
-	$('#loading').hide().removeClass('hide');
-	$('#stage').fadeIn(300);
-	login();
-	//abertura();
+	$('html').addClass('print2');
+	$('#loading').removeClass('hide');
+	$('#loading .sprite').html('Carregando...');
 
+	logOut();
+	validaLoginFtd();
 
-	$('#abertura .btVoltar').off().on('click', function () {
-		$('.page').hide();
-		login();
-	})
-	$('#dadosGestor .btVoltar').off().on('click', function () {
-		$('.page').hide();
-		abertura();
-	})
-	$('#configCalendario .btVoltar').off().on('click', function () {
-		$('.page').hide();
-		page2();
-	})
-
-	$('#iframe').contents().find('body').html('<form enctype="multipart/form-data" method="POST" action="/api/instituicao/update.php" ><input type="file" name="logo" value=""><input type="text" name="id" value="" ><input type="text" name="nome" value="" ><input type="text" name="uf" value="" ><button style="height:100%;" >Enviar</button></form>');
 });
 
+function ajaxLogin(method, url, contentType, data, callback) {
+	var baseUrl = 'https://souionica.tk/api';
+	var head = '';
+	if (data.auth) {
+		head = {
+			"Authorization": data.auth
+		}
+	}
+	$.ajax({
+		method: method,
+		type: method,
+		url: baseUrl + url,
+		contentType: contentType,
+		headers: head,
+		data: JSON.stringify(data),
+		dataType: 'json',
+		async: false
+	}).done(function (res) {
+		if (callback) callback(res);
+		//return data;
+	}).fail(function (jqXHR, textStatus, msg) {
+		//console.log(jqXHR, textStatus, msg)
+		if (callback) callback();
+		//return [jqXHR, textStatus, msg];
+	});
+}
 
-function login() {
+function validaLoginFtd() {
+	var tokenIni = params.get('token');
+	var short_token = 'gzKuqV';
+	var new_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJndWlkIjoiYzcwMjU5MDEtNWE3Ny0xMWViLWI2NGYtZTczYmRmOTk0N2MzIiwidXNlcm5hbWUiOiJzY2hvb2wuYWRtaW4ueGFkcmV6IiwiZW1haWwiOiIiLCJyb2xlX2d1aWQiOiJSMDMiLCJuYW1lIjoiRGlyZXRvciIsImxhc3RuYW1lIjoiWGFkcmV6IiwiYXZhdGFyIjoiIiwiZXhwIjoxNjE0MzAyOTc2fQ.q-7QUtzvT-_6CrIvdOYTF1FVsIGa5K6JRf041aAu94s';
+
+	var testLogin = {
+		"email": "school.admin.xadrez",
+		"password": "123"
+	}
+	var testLogin = {
+		"email": "teacher.xadrez",
+		"password": "123"
+	}
+	var testLogin = {
+		"email": "student.xadrez",
+		"password": "123"
+	}
+
+	if (prod) {
+		if (params.get('token') != null) {
+
+			ajaxLogin('POST', '/login', 'application/json', testLogin, function (data) {
+				//console.log(data)
+				if (data.status == 'success') {
+					tokenIni = data.data.token;
+
+					var body = { auth: tokenIni };
+					ajaxLogin('GET', '/users/access-token', 'application/x-www-form-urlencoded', body, function (data) {
+						//console.log(data);
+						if (data.status == 'success') {
+							short_token = data.data.token;
+
+							var body = {
+								"token": short_token,
+								"identity_provider": "i2c"
+							}
+							ajaxLogin('POST', '/login-oauth', 'application/json; charset=utf-8', body, function (data) {
+								//console.log(data);
+								if (data.status == 'success') {
+									new_token = data.data.token;
+
+									var body = { auth: new_token };
+									checkUserExist(body);
+								} else {
+									falhaLogin();
+								}
+							})
+						} else {
+							falhaLogin();
+						}
+					})
+				} else {
+					falhaLogin();
+				}
+			});
+
+		} else {
+			telaLogin();
+		}
+
+	} else {
+		if (params.get('token') != null) {
+
+			var body = { auth: tokenIni };
+			ajaxLogin('GET', '/	users/access-token', 'application/x-www-form-urlencoded', body, function (data) {
+				//console.log(data);
+				if (data && data.status == 'success') {
+					short_token = data.data.token;
+
+					var body = {
+						"token": short_token,
+						"identity_provider": "i2c"
+					}
+					ajaxLogin('POST', '/login-oauth', 'application/json; charset=utf-8', body, function (data) {
+						//console.log(data);
+						if (data.status == 'success') {
+							new_token = data.data.token;
+
+							var body = { auth: new_token };
+							checkUserExist(body);
+						} else {
+							falhaLogin();
+						}
+					})
+				} else {
+					falhaLogin();
+				}
+			})
+		} else {
+			falhaLogin();
+		}
+	}
+
+}
+
+function falhaLogin() {
+	$('#loading').fadeOut();
+	$('.falhaLogin').fadeIn();
+}
+
+
+function telaLogin() {
 	$('#telaLogin').fadeIn(300);
 	$('.formLoginProf input').off().on('focus', function (evt) {
 		$(this).removeClass('erro');
@@ -69,7 +186,13 @@ function login() {
 		return false;
 	})
 	//.trigger('submit')
+
+
+	$('#stage').removeClass('print');
+	$('#loading').addClass('hide');
+	$('html').removeClass('print2');
 }
+
 
 function submitFormLogin(form) {
 
@@ -84,13 +207,11 @@ function submitFormLogin(form) {
 	}
 
 	var data = getFormData($(form));
-	//console.log(data);
 	data.ambiente = 'SITE';
-
+	console.log(data);
 	dispatch('POST', '/api/usuario/login.php', data, function (data) {
 		if (data.sucess && data.usuario) {
 			dataUsuario = data.usuario;
-			//console.log(dataUsuario);
 			idProf = dataUsuario.id;
 			objCalendario.usuario = {
 				id: dataUsuario.id
@@ -109,6 +230,147 @@ function submitFormLogin(form) {
 
 }
 
+function checkUserExist(body) {
+	ajaxLogin('GET', '/users/whoami', 'application/json; charset=utf-8', body, function (data) {
+		//console.log(data);
+		if (data.status == 'success') {
+			userFTD = data.data;
+			console.log(userFTD);
+			login();
+		}
+	})
+}
+
+
+function logado() {
+	$('.page').hide();
+	$('#loading').addClass('hide');
+	$('#stage').fadeIn(300);
+
+
+	$('#dadosGestor .btVoltar').off().on('click', function () {
+		$('.page').hide();
+		abertura();
+	})
+	$('#configCalendario .btVoltar').off().on('click', function () {
+		$('.page').hide();
+		page2();
+	})
+
+
+};
+
+
+
+function login() {
+
+	if (userFTD.schools.length > 0) {
+		var pass = userFTD.schools[0].name;
+		var inst = {
+			nome: '',
+			uf: '',
+			logo: ''
+		};
+	} else {
+		var pass = 'PASSFTD';
+		var inst = null;
+
+	}
+
+	var data = {
+		usuario: userFTD.username,
+		senha: pass,
+		instituicao: inst,
+		tipo_usuario: {
+			id: 2,
+			descricao: null,
+		}
+	}
+	data.ambiente = 'SITE';
+
+	console.log(data);
+	dispatch('POST', '/api/usuario/login.php', data, function (data) {
+		console.log(data);
+		if (data.sucess && data.usuario) {
+			loginCompleto(data.usuario);
+		} else {
+			novoUsuario();
+		}
+	});
+
+
+}
+function loginCompleto(data) {
+	dataUsuario = data;
+	idProf = dataUsuario.id;
+	objCalendario.usuario = {
+		id: dataUsuario.id
+	};
+	logado()
+	abertura();
+	checkInstituicao();
+	$('.bemvindo .nameUsuario').html($('.formLoginProf #login_professor').val());
+	$('.formLoginProf .error').html('').hide();
+
+
+	$('#stage').removeClass('print');
+	$('#loading').addClass('hide');
+	$('html').removeClass('print2');
+}
+
+function novoUsuario() {
+	if (userFTD.schools.length > 0) {
+		var pass = userFTD.schools[0].name;
+		var inst = null;
+	} else {
+		var pass = 'PASSFTD';
+		var inst = null;
+
+	}
+	novaInst = true;
+
+	var data = {
+		id: '',
+		nome: userFTD.name + ' ' + userFTD.lastname,
+		login_ftd: userFTD.username,
+		password_ftd: pass,
+		login: null,
+		password: null,
+		email: '',
+		id_instituicao: null,
+		instituicao: inst,
+		tipo_usuario: {
+			id: 2,
+			descricao: null,
+		},
+		uf: '',
+	}
+
+
+	console.log(data);
+	dispatch('PUT', '/api/usuario/create.php', data, function (data) {
+		if (data.id) {
+
+			var login = {
+				usuario: userFTD.username,
+				senha: pass,
+				instituicao: inst,
+				ambiente: 'SITE',
+				tipo_usuario: {
+					id: 2,
+					descricao: null,
+				},
+			}
+			dispatch('POST', '/api/usuario/login.php', login, function (data) {
+				if (data.sucess && data.usuario) {
+					loginCompleto(data.usuario);
+				}
+			});
+		}
+	});
+
+}
+
 function checkInstituicao() {
 	if (!dataUsuario.instituicao || !dataUsuario.instituicao.id) {
 
@@ -120,8 +382,8 @@ function checkInstituicao() {
 		var request = new XMLHttpRequest();
 		request.open("POST", "/api/instituicao/create.php");
 		request.send(formData); */
-		dispatch('POST', '/api/instituicao/create.php', { nome:'',if:'',logo:'' }, function (data) {
-			instituicao = {id:data.id};
+		dispatch('POST', '/api/instituicao/create.php', { nome: '', if: '', logo: '' }, function (data) {
+			instituicao = { id: data.id };
 			dataUsuario.instituicao = instituicao;
 		});
 	} else {
@@ -136,10 +398,7 @@ function sendCalendario(method, url) {
 	objCalendario.dt_inicio_recesso = formatData2(inicioRecesso.dt_inicio);
 	objCalendario.dt_fim_recesso = formatData2(fimRecesso.dt_inicio);
 
-	//console.log(objCalendario);
-	//console.log(method, '/api/calendario/' + url + '.php' );
 	dispatch(method, '/api/calendario/' + url + '.php', objCalendario, function (data) {
-		//console.log(data);
 		if (url == 'create') {
 			objCalendario.id = data.id;
 		}
@@ -160,13 +419,9 @@ function sendCalendario(method, url) {
 	$('.formInstituicao input[name="json_data"]').val(JSON.stringify(instituicao));
 
 	uploadFile();
-	/* 
-	
-	console.log({ logo:logoInstituicao , json_data:instituicao });
-	dispatch('POST', '/api/instituicao/update.php', { logo:logoInstituicao , "json_data":instituicao }, function (data) {
-		console.log(data);
-	}); */
-	if(logoInstituicao) {
+
+
+	if (logoInstituicao) {
 		$('#logoEscola').html('<img src="' + logoInstituicao + '" />').removeClass('off');
 	} else {
 		$('#logoEscola').html('<img src="' + dataUsuario.instituicao.logo + '" />').removeClass('off');
@@ -193,13 +448,10 @@ function loadCalendarios() {
 		$('.contCalendarios .btCalendario').off().on('click', function () {
 			sendDataCalendario($(this)[0].obj);
 		})
-	}, function (data) {
-		//console.log(data);
 	});
 }
 function sendDataCalendario(obj) {
 	objCalendario = obj;
-	//console.log(objCalendario);
 
 	objCalendario.dt_inicio_ano_letivo = formatData1(objCalendario.dt_inicio_ano_letivo);
 	objCalendario.dt_fim_ano_letivo = formatData1(objCalendario.dt_fim_ano_letivo);
@@ -249,6 +501,9 @@ function page2() {
 	$('#abertura').fadeOut();
 	$('#dadosGestor').fadeIn();
 
+	if (userFTD.schools.length > 0 && novaInst) {
+		$('.nomeInstituicao').val(userFTD.schools[0].name);
+	}
 
 	$('#dadosGestor .iniciar').off().on('click', function () {
 		if ($('#dadosGestor .inputDate.erro').length <= 0) {
@@ -461,7 +716,9 @@ function loadEventos() {
 		dispatch('GET', '/api/evento/read.php?tipo_evento=2&calendario=' + objCalendario.id, '', function (data) {
 			if (data.eventos) {
 				for (var i in data.eventos) {
-					evtsProf.push(convertFromDB(data.eventos[i]));
+					if (data.eventos[i].titulo != 'Evento tutorial') {
+						evtsProf.push(convertFromDB(data.eventos[i]));
+					}
 				}
 			}
 		});
@@ -559,8 +816,13 @@ function qtdDias() {
 
 
 function dividirCapitulos() {
-
 	volumes = [];
+
+	objCalendario.revisao_volume_3o_ano = ($('#configCalendario .checks .btCheck.on').attr('data-tipo') - 1);
+	/* if ($('#configCalendario .checks .btCheck.on').attr('data-tipo') == 2) {
+		objCalendario.qtde_volumes_3o_ano = 0;
+	} */
+
 	if ($('#configCalendario .checks .btCheck.on').attr('data-tipo') != 4) {
 		qtdDias();
 
@@ -570,7 +832,7 @@ function dividirCapitulos() {
 		var v3 = parseInt($('#configCalendario .form input[name="v3"]').val());
 		var v4 = parseInt($('#configCalendario .form input[name="v4"]').val());
 
-		if ($('.selectVol.on:last').attr('data-tipo') != 2) {
+		if (objCalendario.revisao_volume_3o_ano != 2) {
 			var v5 = parseInt($('#configCalendario .form .on input[name="v5"]').val());
 			var v6 = parseInt($('#configCalendario .form .on input[name="v6"]').val());
 		} else {
@@ -598,17 +860,14 @@ function evtsVolumes(v1, v2, v3, v4, v5, v6) {
 	objCalendario.qtde_volumes_2o_ano = (v4 - v3 + 1);
 
 
-	if ($('#configCalendario .checks .btCheck.on').attr('data-tipo') == 2) {
-		objCalendario.qtde_volumes_3o_ano = 0;
-	}
 
-	objCalendario.revisao_volume_3o_ano = ($('#configCalendario .checks .btCheck.on').attr('data-tipo') - 1);
+
 
 	var diaDiv = arDias.length / (v2 - v1 + 1);
 	for (var i = 0; i < (v2 - v1 + 1); i++) {
 		var dia = arDias[parseInt(diaDiv * i)];
 		var data = dia.dataDia + '/' + dia.dataMes + '/' + dia.dataAno;
-		var tit = 'Início vol. ' + (v1 + i) + ' (1º EM)';
+		var tit = 'Início vol. ' + (v1 + i) + ' (1<sup>o</sup> EM)';
 
 		var obj = {
 			volume: (v1 + i),
@@ -630,7 +889,7 @@ function evtsVolumes(v1, v2, v3, v4, v5, v6) {
 	for (var i = 0; i < (v4 - v3 + 1); i++) {
 		var dia = arDias[parseInt(diaDiv * i)];
 		var data = dia.dataDia + '/' + dia.dataMes + '/' + dia.dataAno;
-		var tit = 'Início vol. ' + (v3 + i) + ' (2º EM)';
+		var tit = 'Início vol. ' + (v3 + i) + ' (2<sup>o</sup> EM)';
 
 		var obj = {
 			volume: (v3 + i),
@@ -647,23 +906,24 @@ function evtsVolumes(v1, v2, v3, v4, v5, v6) {
 		}
 		volumes.push(obj);
 	}
-	if ($('.selectVol.on:last').attr('data-tipo') != 2) {
-
+	if (objCalendario.revisao_volume_3o_ano != 2) {
+		console.log(v6, v5);
+		console.log(objCalendario);
 		objCalendario.qtde_volumes_3o_ano = (v6 - v5 + 1);
 
-		if ($('.selectVol.on:last').attr('data-tipo') == 3) {
+		if (objCalendario.revisao_volume_3o_ano == 1) {
 			var diaDiv = arDias2.length / (v6 - v5 + 1);
 		} else {
 			var diaDiv = arDias.length / (v6 - v5 + 1);
 		}
 		for (var i = 0; i < (v6 - v5 + 1); i++) {
-			if ($('.selectVol.on:last').attr('data-tipo') == 3) {
+			if (objCalendario.revisao_volume_3o_ano == 1) {
 				var dia = arDias2[parseInt(diaDiv * i)];
 			} else {
 				var dia = arDias[parseInt(diaDiv * i)];
 			}
 			var data = dia.dataDia + '/' + dia.dataMes + '/' + dia.dataAno;
-			var tit = 'Início vol. ' + (v5 + i) + ' (3º EM)';
+			var tit = 'Início vol. ' + (v5 + i) + ' (3<sup>o</sup> EM)';
 
 			var obj = {
 				volume: (v5 + i),
@@ -884,17 +1144,19 @@ function calendario() {
 			if (hj < iAno || hj > fAno) {
 				className += ' diasRecesso ';
 			}
-			if (hj.getDate() == iAno.getDate() && hj.getMonth() == iAno.getMonth() && hj.getFullYear() == iAno.getFullYear()) {
-				className += ' iniDia ';
-			}
-			if (hj.getDate() == fAno.getDate() && hj.getMonth() == fAno.getMonth() && hj.getFullYear() == fAno.getFullYear()) {
-				className += ' fimDia ';
-			}
-			if (hj.getDate() == iRec.getDate() && hj.getMonth() == iRec.getMonth() && hj.getFullYear() == iRec.getFullYear()) {
-				className += ' iniRecesso ';
-			}
-			if (hj.getDate() == fRec.getDate() && hj.getMonth() == fRec.getMonth() && hj.getFullYear() == fRec.getFullYear()) {
-				className += ' fimRecesso ';
+			if (className.match('foraMes') == null) {
+				if (hj.getDate() == iAno.getDate() && hj.getMonth() == iAno.getMonth() && hj.getFullYear() == iAno.getFullYear()) {
+					className += ' iniDia ';
+				}
+				if (hj.getDate() == fAno.getDate() && hj.getMonth() == fAno.getMonth() && hj.getFullYear() == fAno.getFullYear()) {
+					className += ' fimDia ';
+				}
+				if (hj.getDate() == iRec.getDate() && hj.getMonth() == iRec.getMonth() && hj.getFullYear() == iRec.getFullYear()) {
+					className += ' iniRecesso ';
+				}
+				if (hj.getDate() == fRec.getDate() && hj.getMonth() == fRec.getMonth() && hj.getFullYear() == fRec.getFullYear()) {
+					className += ' fimRecesso ';
+				}
 			}
 
 
@@ -920,13 +1182,14 @@ function calendario() {
 		contMes.find('.removeDia').remove();
 	}
 
-
 	$('#calendario').fadeIn(500, function () {
 		// $stepTuto = 0
 		// tutorial($stepTuto);
 
 		$('#tutorial .continuar').off().on('click', function () {
-			tutorial($stepTuto);
+			if (!$tTutorial) {
+				tutorial($stepTuto);
+			}
 		})
 
 		$('.btTutorial').off().on('click', function () {
@@ -952,26 +1215,33 @@ function tutorial(passo) {
 	var mes = $('.copyMes:visible').index() + 1;
 	var obj = $('.copyMes:visible .quarta:eq(2)');
 	var dia = $('.copyMes:visible .quarta:eq(2) .txt').text() * 1;
-	console.log(dia, mes)
-	var evento = ''
-
+	//console.log(dia, mes)
+	var evento = '';
+	$tTutorial = true;
+	setTimeout(function () { $tTutorial = false; }, 3300)
 	switch (passo) {
 		case 0:
 			var t = obj.offset().top - $('.ano').offset().top + 40;
 			var l = obj.offset().left - $('.ano').offset().left + 70;
 			TweenMax.fromTo($('.cursor'), 1.3, { top: 300, left: 1200 }, { top: t, left: l })
-			$('#tutorial .m1').delay(1000).fadeIn(500);
+
+			$('#tutorial .m1').delay(1000).fadeIn(500, function () {
+			});
 			break;
 		case 1:
-			obj.trigger('click')
+			obj.trigger('click');
 			TweenMax.to($('.cursor'), .7, {
 				top: 450, left: 520, onComplete: function () {
-					TweenMax.to($('.cursor'), .7, { delay: 1, top: 330, left: 700 })
+					TweenMax.to($('.cursor'), .7, {
+						delay: 1, top: 330, left: 700, onComplete: function () {
+						}
+					})
 				}
 			})
 			$('#tutorial .m2').delay(700).fadeIn(500, function () {
 				$('.tituloEvt').val('Reunião Professores')
 			});
+
 			break;
 		case 2:
 			$('.btCancelar').trigger('click');
@@ -981,12 +1251,15 @@ function tutorial(passo) {
 			TweenMax.fromTo($('.cursor'), 1.3, { top: 330, left: 700 }, {
 				top: t, left: l, onComplete: function () {
 					TweenMax.to($('.cursor'), 1.3, { delay: .2, top: 370, left: l + 200 })
-					console.log(dia, dia + 1, dia + 2, mes)
+					//console.log(dia, dia + 1, dia + 2, mes)
 					setTimeout(function () { classDrag($('.dia' + dia + '.diaM' + mes), $('.dia' + dia + '.diaM' + mes)); }, 000)
 					setTimeout(function () { classDrag($('.dia' + dia + '.diaM' + mes), $('.dia' + (dia + 1) + '.diaM' + mes)); }, 500)
-					setTimeout(function () { classDrag($('.dia' + dia + '.diaM' + mes), $('.dia' + (dia + 2) + '.diaM' + mes)); }, 1000)
+					setTimeout(function () {
+						classDrag($('.dia' + dia + '.diaM' + mes), $('.dia' + (dia + 2) + '.diaM' + mes));
+					}, 1000)
 				}
 			})
+
 			$('#tutorial .m3').delay(1000).fadeIn(500, function () { });
 			break;
 		case 3:
@@ -1015,11 +1288,13 @@ function tutorial(passo) {
 
 				var t = $(evento).offset().top - $('.ano').offset().top + 40;
 				var l = $(evento).offset().left - $('.ano').offset().left + 70;
-				console.log(t, l)
+				//console.log(t, l)
 
 				TweenMax.to($('.cursor'), 1, { delay: .5, top: t, left: l });
-				$('#tutorial .m4').delay(1000).fadeIn(500, function () { });
+				$('#tutorial .m4').delay(1000).fadeIn(500, function () {
+				});
 			}, 500)
+
 			break;
 		case 5:
 			$('.copyMes:visible .infoMes .diaEvento .txtEvento span').each(function () {
@@ -1029,13 +1304,21 @@ function tutorial(passo) {
 				}
 			})
 			$(evento).trigger('click');
-			TweenMax.to($('.cursor'), 1, { top: 670, left: 400 });
+			TweenMax.to($('.cursor'), 1, {
+				top: 670, left: 400, onComplete: function () {
+				}
+			});
+
 			break;
 		case 6:
-			$('.btExcluir ').trigger('click');
-			TweenMax.fromTo($('.cursor'), 1, { top: 670, left: 400 }, { top: 500, left: -100 });
+			$('.btExcluir').trigger('click');
+			TweenMax.fromTo($('.cursor'), 1, { top: 670, left: 400 }, {
+				top: 500, left: -100, onComplete: function () {
+				}
+			});
 			$('#tutorial').delay(500).fadeOut();
 			$('.btsTopo, .setaDir, .setaEsq, .btTutorial').fadeIn()
+
 			break;
 	}
 }
@@ -1247,6 +1530,7 @@ function edtEvento(dia) {
 
 	$('.novoEvento .btExcluir').show().off().on('click', function () {
 
+		//console.log (obj.dt_inicio , obj.dt_fim);
 		if (obj.dt_inicio != obj.dt_fim) {
 			var dI = obj.dt_inicio.split('/');
 			var dF = obj.dt_fim.split('/');
@@ -1356,7 +1640,11 @@ function updateEventos() {
 						d.find('.evts').append('<div class="evt' + evt.tipo_evento.id + '"></div>');
 						d.removeClass('diaLetivo');
 					}
-					if (!evt.dia_letivo) d[0].dia_letivo = false;
+					if (!evt.dia_letivo) {
+						d.each(function () {
+							this.dia_letivo = false;
+						})
+					}
 				}
 
 			} else {
@@ -1372,7 +1660,11 @@ function updateEventos() {
 					diaI.removeClass('diaLetivo');
 				}
 
-				if (!evt.dia_letivo) diaI[0].dia_letivo = false;
+				if (!evt.dia_letivo) {
+					diaI.each(function () {
+						this.dia_letivo = false;
+					})
+				}
 			}
 
 
@@ -1503,7 +1795,6 @@ function updateVolumes() {
 					if (i != arGroup.length - 1) txtEvt += '<br>';
 					arGroup[i].addClass('remove');
 				}
-				//console.log(dataEvt.split('/')[0], arGroup, dataEvt, txtEvt);
 				obj = $('<div class="diaEvento" data-dia="' + dataEvt.split('/')[0] + '"><div class="cor evt6"></div>\
 					<div class="txtEvento">\
 					<strong>'+ dataEvt + '</strong><br>\
@@ -1522,7 +1813,6 @@ function updateVolumes() {
 			if (parseInt($(this).attr('data-dia')) == diaVol) {
 				arGroup.push($(this));
 			}
-			//console.log ($(this).index() , $(this).parent().find('.diaEvento').length - 1);
 			if ($(this).index() == $(this).parent().find('.diaEvento').length - 1) {
 				appendDiv();
 			}
@@ -1607,7 +1897,8 @@ function gerarCalendario() {
 	}
 	$('#cont2').html('');
 	$('#stage').addClass('print');
-	$('#loading').fadeIn();
+	$('#loading').removeClass('hide');
+	$('#loading .sprite').html('Gerando PDF');
 
 	cloneImage(0, function () {
 		gerarPdf();
@@ -1645,7 +1936,7 @@ function cloneImage(j) {
 				cloneImage(j);
 			} else {
 				$pdf.save("calendario.pdf");
-				$('#loading').fadeOut();
+				$('#loading').addClass('hide');
 				$('#calendario').fadeIn();
 				$('#pagePrint').fadeOut();
 				$('#stage').removeClass('print');
@@ -1774,24 +2065,24 @@ function generateImage(input) {
 			logoInstituicao = e.target.result;
 		};
 		reader.readAsDataURL(input.files[0]);
-		console.log( input.files[0] );
+		//console.log( input.files[0] );
 		dataUsuario.instituicao.logo = input.files[0]
 	}
 
 }
 var formData;
 function uploadFile() {
-	
+
 	// define new form
 	formData = new FormData();
-	formData.append('nome',  instituicao.nome );
-	formData.append('id',  instituicao.id );
-	formData.append('uf',  instituicao.uf );
-	formData.append('logo',  instituicao.logo );
-	console.log(  instituicao.logo );
+	formData.append('nome', instituicao.nome);
+	formData.append('id', instituicao.id);
+	formData.append('uf', instituicao.uf);
+	formData.append('logo', instituicao.logo);
+	//console.log(  instituicao.logo );
 
 	var request = new XMLHttpRequest();
-	request.open("POST", baseUrl+"/api/instituicao/update.php");
+	request.open("POST", baseUrl + "/api/instituicao/update.php");
 	request.send(formData);
 
 }

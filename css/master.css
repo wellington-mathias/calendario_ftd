@@ -64,6 +64,7 @@
 
 /* html {overflow: scroll;} */
 
+html.print2{overflow: hidden;}
 * {border:0; margin:0; padding:0; }
 #stage {display:block; min-width: 1024px; width:100%; min-height:100%; position:absolute; background-color: #ededed;}
 #stage #console{display:block; width:100%; height:100px; overflow:hidden; position:absolute; top:0; left:0; pointer-events:none; z-index:100000; font-size:20px;}
@@ -173,11 +174,14 @@
 #configCalendario .titulo .num{width: 20px; display: inline-block; margin-left: -20px;}
 #configCalendario .form{border-radius:20px; border:2px solid #0f3a5d; padding:0 20px; margin-bottom: 20px; }
 #configCalendario .form input.erro{background-color: #ff7f7f;}
+#configCalendario .form sup{border-bottom: 1px solid #333; font-size: 12px; line-height: 12px; margin-left: 1px; }
 #configCalendario .comentAsterisco{font-size: 11px; font-style: italic;}
+#configCalendario .comentAsterisco sup{border-bottom: 1px solid #333; font-size: 8px; line-height: 8px; }
 #configCalendario .ano3>span{display: none; }
 #configCalendario .ano3>span.on{display: block; }
 #configCalendario input{border: 2px solid #666; line-height: 30px; padding: 0 3px; border-radius: 4px; margin:0 10px ; width: 60px;}
 #configCalendario .checks{margin:  0;}
+#configCalendario .checks sup{border-bottom: 1px solid #333; font-size: 12px; line-height: 12px; margin-left: 1px; }
 #configCalendario .checks .btCheck{float: left; clear:both; margin-bottom: 5px; position: relative; padding-left: 30px; cursor: pointer; }
 #configCalendario .checks .btCheck span{position: relative; }
 #configCalendario .checks .btCheck span:before{ content: ''; position: absolute; left: -25px; width: 20px; height: 20px; background-color: rgb(56, 56, 56); border-radius: 50%; }
@@ -244,12 +248,12 @@
 .contMes .dias .dia .vols{display: flex; align-items: flex-start; justify-content: flex-start; padding: 0 0px; }
 .contMes .dias .sabado,
 .contMes .dias .domingo{color: #f00; background-color: #eee; }
-.contMes .dias .foraMes{background-color: #eee; color: #999;}
 .contMes .dias .foraMes>div{opacity: .5;}
 .contMes .dias .foraMes.sabado,
 .contMes .dias .foraMes.domingo{color: #f99;}
 .contMes .dias .diaUtil{ }
 .contMes .dias .diasRecesso{background-color:#f7ecdb; }
+.contMes .dias .foraMes{background-color: #eee; color: #999;}
 .evt1{background-color: #d1dda4  !important}
 .evt2.corProf1{background-color: #fbb0e9 !important;}
 .evt2.corProf2{background-color: #f0917f !important;}
@@ -297,6 +301,7 @@
 .infos {display: flex;}
 .infoMesVol {margin:5px 0px 0 ; /* height: 250px; */ position: relative; display: flex; flex-direction: column; width: 30%; }
 .infoMes {margin:5px 0px 0 ; /* height: 250px; */ position: relative; display: flex; flex-wrap: wrap; flex-direction: column; width: 70%; }
+.infoMesVol sup{border-bottom: 1px solid #333; font-size: 10px; line-height: 10px; margin-left: 1px; }
 .infoMesVol .diaEvento,
 .infoMes .diaEvento { padding: 10px 10px 0 10px; display: flex; box-sizing: border-box; cursor: pointer; align-items: start;}
 .infoMesVol .diaEvento .cor{width: 36px; height: 30px; box-sizing: border-box; background-position: top;     margin-right: -20px;}
@@ -423,10 +428,10 @@
 #pagePrint .copyMes  {transform-origin: 0 0;  width: 934px; margin: 0;}
 #pagePrint #cont2  { position: absolute; width: 100%; height: 100%;  overflow-y: scroll; }
 
-/* #pagePrint.qtd1 .cont  { width: 1550px; height: 1000px} */
+
 #pagePrint.qtd1 .copyMes  {transform: scale(1.50); transform-origin: 0 0;}
-/* #pagePrint.qtd1 .contMes .dias>div  { font-size: 15px; } */
-#pagePrint.qtd1 .infoMes  { height: 220px; margin: 5px 0;/*  flex-direction:row; */ }
+#pagePrint .infoMes  { overflow: hidden; }
+#pagePrint.qtd1 .infoMes  { height: 220px; margin: 5px 0; }
 #pagePrint.qtd1 .infoMes .diaEvento {padding: 5px 0;}
 #pagePrint.qtd1 .btsTopo{width: calc(100% - 220px); margin-left: 90px;}
 #pagePrint.qtd1 .btsTopo .logoFTD{width: 240px; height: 110px; top: 0;}
@@ -611,10 +616,11 @@
 
 
 
-#loading {position: fixed; top: 0; bottom: 0; left: 0; right: 0; margin: auto; z-index: 50; display: flex; align-items: center; justify-content: center; background-color: #333; }
+.falhaLogin {position: fixed; top: 0; bottom: 0; left: 0; right: 0; margin: auto; z-index: 150; background-color: rgba(255,255,255,.55); color: #ea5a1e; font-family: 'Harabara'; font-size: 30px; display: none; text-align: center; line-height: 100vh; }
+#loading {position: fixed; top: 0; bottom: 0; left: 0; right: 0; margin: auto; z-index: 150; display: flex; align-items: center; justify-content: center; background-color: rgba(255,255,255,.55); }
 #loading.hide {display: none;}
-#loading .sprite {width: 300px; height: 300px; border: 50px solid #000; border-radius: 50%; animation: loading2 1.5s  linear infinite; color: #fff; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 20px; }
+#loading .sprite {width: 300px; height: 300px; border: 50px solid #ea5a1e; border-radius: 50%;  color: #ea5a1e; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 20px;  }
 #loading .ponteiro {position: absolute; top: 50%; left: 50%; width: 148px;height: 0; transform-origin: 0 0; animation: loading 1.5s  linear infinite; }
-#loading .ponteiro:after { content: ''; position: absolute; left:100%; width: 50px; height: 50px; background-color: #ddd; border-radius: 50%; filter:blur(3px) drop-shadow(1px -14px 5px #fff); }
+#loading .ponteiro:after { content: ''; position: absolute; left:100%; width: 50px; height: 50px; background-color: #0f3a5d; border-radius: 50%; filter:blur(3px) drop-shadow(1px -14px 5px #0f3a5d); }
 
 

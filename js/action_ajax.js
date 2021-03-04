@@ -1,4 +1,5 @@
-var baseUrl = '/ftd/calendario/html';
+//var baseUrl = '/ftd/calendario/html';
+var baseUrl = '';
 function dispatch(method, url, data, callback,error) {
     $.ajax({
         method: method,

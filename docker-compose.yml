@@ -1,0 +1,40 @@
+version: '3.5'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: calendarioftd-webapp
+    image: calendarioftd:webapp
+    restart: always
+    # depends_on:
+    #   - database
+    # links:
+    #   - database
+    ports:
+      - 80:80
+    volumes:
+      - ./:/app:rw
+    environment:
+      - DB_HOST_CALENDARIOFTD=calendario_ftd.mysql.dbaas.com.br
+      - DB_USER_CALENDARIOFTD=calendario_ftd
+      - DB_PASSWORD_CALENDARIOFTD=cpcinfo
+      - DB_DBNAME_CALENDARIOFTD=calendario_ftd
+      - DB_PORT_CALENDARIOFTD=3306
+#   database:
+#     container_name: calendarioftd-mysql
+#     image: mysql:5.7
+#     restart: always
+#     ports:
+#       - 3306:3306
+#     command: --default-authentication-plugin=mysql_native_password
+#     volumes:
+#       - ~/.docker-volumes/mysql5.7/data:/var/lib/mysql
+#     environment:
+#       - MYSQL_ROOT_PASSWORD=testes
+#       - MYSQL_DATABASE=calendario_ftd
+#       - MYSQL_USER=testes
+#       - MYSQL_PASSWORD=testes
+# volumes:
+#   mysql-data:
+#     driver: "local"

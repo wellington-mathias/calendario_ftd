@@ -147,14 +147,14 @@ function submitForm(form) {
             dispatch('POST', '/api/instituicao/update.php', data.instituicao, function (data) {
             });
         } else {
-
             data.instituicao = null;
-            dispatch($(form).attr('method'), $(form).attr('action'), data, function (data) {
-                listar();
-                pageListar();
-            });
 
         }
+        console.log(data);
+        dispatch($(form).attr('method'), $(form).attr('action'), data, function (data) {
+            listar();
+            pageListar();
+        });
 
 
 
@@ -283,9 +283,11 @@ function pageAdcionar(obj) {
         if (obj.tipo_usuario) $('select[name="tipo_usuario"] option[value="' + obj.tipo_usuario.id + '"]').attr('selected', 'selected');
 
         $('form .campos').hide();
-        $('form .tipo' + obj.tipo_usuario.id).show();
+        if(obj.tipo_usuario){
+            $('form .tipo' + obj.tipo_usuario.id).show();
+        }
 
-        console.log(obj);
+        //console.log(obj);
 
         if (page == 'usuario') {
             $('.formAdicionar .btEnviar ').hide();
