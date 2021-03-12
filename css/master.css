@@ -428,7 +428,9 @@ html.print2{overflow: hidden;}
 #pagePrint .copyMes  {transform-origin: 0 0;  width: 934px; margin: 0;}
 #pagePrint #cont2  { position: absolute; width: 100%; height: 100%;  overflow-y: scroll; }
 
+#pagePrint .contMes .tableheader .nomeAno {display: none; }
 
+#pagePrint.qtd1 .cont  {padding: 50px ​100px 30p;}
 #pagePrint.qtd1 .copyMes  {transform: scale(1.50); transform-origin: 0 0;}
 #pagePrint .infoMes  { overflow: hidden; }
 #pagePrint.qtd1 .infoMes  { height: 220px; margin: 5px 0; }
@@ -438,7 +440,7 @@ html.print2{overflow: hidden;}
 #pagePrint.qtd1 .evt4::before {width: 27px; height: 27px; left: 2px;}
 
 
-#pagePrint.qtd2 .cont  {padding: 0 60px 30px;}
+#pagePrint.qtd2 .cont  {padding: 60px 60px 30px;}
 #pagePrint.qtd2 .copyMes:nth-child(2){border-top: 2px solid #0f3a5d}
 #pagePrint.qtd2 .copyMes  {transform:scale(1.10)}
 /* #pagePrint.qtd2 .contMes .dias>div  {height: 45px; font-size: 15px; } */
@@ -458,12 +460,12 @@ html.print2{overflow: hidden;}
 
 #pagePrint.qtd4 .btsTopo .logoFTD{ transform: scale(.6); transform-origin: 0 0; right: 10px; top: 0;}
 
-#pagePrint.qtd4 .cont  { justify-content: space-around; padding: 20px 50px 50px; }
+#pagePrint.qtd4 .cont  { justify-content: space-around; padding: 30px 50px 50px; }
 #pagePrint.qtd4 .copyMes  {width: 700px; margin: 0; transform: scale(1); transform-origin: 50% 0;}
 #pagePrint.qtd4 .copyMes:nth-child(3){border-top: 2px solid #0f3a5d; padding-top:10px;}
 #pagePrint.qtd4 .copyMes:nth-child(4){border-top: 2px solid #0f3a5d; padding-top:10px;}
 
-#pagePrint.qtd4 .tableheader { margin-top: 0px; margin-bottom: 10px; height: 60px;} 
+#pagePrint.qtd4 .tableheader { margin-top: 0px; margin-bottom: 10px; height: 50px;} 
 #pagePrint.qtd4 .contMes .dias .nomeMes { height: 30px !important; font-size: 24px !important; background-size: 100%; width: 240px; background-position: 0 10px; }
 #pagePrint.qtd4 .contMes .dias .nomeAno { align-items: start; height: 30px; }
 
@@ -481,9 +483,9 @@ html.print2{overflow: hidden;}
 #pagePrint.qtd4 .infoMesVol .cor{width: 25px; height: 16px !important; margin: 0 -10px 0 0 ;}
 
 #pagePrint.qtd4 .infoMesVol .diaEvento .txtEvento,
-#pagePrint.qtd4 .infoMes .diaEvento .txtEvento{font-size: 12px; line-height: 16px; margin-left: 5px;}
+#pagePrint.qtd4 .infoMes .diaEvento .txtEvento{font-size: 11px; line-height: 12px; margin-left: 5px;}
 
-#pagePrint.qtd4 .infoMes .diaEvento{width: 50%; padding: 0; margin-bottom: 5px; align-items: start;}
+#pagePrint.qtd4 .infoMes .diaEvento{width: 50%; padding: 0; margin-bottom: 4px; align-items: start;}
 #pagePrint.qtd4 .contMes .dias .dia .vols{padding-left: 2px;}
 #pagePrint.qtd4 .infoMesVol .diaEvento{padding: 0; margin-bottom: 5px; align-items: start;}
 
@@ -499,12 +501,12 @@ html.print2{overflow: hidden;}
 
 
 
-#pagePrint.qtd6 .cont  { padding: 0 40px 30px;}
+#pagePrint.qtd6 .cont  { padding: 30px 40px 30px;}
 #pagePrint.qtd6 .btsTopo{transform: scale(.93);top: 0;transform-origin: 50% 0;left: 0;}
 #pagePrint.qtd6 .btsTopo .containerLeft{transform: scale(.7); transform-origin: 0; margin-top: -15px;}
 #pagePrint.qtd6 .btsTopo .containerRight{transform: scale(.6);}
 #pagePrint.qtd6 .copyMes  { width: 525px; margin: 0 0 10px; }
-#pagePrint.qtd6 .tableheader{height: 80px; margin-top: 10px;}
+#pagePrint.qtd6 .tableheader{height: 50px; margin-top: 10px;}
 #pagePrint.qtd6 .copyMes:nth-child(3) .tableheader,
 #pagePrint.qtd6 .copyMes:nth-child(4) .tableheader,
 #pagePrint.qtd6 .copyMes:nth-child(5) .tableheader,
@@ -532,27 +534,9 @@ html.print2{overflow: hidden;}
 
 
 #pagePrint.qtd6 .infoMesVol .diaEvento .txtEvento, 
-#pagePrint.qtd6 .infoMes .diaEvento .txtEvento {
-  width: calc(100% - 0px);
-  margin-left: 10px;
-  font-family: 'Montserrat';
-  font-size: 10px;
-  line-height: 16px;
-}
-
-#pagePrint.qtd6 .evt4::before {
-  width: 15px;
-  height: 15px;
-  left: 2px;
-  bottom: 2px;
-}
-
-#pagePrint.qtd6 .evt5::before {
-  width: 15px;
-  height: 15px;
-  left: 2px;
-  bottom: 2px;
-}
+#pagePrint.qtd6 .infoMes .diaEvento .txtEvento { width: calc(100% - 0px); margin-left: 10px; font-family: 'Montserrat'; font-size: 10px; line-height: 12px; }
+#pagePrint.qtd6 .evt4::before { width: 15px; height: 15px; left: 2px; bottom: 2px; }
+#pagePrint.qtd6 .evt5::before { width: 15px; height: 15px; left: 2px; bottom: 2px; }
 
 
 
@@ -577,7 +561,7 @@ html.print2{overflow: hidden;}
 
 #pagePrint.qtd12 .dia .evt5:before {width: 10px; height: 10px; left: 2px;}
 
-#pagePrint.qtd12 .tableheader{height: 80px; margin-top: 0px; margin-bottom: -10px;}
+#pagePrint.qtd12 .tableheader{height: 30px; margin-top: 0px; margin-bottom: 0px;}
 #pagePrint.qtd12 .tableheader:nth-child(6){border-top: 2px solid #0f3a5d;}
 #pagePrint.qtd12 .contMes .tableheader .nomeMes {font-size: 22px !important;width: 160px;height: 30px !important;}
 #pagePrint.qtd12 .contMes .tableheader .nomeAno {height: 20px;font-size: 14px;}
@@ -589,11 +573,12 @@ html.print2{overflow: hidden;}
 #pagePrint.qtd12 .infoMesVol .diaEvento .cor.evt6 { width: 20px; margin-right: -10px;}
 
 
-#pagePrint.qtd12 .infoMes  { margin: 5px 0;align-items: flex-start; max-height: 180px; overflow: hidden;}
-#pagePrint.qtd12 .infoMesVol  {width: 40%;}
-#pagePrint.qtd12 .infoMes .diaEvento .txtEvento{font-size: 10px; line-height: 12px;}
-#pagePrint.qtd12 .infoMesVol .diaEvento, 
-#pagePrint.qtd12 .infoMes .diaEvento{width: 100%; padding: 0; margin-bottom: 5px; }
+#pagePrint.qtd12 .infoMes  { margin: 5px 0;align-items: flex-start; max-height: 210px; overflow: hidden; flex-grow: 2; width: auto; }
+#pagePrint.qtd12 .infoMesVol  {width: 36%;}
+#pagePrint.qtd12 .infoMes .diaEvento .txtEvento{font-size: 10px; line-height: 11px;}
+#pagePrint.qtd12 .infoMesVol .diaEvento{width: 100%; padding: 0; margin-bottom: 5px; }
+#pagePrint.qtd12 .infoMes .diaEvento{width: 50%; padding: 0; margin-bottom: 5px; }
+#pagePrint.qtd12 .infoMes .diaEvento.w100{width: 100%;}
 
 #pagePrint.qtd12 .contMes .dias.semana strong { display: inline;}
 #pagePrint.qtd12 .contMes .dias.semana strong:first-child { display: none;}
