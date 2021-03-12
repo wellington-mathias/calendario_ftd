@@ -264,7 +264,7 @@ function logado() {
 
 function login() {
 
-	if (userFTD.schools.length > 0) {
+	if (userFTD && userFTD.schools.length > 0) {
 		var pass = userFTD.schools[0].name;
 		var inst = {
 			nome: '',
@@ -319,7 +319,7 @@ function loginCompleto(data) {
 }
 
 function novoUsuario() {
-	if (userFTD.schools.length > 0) {
+	if (userFTD && userFTD.schools.length > 0) {
 		var pass = userFTD.schools[0].name;
 		var inst = null;
 	} else {
@@ -501,7 +501,7 @@ function page2() {
 	$('#abertura').fadeOut();
 	$('#dadosGestor').fadeIn();
 
-	if (userFTD.schools.length > 0 && novaInst) {
+	if (userFTD && userFTD.schools.length > 0 && novaInst) {
 		$('.nomeInstituicao').val(userFTD.schools[0].name);
 	}
 
