@@ -275,7 +275,7 @@ html.print2{overflow: hidden;}
 .diaEvento .evt5{background-color: transparent !important; border:none !important; background-image: url(../assets/imagens/logo.png); background-size: 100%; background-repeat: no-repeat;}
 /* .diaEvento .evt4:before {bottom: 0;left: 0px; width: 100%; height: 100%;} */
 
-.infoMes .diaEvento .evt6{ position: relative; margin: 0; left: 0; border: none !important; }
+.infoMes .diaEvento .evt6{ position: relative; margin: 0; left: 0; height: 400px; border: none !important; }
 .vols .evt6{margin-top: -3px; margin-left: 3px; width: 25px; height: 20px !important; text-indent: 12px;}
 
 .evt6{

@@ -216,6 +216,7 @@ function submitFormLogin(form) {
 			objCalendario.usuario = {
 				id: dataUsuario.id
 			};
+			logado();
 			abertura();
 			checkInstituicao();
 			$('.bemvindo .nameUsuario').html($('.formLoginProf #login_professor').val());
@@ -1912,6 +1913,9 @@ function cloneImage(j) {
 	$('#cont2').hide();
 	for (var a = j; a < j + $mesesPage; a++) {
 		$('#calendario .ano .copyMes:eq(' + (a) + ')').clone().appendTo($('#pagePrint .cont'));
+		if($mesesPage == 12 && $('#pagePrint .cont .copyMes:last .infoMes .diaEvento').length <= 5 ){
+			$('#pagePrint .cont .copyMes:last .infoMes .diaEvento').addClass('w100');
+		}
 	}
 	$('#calendario .btsTopo').clone().appendTo($('#pagePrint .cont'));
 	$('#pagePrint .btsTopo .btGerarCalendario').remove();
