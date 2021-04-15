@@ -6,21 +6,21 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 header("Content-Type: application/json; charset=UTF-8");
 
-if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "DELETE") {
+if (strtoupper($_SERVER["REQUEST_METHOD"]) !== "DELETE") {
     http_response_code(405);
     exit();
 }
-  
+
 // includes
 include_once '../objects/evento.php';
-  
+
 // get evento id
 $data = json_decode(file_get_contents("php://input"));
 
-if(empty($data->id)) {
+if (empty($data->id)) {
     // set response code - 400 bad request
     http_response_code(400);
-    
+
     // tell the user
     echo json_encode(array("message" => "Unable to delete evento. No id informed."));
 } else {
@@ -29,20 +29,19 @@ if(empty($data->id)) {
 
     // set evento id to be deleted
     $evento->id = $data->id;
-    
+
     // delete the evento
-    if(!$evento->delete()) {
+    if (!$evento->delete()) {
         // set response code - 503 service unavailable
         http_response_code(503);
-    
+
         // tell the user
         echo json_encode(array("message" => "Unable to delete evento."));
     } else {
         // set response code - 200 ok
         http_response_code(200);
-    
+
         // tell the user
         echo json_encode(array("message" => "Evento was deleted."));
     }
 }
-?>

@@ -6,8 +6,8 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 header("Content-Type: application/json; charset=UTF-8");
 
-if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "POST") {
-    send_message(405, null);
+if (strtoupper($_SERVER["REQUEST_METHOD"]) !== "POST") {
+    sendMessage(405, null);
 }
 
 // includes
@@ -21,7 +21,7 @@ $obj = new Instituicao();
 $obj->id = empty($_POST["id"]) ? 0 : trim($_POST["id"]);
 
 if ($obj->id == 0) {
-    send_message(400, array("message" => "Unable to update Instituicao. ID is required."));
+    sendMessage(400, array("message" => "Unable to update Instituicao. ID is required."));
 } else {
     $obj->nome = empty($_POST["nome"]) ? null : trim($_POST["nome"]);
     $obj->uf = empty($_POST["uf"]) ? null : trim($_POST["uf"]);
@@ -35,21 +35,22 @@ if ($obj->id == 0) {
         $obj->logo = file_get_contents($file['tmp_name']);
         $obj->logo_content_type = $file['type'];
     }
-    
+
     // update the object
     if (!$obj->update()) {
         // set response code - 503 service unavailable
-        send_message(503, array("message" => "Unable to update Instituicao."));
+        sendMessage(503, array("message" => "Unable to update Instituicao."));
     } else {
         // set response code - 200 ok
-        send_message(200, array ("id" => $obj->id, "message" => "Instituicao was updated."));
+        sendMessage(200, array("id" => $obj->id, "message" => "Instituicao was updated."));
     }
 }
 
-function send_message($http_code, $response_data) {
+function sendMessage($http_code, $response_data)
+{
     // set response code
     http_response_code($http_code);
-    
+
     if ($response_data != null) {
         // tell the user
         echo json_encode($response_data);
@@ -58,7 +59,8 @@ function send_message($http_code, $response_data) {
     exit();
 }
 
-function validateUpload($filename) {
+function validateUpload($filename)
+{
     $utilities = new Utilities();
 
     if ($utilities->emptyUpload($filename)) {
@@ -75,23 +77,22 @@ function validateUpload($filename) {
             if ($file['error'] != 0) {
                 $hasError = true;
                 $errorMessage = $utilities->validateErrorMessage($file);
-            }  else if (!$utilities->validateFileType($file['type'], array("image/jpeg", "image/png", "image/gif"))) {
+            } elseif (!$utilities->validateFileType($file['type'], array("image/jpeg", "image/png", "image/gif"))) {
                 $hasError = true;
                 $errorMessage = "O formato de arquivo '" . $file['type']  . "' e invalido";
-            } else if (!$utilities->validateFileSize($file['size'], 512000)) {
+            } elseif (!$utilities->validateFileSize($file['size'], 512000)) {
                 $hasError = true;
                 $errorMessage = "O arquivo enviado excede o limite maximo permitido de 500KB";
-            } else if (!file_exists($file["tmp_name"]) || !is_uploaded_file($file["tmp_name"])) {
+            } elseif (!file_exists($file["tmp_name"]) || !is_uploaded_file($file["tmp_name"])) {
                 $hasError = true;
                 $errorMessage = "Falha ao obter dados do arquivo";
             }
 
             if ($hasError) {
-                send_message(400, array("message" => $errorMessage));
+                sendMessage(400, array("message" => $errorMessage));
             }
 
             return $file;
         }
     }
 }
-?>

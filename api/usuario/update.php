@@ -6,7 +6,7 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 header("Content-Type: application/json; charset=UTF-8");
 
-if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "POST") {
+if (strtoupper($_SERVER["REQUEST_METHOD"]) !== "POST") {
     http_response_code(405);
     exit();
 }
@@ -27,36 +27,35 @@ $data = json_decode(file_get_contents("php://input"));
 
 $data_incomplete = empty($data->id);
 
-if($data_incomplete) {
+if ($data_incomplete) {
     // set response code - 400 bad request
     http_response_code(400);
-  
+
     // tell the user
     echo json_encode(array("message" => "Unable to update usuario. Data is incomplete."));
 } else {
     // set ID property to be edited
     $usuario->id = $data->id;
-    
+
     // set property values
     $usuario->nome =  empty($data->nome) ? null : $data->nome;
     $usuario->email = empty($data->email) ? null : $data->email;
     $usuario->dt_alteracao = date('Y-m-d H:i:s');
     $usuario->tipo_usuario->id = $data->tipo_usuario->id;
     $usuario->instituicao->id = empty($data->instituicao) || empty($data->instituicao->id)  ? null : $data->instituicao->id;
-    
+
     // update the usuario
     if (!$usuario->update()) {
         // set response code - 503 service unavailable
         http_response_code(503);
-    
+
         // tell the user
         echo json_encode(array("message" => "Unable to update usuario."));
     } else {
         // set response code - 200 ok
         http_response_code(200);
-    
+
         // tell the user
         echo json_encode(array("message" => "Usuario was updated."));
     }
 }
-?>

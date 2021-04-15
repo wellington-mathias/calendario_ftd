@@ -1,7 +1,8 @@
 <?php
 include_once '../objects/crud_object.php';
 
-class Instituicao extends CrudObject {
+class Instituicao extends CrudObject
+{
     // object properties
     public $id;
     public $nome;
@@ -11,12 +12,14 @@ class Instituicao extends CrudObject {
     public $dt_criacao;
     public $dt_alteracao;
 
-    public function __constructor() {
+    public function __constructor()
+    {
         parent::__construct();
     }
 
-   // create method
-   function create() {
+    // create method
+    function create()
+    {
         // query to insert record
         $query = "INSERT INTO instituicao
                     SET
@@ -46,9 +49,10 @@ class Instituicao extends CrudObject {
             return true;
         }
     }
-    
+
     // read all usuarios
-    public function  read() {
+    public function  read()
+    {
         // select all query
         $query = "SELECT
                     u.id,
@@ -75,7 +79,7 @@ class Instituicao extends CrudObject {
             // retrieve our table contents
             // fetch() is faster than fetchAll()
             // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 // extract row
                 // this will make $row['name'] to
                 // just $name only
@@ -99,7 +103,8 @@ class Instituicao extends CrudObject {
     }
 
     // read one product
-    function readOne() {
+    function readOne()
+    {
         // query to read single record
         $query = "SELECT
                     u.id,
@@ -112,19 +117,19 @@ class Instituicao extends CrudObject {
                 FROM instituicao u
                 WHERE u.id = ?
                 LIMIT 0,1";
-    
+
         // prepare query statement
-        $stmt = $this->conn->prepare( $query );
+        $stmt = $this->conn->prepare($query);
 
         // sanitize
         $this->id = (int) htmlspecialchars(strip_tags($this->id));
-    
+
         // bind id of product to be updated
         $stmt->bindParam(1, $this->id);
-    
+
         // execute query
         $stmt->execute();
-       
+
         $num = $stmt->rowCount();
 
         // check if the object is not null
@@ -143,12 +148,13 @@ class Instituicao extends CrudObject {
             $this->dt_criacao = $dt_criacao;
             $this->dt_alteracao = $dt_alteracao;
         }
-        
+
         return $this;
     }
 
     // update method
-    function update() {
+    function update()
+    {
         // update query
         $doUpdate = !is_null($this->nome) || !is_null($this->uf) || !is_null($this->logo);
         $queryData = "";
@@ -157,11 +163,11 @@ class Instituicao extends CrudObject {
             if (!is_null($this->nome)) {
                 $queryData .= strlen($queryData) > 0 ? ", nome = :nome" : "nome = :nome";
             }
-    
+
             if (!is_null($this->uf)) {
                 $queryData .= strlen($queryData) > 0 ? ", uf = :uf" : "uf = :uf";
             }
-    
+
             if (!is_null($this->logo)) {
                 $queryData .= strlen($queryData) > 0 ? ", logo = :logo" : "logo = :logo";
             }
@@ -193,38 +199,38 @@ class Instituicao extends CrudObject {
             if (!is_null($this->logo_content_type)) {
                 $stmt->bindParam(":logo_content_type", $this->logo_content_type);
             }
-            
+
             $stmt->bindParam(":id", $this->id);
 
             // execute the query
-            if(!$stmt->execute()) {
+            if (!$stmt->execute()) {
                 return false;
             }
         }
-    
+
         return true;
     }
 
     // delete the product
-    function delete() {
+    function delete()
+    {
         // delete query
         $query = "DELETE FROM instituicao WHERE id = ?";
-    
+
         // prepare query
         $stmt = $this->conn->prepare($query);
-    
+
         // sanitize
         $this->id = (int) htmlspecialchars(strip_tags($this->id));
-    
+
         // bind id of record to delete
         $stmt->bindParam(1, $this->id);
-    
+
         // execute query
-        if(!$stmt->execute()) {
+        if (!$stmt->execute()) {
             return false;
         }
-    
+
         return true;
     }
 }
-?>

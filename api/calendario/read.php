@@ -6,8 +6,8 @@ header("Access-Control-Allow-Headers: access");
 header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=UTF-8");
 
-if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "GET") {
-    send_message(405, null);
+if (strtoupper($_SERVER["REQUEST_METHOD"]) !== "GET") {
+    sendMessage(405, null);
 }
 
 // includes
@@ -15,38 +15,40 @@ include_once '../objects/calendario.php';
 
 if (isset($_GET['id'])) {
     readOne();
-} else if (isset($_GET['usuario'])) {
+} elseif (isset($_GET['usuario'])) {
     readByUser($_GET['usuario']);
 } else {
     readAll();
 }
 
-function readAll() {
+function readAll()
+{
     // Retrieve object
     $calendario = new Calendario();
 
     // query objects
     $calendarios = $calendario->read();
-    
+
     // check if more than 0 record found
     if (count($calendarios) == 0) {
-        send_message(404, array("message" => "Nenhum Calendario encontrado."));
+        sendMessage(404, array("message" => "Nenhum Calendario encontrado."));
     } else {
         // objects array
         $objects_arr = array();
         $objects_arr["calendarios"] = array();
-    
-        foreach($calendarios as $calendario) {
+
+        foreach ($calendarios as $calendario) {
             array_push($objects_arr["calendarios"], getDataAsArray($calendario));
         }
-    
-       send_message(200, $objects_arr);
+
+        sendMessage(200, $objects_arr);
     }
 }
 
-function readOne() {
+function readOne()
+{
     if (empty($_GET['id'])) {
-        send_message(400, array("message" => "Unable to read Calendario. No id informed."));
+        sendMessage(400, array("message" => "Unable to read Calendario. No id informed."));
     } else {
         // Retrieve object
         $calendario = new Calendario();
@@ -57,45 +59,47 @@ function readOne() {
         $calendario = $calendario->readOne();
 
         // check if the object is not null
-        if($calendario == null)  {
-            send_message(404, array("message" => "Calendario does not exist."));
+        if ($calendario == null) {
+            sendMessage(404, array("message" => "Calendario does not exist."));
         } else {
-            send_message(200, getDataAsArray($calendario));
+            sendMessage(200, getDataAsArray($calendario));
         }
     }
 }
 
-function readByUser($usuario_id) {
+function readByUser($usuario_id)
+{
     if (empty($usuario_id)) {
-        send_message(400, array("message" => "Unable to read Calendarios. No User informed."));
+        sendMessage(400, array("message" => "Unable to read Calendarios. No User informed."));
     } else {
         // Retrieve object
         $calendario = new Calendario();
 
         // query objects
         $calendarios = $calendario->readByUser($usuario_id);
-        
+
         // check if more than 0 record found
         if (count($calendarios) == 0) {
-            send_message(404, array("message" => "Nenhum Calendario encontrado."));
+            sendMessage(404, array("message" => "Nenhum Calendario encontrado."));
         } else {
             // objects array
             $objects_arr = array();
             $objects_arr["calendarios"] = array();
-        
-            foreach($calendarios as $calendario) {
+
+            foreach ($calendarios as $calendario) {
                 array_push($objects_arr["calendarios"], getDataAsArray($calendario));
             }
-        
-        send_message(200, $objects_arr);
+
+            sendMessage(200, $objects_arr);
         }
     }
 }
 
-function send_message($http_code, $response_data) {
+function sendMessage($http_code, $response_data)
+{
     // set response code - 400 bad request
     http_response_code($http_code);
-    
+
     if ($response_data != null) {
         // tell the user
         echo json_encode($response_data);
@@ -104,7 +108,8 @@ function send_message($http_code, $response_data) {
     exit();
 }
 
-function getDataAsArray($dataAsObject) {
+function getDataAsArray($dataAsObject)
+{
     $dataAsArray = array(
         "id" => $dataAsObject->id,
         "ano_referencia" => $dataAsObject->ano_referencia,
@@ -141,4 +146,3 @@ function getDataAsArray($dataAsObject) {
 
     return $dataAsArray;
 }
-?>

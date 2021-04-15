@@ -6,7 +6,7 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 header("Content-Type: application/json; charset=UTF-8");
 
-if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "POST") {
+if (strtoupper($_SERVER["REQUEST_METHOD"]) !== "POST") {
     http_response_code(405);
     exit();
 }
@@ -23,18 +23,18 @@ $data_incomplete = $data_incomplete && empty($data->dt_inicio_ano_letivo) && emp
 $data_incomplete = $data_incomplete && empty($data->dt_inicio_recesso) && empty($data->dt_fim_recesso);
 $data_incomplete = $data_incomplete && empty($data->usuario->id);
 
-if($data_incomplete) {
+if ($data_incomplete) {
     // set response code - 400 bad request
     http_response_code(400);
-  
+
     // tell the user
     echo json_encode(array("message" => "Unable to update Calendario. Data is incomplete."));
 } else {
-     // prepare object
-     $obj = new Calendario();
+    // prepare object
+    $obj = new Calendario();
 
-     // set ID property to be edited
-     $obj->id = $data->id;
+    // set ID property to be edited
+    $obj->id = $data->id;
 
     // set property values
     $obj->ano_referencia = $data->ano_referencia;
@@ -47,20 +47,19 @@ if($data_incomplete) {
     $obj->qtde_volumes_3o_ano = $data->qtde_volumes_3o_ano;
     $obj->revisao_volume_3o_ano = $data->revisao_volume_3o_ano;
     $obj->usuario = $data->usuario;
-    
+
     // update the evento
     if (!$obj->update()) {
         // set response code - 503 service unavailable
         http_response_code(503);
-    
+
         // tell the user
         echo json_encode(array("message" => "Unable to update Calendario."));
     } else {
         // set response code - 200 ok
         http_response_code(200);
-    
+
         // tell the user
         echo json_encode(array("message" => "Calendario was updated."));
     }
 }
-?>

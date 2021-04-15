@@ -9,19 +9,18 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 header("Content-Type: application/json; charset=UTF-8");
 
-if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "POST") {
+if (strtoupper($_SERVER["REQUEST_METHOD"]) !== "POST") {
     http_response_code(405);
     exit();
 }
- 
+
 // Check if the user is already logged in, if yes then redirect him to welcome page
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     $response = json_decode($_SESSION["userResponse"]);
     $response->message = "An User is already logged in!";
 
     // make it json format
     echo json_encode($response);
-    
 } else {
     // include database and object files
     include_once '../config/database.php';
@@ -58,7 +57,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
             ));
 
         // IF PASSWORD IS LESS THAN 8 THE SHOW THE ERROR
-        } else if(strlen($password) < 8) {
+        } elseif(strlen($password) < 8) {
             // set response code - 400 bad request
             http_response_code(422);
 
@@ -68,13 +67,13 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                 "message" => 'Your password must be at least 8 characters long!'
             ));
         */
-    
+
         // THE USER IS ABLE TO PERFORM THE LOGIN ACTION
-        
+
         $obj = new Usuario();
 
         $usuario = $obj->login($ambiente, $login);
-        
+
         if ($usuario == null) {
             // set response code - 400 bad request
             http_response_code(422);
@@ -85,7 +84,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                 "message" => 'Invalid User or Enviroment!'
             ));
         } else {
-            if (!password_verify( $password , $usuario->senha)) {
+            if (!password_verify($password, $usuario->senha)) {
                 // set response code - 400 bad request
                 http_response_code(422);
 
@@ -101,12 +100,12 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                     "usuario" => array(
                         "id" => $usuario->id,
                         "nome" => $usuario->nome,
-                        "email" => $usuario->email, 
+                        "email" => $usuario->email,
                         "dt_criacao" => $usuario->dt_criacao,
                         "dt_alteracao" => $usuario->dt_alteracao,
                         "tipo_usuario" => array(
                             "id" => $usuario->tipo_usuario->id,
-                        	"descricao" => $usuario->tipo_usuario->descricao
+                            "descricao" => $usuario->tipo_usuario->descricao
                         )
                     )
                 );
@@ -120,7 +119,6 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                         "dt_criacao" => $usuario->instituicao->dt_criacao,
                         "dt_alteracao" => $usuario->instituicao->dt_alteracao
                     );
-            
                 }
 
                 // set response code - 200 OK
@@ -138,4 +136,3 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
         }
     }
 }
-?>

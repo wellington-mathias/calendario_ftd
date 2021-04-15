@@ -5,7 +5,8 @@ include_once '../objects/tipo_usuario.php';
 include_once '../objects/instituicao.php';
 include_once '../objects/evento.php';
 
-class Calendario extends CrudObject {
+class Calendario extends CrudObject
+{
     // object properties
     public $id;
     public $ano_referencia;
@@ -22,12 +23,14 @@ class Calendario extends CrudObject {
     public $usuario;
 
     // constructor with $db as database connection
-    public function __constructor() {
+    public function __constructor()
+    {
         parent::__construct();
     }
 
     // create method
-    public function create() {
+    public function create()
+    {
         // query to insert record
         $query = "INSERT INTO calendario
                     SET
@@ -80,7 +83,8 @@ class Calendario extends CrudObject {
     }
 
     // read all
-    public function read() {
+    public function read()
+    {
         // select all query
         $query = "SELECT
                         a.id,
@@ -129,14 +133,14 @@ class Calendario extends CrudObject {
             // retrieve our table contents
             // fetch() is faster than fetchAll()
             // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 // extract row
                 // this will make $row['name'] to
                 // just $name only
                 extract($row);
 
                 $calendario = new Calendario();
-                
+
                 $calendario->id = $id;
                 $calendario->ano_referencia = $ano_referencia;
                 $calendario->dt_inicio_ano_letivo = $dt_inicio_ano_letivo;
@@ -152,8 +156,8 @@ class Calendario extends CrudObject {
 
                 $calendario->usuario = new Usuario();
                 $calendario->usuario->id = $usuario_id;
-                $calendario->usuario->nome = (is_null ($usuario_nome)) ? null: html_entity_decode($usuario_nome);
-                $calendario->usuario->email = (is_null ($usuario_email)) ? null: html_entity_decode($usuario_email);
+                $calendario->usuario->nome = (is_null($usuario_nome)) ? null : html_entity_decode($usuario_nome);
+                $calendario->usuario->email = (is_null($usuario_email)) ? null : html_entity_decode($usuario_email);
                 $calendario->usuario->dt_criacao = $usuario_dt_criacao;
                 $calendario->usuario->dt_alteracao = $usuario_dt_alteracao;
 
@@ -178,7 +182,8 @@ class Calendario extends CrudObject {
     }
 
     // read one product
-    public function readOne() {
+    public function readOne()
+    {
         // query to read single record
         $query = "SELECT
                     a.id,
@@ -213,19 +218,19 @@ class Calendario extends CrudObject {
                 INNER JOIN instituicao d ON (d.id = b.instituicao_id)
                 WHERE a.id = ?
                 LIMIT 0,1";
-    
+
         // prepare query statement
-        $stmt = $this->conn->prepare( $query );
+        $stmt = $this->conn->prepare($query);
 
         // sanitize
         $this->id = (int) htmlspecialchars(strip_tags($this->id));
-    
+
         // bind id of product to be updated
         $stmt->bindParam(1, $this->id);
-    
+
         // execute query
         $stmt->execute();
-       
+
         $num = $stmt->rowCount();
 
         // check if the object is not null
@@ -251,8 +256,8 @@ class Calendario extends CrudObject {
 
             $this->usuario = new Usuario();
             $this->usuario->id = $usuario_id;
-            $this->usuario->nome = (is_null ($usuario_nome)) ? null: html_entity_decode($usuario_nome);
-            $this->usuario->email = (is_null ($usuario_email)) ? null: html_entity_decode($usuario_email);
+            $this->usuario->nome = (is_null($usuario_nome)) ? null : html_entity_decode($usuario_nome);
+            $this->usuario->email = (is_null($usuario_email)) ? null : html_entity_decode($usuario_email);
             $this->usuario->dt_criacao = $usuario_dt_criacao;
             $this->usuario->dt_alteracao = $usuario_dt_alteracao;
 
@@ -269,12 +274,13 @@ class Calendario extends CrudObject {
             $this->usuario->instituicao->dt_criacao = $instituicao_dt_criacao;
             $this->usuario->instituicao->dt_alteracao = $instituicao_dt_alteracao;
         }
-        
+
         return $this;
     }
 
     // read all
-    public function readByUser($usuario_id) {
+    public function readByUser($usuario_id)
+    {
         // select all query
         $query = "SELECT
                         a.id,
@@ -315,7 +321,7 @@ class Calendario extends CrudObject {
 
         // sanitize
         $usuario_id = (int) htmlspecialchars(strip_tags($usuario_id));
-    
+
         // bind id of product to be updated
         $stmt->bindParam(1, $usuario_id);
 
@@ -330,14 +336,14 @@ class Calendario extends CrudObject {
             // retrieve our table contents
             // fetch() is faster than fetchAll()
             // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 // extract row
                 // this will make $row['name'] to
                 // just $name only
                 extract($row);
 
                 $calendario = new Calendario();
-                
+
                 $calendario->id = $id;
                 $calendario->ano_referencia = $ano_referencia;
                 $calendario->dt_inicio_ano_letivo = $dt_inicio_ano_letivo;
@@ -353,8 +359,8 @@ class Calendario extends CrudObject {
 
                 $calendario->usuario = new Usuario();
                 $calendario->usuario->id = $usuario_id;
-                $calendario->usuario->nome = (is_null ($usuario_nome)) ? null: html_entity_decode($usuario_nome);
-                $calendario->usuario->email = (is_null ($usuario_email)) ? null: html_entity_decode($usuario_email);
+                $calendario->usuario->nome = (is_null($usuario_nome)) ? null : html_entity_decode($usuario_nome);
+                $calendario->usuario->email = (is_null($usuario_email)) ? null : html_entity_decode($usuario_email);
                 $calendario->usuario->dt_criacao = $usuario_dt_criacao;
                 $calendario->usuario->dt_alteracao = $usuario_dt_alteracao;
 
@@ -379,7 +385,8 @@ class Calendario extends CrudObject {
     }
 
     // update method
-    public function update() {
+    public function update()
+    {
         // update query
         $query = "UPDATE calendario
                     SET
@@ -394,7 +401,7 @@ class Calendario extends CrudObject {
                         revisao_volume_3o_ano = :revisao_volume_3o_ano,
                         usuario_id = :usuario_id
                     WHERE id = :id";
-    
+
         // prepare query statement
         $stmt = $this->conn->prepare($query);
 
@@ -425,36 +432,38 @@ class Calendario extends CrudObject {
         $stmt->bindParam(":id", $this->id);
 
         // execute the query
-        if(!$stmt->execute()) {
+        if (!$stmt->execute()) {
             return false;
         }
-    
+
         return true;
     }
 
     // delete the product
-    public function delete() {
+    public function delete()
+    {
         // delete query
         $query = "DELETE FROM calendario WHERE id = ?";
-    
+
         // prepare query
         $stmt = $this->conn->prepare($query);
-    
+
         // sanitize
         $this->id = (int) htmlspecialchars(strip_tags($this->id));
-    
+
         // bind id of record to delete
         $stmt->bindParam(1, $this->id);
-    
+
         // execute query
-        if(!$stmt->execute()) {
+        if (!$stmt->execute()) {
             return false;
         }
-    
+
         return true;
     }
 
-    public function addEvento($evento_id) {
+    public function addEvento($evento_id)
+    {
         // query to insert record
         $query = "INSERT INTO calendario_evento SET
                     calendario_id = :calendario_id,
@@ -479,7 +488,8 @@ class Calendario extends CrudObject {
         return true;
     }
 
-    public function removeEvento($evento_id) {
+    public function removeEvento($evento_id)
+    {
         // query to insert record
         $query = "DELETE FROM calendario_evento
                     WHERE calendario_id = :calendario_id
@@ -504,4 +514,3 @@ class Calendario extends CrudObject {
         return true;
     }
 }
-?>

@@ -6,7 +6,7 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 header("Content-Type: application/json; charset=UTF-8");
 
-if(strtoupper($_SERVER["REQUEST_METHOD"]) !== "PUT") {
+if (strtoupper($_SERVER["REQUEST_METHOD"]) !== "PUT") {
     http_response_code(405);
     exit();
 }
@@ -17,17 +17,17 @@ include_once '../objects/usuario.php';
 
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
-  
+
 // make sure data is not empty
 $data_incomplete = empty($data->ano_referencia);
 $data_incomplete = $data_incomplete && empty($data->dt_inicio_ano_letivo) && empty($data->dt_fim_ano_letivo);
 $data_incomplete = $data_incomplete && empty($data->dt_inicio_recesso) && empty($data->dt_fim_recesso);
 $data_incomplete = $data_incomplete && empty($data->usuario);
 
-if($data_incomplete) {
+if ($data_incomplete) {
     // set response code - 400 bad request
     http_response_code(400);
-  
+
     // tell the user
     echo json_encode(array("message" => "Unable to create Calendario. Data is incomplete."));
 } else {
@@ -48,10 +48,10 @@ if($data_incomplete) {
     if (!isset($calendario->usuario->id) || is_null($calendario->usuario->id) || empty($calendario->usuario->id)) {
         // set response code - 400 bad request
         http_response_code(400);
-            
+
         // tell the user
         echo json_encode(array("message" => "Unable to create tipo de calendario. Data is incomplete."));
-        
+
         die();
         /*
         $data_incomplete = empty($data->usuario->nome) && empty($data->usuario->logo) && empty($data->usuario->uf);
@@ -75,25 +75,25 @@ if($data_incomplete) {
         }
         */
     }
-    
+
     // create the calendario
-    if(!$calendario->create()) {
+    if (!$calendario->create()) {
         // set response code - 503 service unavailable
         http_response_code(503);
-  
+
         // tell the user
         echo json_encode(array("message" => "Unable to create calendario."));
     } else {
-  
+
         // set response code - 201 created
         http_response_code(201);
-  
+
         // tell the user
         echo json_encode(
-            array (
+            array(
                 "id" => $calendario->id,
-                "message" => "Calendario was created.")
+                "message" => "Calendario was created."
+            )
         );
     }
 }
-?>
