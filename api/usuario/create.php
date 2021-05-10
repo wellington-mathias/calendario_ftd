@@ -83,9 +83,6 @@ if ($data_incomplete) {
 
     validateUsername($usuario);
 
-    print_r($usuario);
-    die();
-
     // create the usuario
     if (!$usuario->create()) {
         // set response code - 503 service unavailable

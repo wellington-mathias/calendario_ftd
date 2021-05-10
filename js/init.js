@@ -47,8 +47,11 @@ $(document).ready(function () {
 });
 
 function ajaxLogin(method, url, contentType, data, callback) {
-	//var baseUrl = window.env.IONICA_BASE_URL;
-	var baseUrl = 'https://souionica.tk/api';
+	if(window.env && window.env.IONICA_BASE_URL){
+		var baseUrl = window.env.IONICA_BASE_URL;
+	} else {
+		var baseUrl = 'https://souionica.tk/api';
+	}
 	var head = '';
 	if (data.auth) {
 		head = {
@@ -97,13 +100,13 @@ function validaLoginFtd() {
 
 			ajaxLogin('POST', '/login', 'application/json', testLogin, function (data) {
 				//console.log(data)
-				if (data.status == 'success') {
+				if (data.status && data.status == 'success') {
 					tokenIni = data.data.token;
 
 					var body = { auth: tokenIni };
 					ajaxLogin('GET', '/users/access-token', 'application/x-www-form-urlencoded', body, function (data) {
 						//console.log(data);
-						if (data.status == 'success') {
+						if (data.status && data.status == 'success') {
 							short_token = data.data.token;
 
 							var body = {
@@ -1904,12 +1907,17 @@ function gerarCalendario() {
 function cloneImage(j) {
 	$('#pagePrint .cont').html('').show();
 	$('#cont2').hide();
+
 	for (var a = j; a < j + $mesesPage; a++) {
 		$('#calendario .ano .copyMes:eq(' + (a) + ')').clone().appendTo($('#pagePrint .cont'));
-		if ($mesesPage == 12 && $('#pagePrint .cont .copyMes:last .infoMes .diaEvento').length <= 5) {
-			$('#pagePrint .cont .copyMes:last .infoMes .diaEvento').addClass('w100');
-		}
 	}
+	$('#pagePrint .cont .copyMes .infoMes .diaEvento').each(function (i) {
+		//console.log(i, $('#pagePrint .cont .copyMes:eq('+i+') .infoMes .diaEvento').length );
+		if ($mesesPage == 12 && $('#pagePrint .cont .copyMes:eq('+i+') .infoMes .diaEvento').length <= 5) {
+			$('#pagePrint .cont .copyMes:eq('+i+') .infoMes .diaEvento').addClass('w100');
+		}
+	})
+
 	$('#calendario .btsTopo').clone().appendTo($('#pagePrint .cont'));
 	$('#pagePrint .btsTopo .btGerarCalendario').remove();
 	$('#pagePrint .btsTopo .btEditar').remove();
@@ -1932,11 +1940,11 @@ function cloneImage(j) {
 				$pdf.addPage();
 				cloneImage(j);
 			} else {
-				/* $pdf.save("calendario.pdf");
+				$pdf.save("calendario.pdf");
 				$('#loading').addClass('hide');
 				$('#calendario').fadeIn();
 				$('#pagePrint').fadeOut();
-				$('#stage').removeClass('print'); */
+				$('#stage').removeClass('print');
 			}
 		});
 	}, 1000);

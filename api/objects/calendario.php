@@ -23,7 +23,7 @@ class Calendario extends CrudObject
     public $usuario;
     
     // constructor with $db as database connection
-    public function __construct()
+    public function __constructor()
     {
         parent::__construct();
     }

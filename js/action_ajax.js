@@ -1,5 +1,5 @@
-//var baseUrl = '/ftd/calendario/html';
-var baseUrl = '/cpci/ftd/calendario/azure/calendario-seem';
+//var baseUrl = '/cpci/ftd/calendario/azure/calendario-seem';
+var baseUrl = '/cpci/ftd/calendario/html';
 function dispatch(method, url, data, callback,error) {
     $.ajax({
         method: method,

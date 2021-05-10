@@ -63,10 +63,17 @@ class Usuario extends CrudObject
         }
         $this->tipo_usuario->id = (int) htmlspecialchars(strip_tags($this->tipo_usuario->id));
         if (is_null($this->instituicao->id)) {
-            $this->instituicao->id = (int) null;
+            $this->instituicao->id = null;
         } else {
             $this->instituicao->id = (int) htmlspecialchars(strip_tags($this->instituicao->id));
         }
+/* 
+        echo $this->instituicao->id;
+        echo '----<br>-----';
+        echo is_null($this->instituicao->id);
+        echo '----<br>-----';
+        echo $this->instituicao->id;
+        die(); */
 
 
         // bind values
@@ -78,9 +85,9 @@ class Usuario extends CrudObject
         $stmt->bindParam(":senha_ftd", $this->senha_ftd);
         $stmt->bindParam(":tipo_usuario_id", $this->tipo_usuario->id);
         $stmt->bindParam(":instituicao_id", $this->instituicao->id);
-        
-        
-        
+
+
+
         if (!$stmt->execute()) {
             /* echo "\nPDO::errorInfo():\n";
             print_r($stmt->errorInfo()); */

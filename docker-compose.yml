@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     container_name: calendarioftd-webapp
     image: calendarioftd:webapp
-    restart: always
+    # restart: always
     # depends_on:
     #   - database
     # links:
@@ -21,6 +21,7 @@ services:
       - DB_PASSWORD_CALENDARIOFTD=cpcinfo
       - DB_DBNAME_CALENDARIOFTD=calendario_ftd
       - DB_PORT_CALENDARIOFTD=3306
+      - IONICA_BASE_URL=https://souionica.tk/api
 #   database:
 #     container_name: calendarioftd-mysql
 #     image: mysql:5.7

@@ -1,0 +1,18 @@
+trigger:
+  branches:
+    include:
+    - 'master'
+  tags:
+    include: 
+    - '*-RC'
+    - '*-RELEASE'
+
+resources:
+  repositories:
+  - repository: self
+  - repository: devops
+    name: arquitetura.devops
+    type: git
+
+extends:
+  template: build-templates/back-ftd-quantbot-v1.yml@devops

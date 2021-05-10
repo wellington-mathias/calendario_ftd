@@ -8,6 +8,7 @@
 
 <body>
 	<link rel="stylesheet" href="css/master.css" media="screen" type="text/css">
+	<!--script type="text/javascript" src="js/env.js"></script-->
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/TweenMax.min.js"></script>
 	<script type="text/javascript" src="js/action_ajax.js"></script>
@@ -30,7 +31,7 @@
 					<p>Calendário <span class="txtAno">2020</span></p>
 				</div>
 				<p class="bemvindo tarjaLeft">
-					Seja bem-vindo, Faça seu login.
+					Seja bem-vindo, faça seu login.
 				</p>
 
 				<form class="formLoginProf" action="" method="">
@@ -38,13 +39,11 @@
 						<li class="error"></li>
 						<li>
 							<label for="login_professor">Login</label>
-							<input type="text" name="usuario" id="login_professor" class="obgt campoLogin"
-								value="talles" />
+							<input type="text" name="usuario" id="login_professor" class="obgt campoLogin" />
 						</li>
 						<li>
 							<label for="senha_professor">Senha</label>
-							<input type="password" name="senha" id="senha_professor" class="obgt campoLogin"
-								value="123" />
+							<input type="password" name="senha" id="senha_professor" class="obgt campoLogin" />
 						</li>
 					</ul>
 					<button class="iniciar btBase"><span>Entrar</span></button>
@@ -59,7 +58,7 @@
 					<p>Calendário <span class="txtAno">2020</span></p>
 				</div>
 				<p class="bemvindo tarjaLeft">
-					Seja bem-vindo, <strong class="nameUsuario">Fulano de Tal</strong>!
+					Seja bem-vindo<strong class="nameUsuario">, Fulano de Tal</strong>!
 				</p>
 				<div class="containerTexto fioTop">
 					<p>A partir de agora, estaremos ainda mais juntos ao longo do ano letivo!</p>
@@ -101,7 +100,12 @@
 						</li>
 						<li>
 							<label>Logo:</label><br>
-							<input type="file" id="img" name="logo" accept="image/*" oninput="generateImage(this)">
+							<input type="file" id="img" name="logo" accept=".png, .jpg, .jpeg, .gif" oninput="generateImage(this)">
+						</li>
+						<li>
+							<span class="infoLogo">
+								Formato: png,jpeg,gif. <br>Tamanho recomendado: 200x80 - 500kb.
+							</span>
 						</li>
 						<li>
 							<label>Ano letivo:</label>
@@ -185,29 +189,30 @@
 						<div class="form">
 							<div>
 								<p>
-									1<sup>o</sup> ano → <input type="text" name="v1" value="1" data-value="1" maxlength="2"
-										readonly />
-									a
+									<span class="col1">1<sup>o</sup> ano → </span>
+									<input type="text" name="v1" value="1" data-value="1" maxlength="2" readonly />
+									<span class="col2">a</span>
 									<input type="text" name="v2" value="12" data-value="12" maxlength="2" />
 								</p>
 								<p>
-									2<sup>o</sup> ano → <input type="text" name="v3" value="13" data-value="13" readonly
-										maxlength="2" /> a
+									<span class="col1">2<sup>o</sup> ano → </span>
+									<input type="text" name="v3" value="13" data-value="13" readonly maxlength="2" /> 
+									<span class="col2">a</span>
 									<input type="text" name="v4" value="24" data-value="24" maxlength="2" />
 								</p>
 								<p class="ano3">
 									<span>
-										3<sup>o</sup> ano → <input type="text" name="v5" value="25" data-value="25" readonly
-											maxlength="2" /> a
-										<input type="text" name="v6" value="36" data-value="36" readonly
-											maxlength="2" />
+										<span class="col1">3<sup>o</sup> ano → </span>
+										<input type="text" name="v5" value="25" data-value="25" readonly maxlength="2" />
+										<span class="col2">a</span>
+										<input type="text" name="v6" value="36" data-value="36" readonly maxlength="2" />
 									</span>
 									<span>
-										3<sup>o</sup> ano → <input type="text" name="v5" value="25" data-value="25" readonly
-											maxlength="2" /> a
-										<input type="text" name="v6" value="36" data-value="36" readonly
-											maxlength="2" /> +
-										Revisão Semestral*
+										<span class="col1">3<sup>o</sup> ano → </span>
+										<input type="text" name="v5" value="25" data-value="25" readonly maxlength="2" />
+										<span class="col2">a</span>
+										<input type="text" name="v6" value="36" data-value="36" readonly maxlength="2" />
+										 + Revisão Semestral*
 										<br>
 										<em class="comentAsterisco">* A divisão de volumes se daria no 1<sup>o</sup> semestre,
 											enquanto
@@ -353,17 +358,16 @@
 			<div class="contEvt fioTop">
 				<ul class="contForm">
 					<li>
-						<label>Data:</label>
 						<div class="adicionar">
-							<p>início: <span class="dIni"></span> <br> Final: <span class="dFim"></span></p>
+							<p>Data de início: <span class="dIni"></span> <br> Data final: <span class="dFim"></span></p>
 						</div>
 						<div class="editar">
-							<p>início: <input type="text" value="" class="dtInicio"></p>
-							<p>Final: <input type="text" value="" class="dtFim"></p>
+							<p>Data de início: <input type="text" value="" class="dtInicio"></p>
+							<p>Data final: <input type="text" value="" class="dtFim"></p>
 						</div>
 					</li>
 					<li>
-						<label>Titulo do evento</label>
+						<label>Título do evento</label>
 						<input type="text" class="tituloEvt" name="tituloEvt" id="">
 					</li>
 					<li class="simulado">
