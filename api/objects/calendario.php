@@ -21,11 +21,13 @@ class Calendario extends CrudObject
     public $dt_criacao;
     public $dt_alteracao;
     public $usuario;
+    public $b64 = "base64,";
+    public $txData = "data:";
 
     // constructor with $db as database connection
-    public function __constructor()
+    public function constructor()
     {
-        parent::__construct();
+        parent::construct();
     }
 
     // create method
@@ -50,10 +52,14 @@ class Calendario extends CrudObject
 
         // sanitize
         $this->ano_referencia = (int) htmlspecialchars(strip_tags($this->ano_referencia));
-        $this->dt_inicio_ano_letivo = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_inicio_ano_letivo))), "Y-m-d");
-        $this->dt_fim_ano_letivo = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim_ano_letivo))), "Y-m-d");
-        $this->dt_inicio_recesso = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_inicio_recesso))), "Y-m-d");
-        $this->dt_fim_recesso = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim_recesso))), "Y-m-d");
+        $dtI = date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_inicio_ano_letivo)));
+        $this->dt_inicio_ano_letivo = date_format($dtI, "Y-m-d");
+        $dtF = date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim_ano_letivo)));
+        $this->dt_fim_ano_letivo = date_format($dtF, "Y-m-d");
+        $dtIR = date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_inicio_recesso)));
+        $this->dt_inicio_recesso = date_format($dtIR, "Y-m-d");
+        $dtFR = date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim_recesso)));
+        $this->dt_fim_recesso = date_format($dtFR, "Y-m-d");
         $this->qtde_volumes_1o_ano = (int) htmlspecialchars(strip_tags($this->qtde_volumes_1o_ano));
         $this->qtde_volumes_2o_ano = (int) htmlspecialchars(strip_tags($this->qtde_volumes_2o_ano));
         $this->qtde_volumes_3o_ano = (int) htmlspecialchars(strip_tags($this->qtde_volumes_3o_ano));
@@ -167,10 +173,17 @@ class Calendario extends CrudObject
 
                 $calendario->usuario->instituicao = new Instituicao();
                 $calendario->usuario->instituicao->id = $instituicao_id;
-                $calendario->usuario->instituicao->nome = (is_null($instituicao_nome)) ? null : html_entity_decode($instituicao_nome);
-                $calendario->usuario->instituicao->logo = (is_null($instituicao_logo)) ? null : "base64," .  base64_encode($instituicao_logo);
-                $calendario->usuario->instituicao->logo_content_type = (is_null($instituicao_logo_content_type)) ? null : "data:" . $instituicao_logo_content_type . ";";
-                $calendario->usuario->instituicao->uf = (is_null($instituicao_uf)) ? null : strtoupper(html_entity_decode($instituicao_uf));
+                $nome = (is_null($instituicao_nome)) ? null : html_entity_decode($instituicao_nome);
+                $calendario->usuario->instituicao->nome = $nome;
+                $logo = (is_null($instituicao_logo)) ? null : $b64 .  base64_encode($instituicao_logo);
+                $calendario->usuario->instituicao->logo = $logo;
+                $logoType = null;
+                if (!is_null($instituicao_logo_content_type)) {
+                    $logoType = $txData . $instituicao_logo_content_type . ";";
+                }
+                $calendario->usuario->instituicao->logo_content_type = $logoType;
+                $uf = (is_null($instituicao_uf)) ? null : strtoupper(html_entity_decode($instituicao_uf));
+                $calendario->usuario->instituicao->uf = $uf;
                 $calendario->usuario->instituicao->dt_criacao = $instituicao_dt_criacao;
                 $calendario->usuario->instituicao->dt_alteracao = $instituicao_dt_alteracao;
 
@@ -267,10 +280,30 @@ class Calendario extends CrudObject
 
             $this->usuario->instituicao = new Instituicao();
             $this->usuario->instituicao->id = $instituicao_id;
-            $this->usuario->instituicao->nome = (is_null($instituicao_nome)) ? null : html_entity_decode($instituicao_nome);
-            $this->usuario->instituicao->logo = (is_null($instituicao_logo)) ? null : "base64," .  base64_encode($instituicao_logo);
-            $this->usuario->instituicao->logo_content_type = (is_null($instituicao_logo_content_type)) ? null : "data:" . $instituicao_logo_content_type . ";";
-            $this->usuario->instituicao->uf = (is_null($instituicao_uf)) ? null : strtoupper(html_entity_decode($instituicao_uf));
+            if (is_null($instituicao_nome)) {
+                $this->usuario->instituicao->nome = null;
+            } else {
+                $this->usuario->instituicao->nome = html_entity_decode($instituicao_nome);
+            }
+
+            if (is_null($instituicao_logo)) {
+                $this->usuario->instituicao->logo = null;
+            } else {
+                $this->usuario->instituicao->logo = $b64 .  base64_encode($instituicao_logo);
+            }
+
+            if (is_null($instituicao_logo_content_type)) {
+                $this->usuario->instituicao->logo_content_type = null;
+            } else {
+                $this->usuario->instituicao->logo_content_type = $txData . $instituicao_logo_content_type . ";";
+            }
+
+            if (is_null($instituicao_uf)) {
+                $this->usuario->instituicao->uf = null;
+            } else {
+                $this->usuario->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
+            }
+
             $this->usuario->instituicao->dt_criacao = $instituicao_dt_criacao;
             $this->usuario->instituicao->dt_alteracao = $instituicao_dt_alteracao;
         }
@@ -370,10 +403,30 @@ class Calendario extends CrudObject
 
                 $calendario->usuario->instituicao = new Instituicao();
                 $calendario->usuario->instituicao->id = $instituicao_id;
-                $calendario->usuario->instituicao->nome = (is_null($instituicao_nome)) ? null : html_entity_decode($instituicao_nome);
-                $calendario->usuario->instituicao->logo = (is_null($instituicao_logo)) ? null : "base64," .  base64_encode($instituicao_logo);
-                $calendario->usuario->instituicao->logo_content_type = (is_null($instituicao_logo_content_type)) ? null : "data:" . $instituicao_logo_content_type . ";";
-                $calendario->usuario->instituicao->uf = (is_null($instituicao_uf)) ? null : strtoupper(html_entity_decode($instituicao_uf));
+
+                if (is_null($instituicao_nome)) {
+                    $calendario->usuario->instituicao->nome =  null;
+                } else {
+                    $calendario->usuario->instituicao->nome = html_entity_decode($instituicao_nome);
+                }
+                if (is_null($instituicao_logo)) {
+                    $calendario->usuario->instituicao->logo =  null;
+                } else {
+                    $calendario->usuario->instituicao->logo =  $b64 .  base64_encode($instituicao_logo);
+                }
+                if (is_null($instituicao_logo_content_type)) {
+                    $calendario->usuario->instituicao->logo_content_type =  null;
+                } else {
+                    $type = $txData . $instituicao_logo_content_type . ";";
+                    $calendario->usuario->instituicao->logo_content_type =  $type;
+                }
+                if (is_null($instituicao_uf)) {
+                    $calendario->usuario->instituicao->uf =  null;
+                } else {
+                    $calendario->usuario->instituicao->uf =  strtoupper(html_entity_decode($instituicao_uf));
+                }
+
+
                 $calendario->usuario->instituicao->dt_criacao = $instituicao_dt_criacao;
                 $calendario->usuario->instituicao->dt_alteracao = $instituicao_dt_alteracao;
 
@@ -407,10 +460,14 @@ class Calendario extends CrudObject
 
         // sanitize
         $this->ano_referencia = (int) htmlspecialchars(strip_tags($this->ano_referencia));
-        $this->dt_inicio_ano_letivo = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_inicio_ano_letivo))), "Y-m-d");
-        $this->dt_fim_ano_letivo = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim_ano_letivo))), "Y-m-d");
-        $this->dt_inicio_recesso = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_inicio_recesso))), "Y-m-d");
-        $this->dt_fim_recesso = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim_recesso))), "Y-m-d");
+        $dti = date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_inicio_ano_letivo)));
+        $this->dt_inicio_ano_letivo = date_format($dti, "Y-m-d");
+        $dtf = date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim_ano_letivo)));
+        $this->dt_fim_ano_letivo = date_format($dtf, "Y-m-d");
+        $dtir = date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_inicio_recesso)));
+        $this->dt_inicio_recesso = date_format($dtir, "Y-m-d");
+        $dtfr = date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim_recesso)));
+        $this->dt_fim_recesso = date_format($dtfr, "Y-m-d");
         $this->qtde_volumes_1o_ano = (int) htmlspecialchars(strip_tags($this->qtde_volumes_1o_ano));
         $this->qtde_volumes_2o_ano = (int) htmlspecialchars(strip_tags($this->qtde_volumes_2o_ano));
         $this->qtde_volumes_3o_ano = (int) htmlspecialchars(strip_tags($this->qtde_volumes_3o_ano));

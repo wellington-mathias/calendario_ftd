@@ -10,13 +10,13 @@ class TipoEvento
     public $descricao;
 
     // constructor with $db as database connection
-    public function __construct($db)
+    public function construct($db)
     {
         $this->conn = $db;
     }
 
     // create method
-    function create()
+    public function create()
     {
         // query to insert record
         $query = "INSERT INTO evento_tipo
@@ -41,7 +41,7 @@ class TipoEvento
     }
 
     // read all eventos
-    function read()
+    public function read()
     {
         // select all query
         $query = "SELECT
@@ -60,7 +60,7 @@ class TipoEvento
     }
 
     // read one
-    function readOne()
+    public function readOne()
     {
         // query to read single record
         $query = "SELECT
@@ -92,7 +92,7 @@ class TipoEvento
     }
 
     // update method
-    function update()
+    public function update()
     {
         // update query
         $query = "UPDATE evento_tipo
@@ -120,7 +120,7 @@ class TipoEvento
     }
 
     // delete the product
-    function delete()
+    public function delete()
     {
         // delete query
         $query = "DELETE FROM evento_tipo WHERE id = ?";

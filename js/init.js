@@ -1,4 +1,4 @@
-var prod = false;
+var prod = true;
 var scale = 1;
 
 var inicioAno = fimAno = inicioRecesso = fimRecesso = {};

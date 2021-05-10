@@ -12,7 +12,7 @@ class TipoUsuario
     public $descricao;
 
     // constructor with $db as database connection
-    public function __construct()
+    public function construct()
     {
         $database = new Database();
         $db = $database->getConnection();
@@ -21,7 +21,7 @@ class TipoUsuario
     }
 
     // create method
-    function create()
+    public function create()
     {
         // query to insert record
         $query = "INSERT INTO usuario_tipo SET descricao = :descricao";
@@ -46,7 +46,7 @@ class TipoUsuario
     }
 
     // read all eventos
-    function read()
+    public function read()
     {
         // select all query
         $query = "SELECT id, descricao FROM usuario_tipo ORDER BY id DESC";
@@ -61,7 +61,7 @@ class TipoUsuario
     }
 
     // read one
-    function readOne()
+    public function readOne()
     {
         // query to read single record
         $query = "SELECT id, descricao FROM usuario_tipo WHERE id = ? LIMIT 0,1";
@@ -88,7 +88,7 @@ class TipoUsuario
     }
 
     // update method
-    function update()
+    public function update()
     {
         // update query
         $query = "UPDATE usuario_tipo SET descricao = :descricao WHERE id = :id";
@@ -113,7 +113,7 @@ class TipoUsuario
     }
 
     // delete the product
-    function delete()
+    public function delete()
     {
         // delete query
         $query = "DELETE FROM usuario_tipo WHERE id = ?";
@@ -135,7 +135,7 @@ class TipoUsuario
         return true;
     }
 
-    function toArray()
+    public function toArray()
     {
         $array = array(
             "id" => $this->id,

@@ -17,13 +17,13 @@ class Evento extends CrudObject
     public $dt_alteracao;
 
     // constructor with $db as database connection
-    public function __construct()
+    public function construct()
     {
-        parent::__construct();
+        parent::construct();
     }
 
     // create method
-    function create()
+    public function create()
     {
         // query to insert record
         $query = "INSERT INTO evento
@@ -40,8 +40,10 @@ class Evento extends CrudObject
         $stmt = $this->conn->prepare($query);
 
         // sanitize
-        $this->dt_inicio = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_inicio))), "Y-m-d");
-        $this->dt_fim = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim))), "Y-m-d");
+        $this->dt_inicio = 
+        date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_inicio))), "Y-m-d");
+        $this->dt_fim = 
+        date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim))), "Y-m-d");
         $this->titulo = htmlspecialchars(strip_tags($this->titulo));
         $this->descricao = (is_null($this->descricao)) ? null : htmlspecialchars(strip_tags($this->descricao));
         $this->uf = (is_null($this->uf)) ? null : strtoupper(htmlspecialchars(strip_tags($this->uf)));
@@ -69,7 +71,7 @@ class Evento extends CrudObject
     }
 
     // read all eventos
-    function read()
+    public function read()
     {
         // select all query
         $query = "SELECT
@@ -130,7 +132,7 @@ class Evento extends CrudObject
     }
 
     // read one product
-    function readOne()
+    public function readOne()
     {
         // query to read single record
         $query = "SELECT
@@ -187,7 +189,7 @@ class Evento extends CrudObject
     }
 
     // read one product by calendario_id
-    function readOneByCalendario($calendario_id, $evento_id)
+    public function readOneByCalendario($calendario_id, $evento_id)
     {
         // select all query
         $query = "SELECT
@@ -283,10 +285,18 @@ class Evento extends CrudObject
         // prepare query statement
         $stmt = $this->conn->prepare($query);
 
-        if (!is_null($evento_tipo_id)) $stmt->bindParam(":evento_tipo_id", $evento_tipo_id);
-        if (!is_null($uf) && !empty($uf) && strcmp($uf, "NULL") != 0) $stmt->bindParam(":uf", $uf);
-        if (!is_null($calendario_id)) $stmt->bindParam(":calendario_id", $calendario_id);
-        if (!is_null($dia_letivo)) $stmt->bindParam(":dia_letivo", $dia_letivo);
+        if (!is_null($evento_tipo_id)) {
+            $stmt->bindParam(":evento_tipo_id", $evento_tipo_id);
+        }
+        if (!is_null($uf) && !empty($uf) && strcmp($uf, "NULL") != 0) {
+            $stmt->bindParam(":uf", $uf);
+        }
+        if (!is_null($calendario_id)) {
+            $stmt->bindParam(":calendario_id", $calendario_id);
+        }
+        if (!is_null($dia_letivo)) {
+            $stmt->bindParam(":dia_letivo", $dia_letivo);
+        }
 
         // execute query
         $stmt->execute();
@@ -348,7 +358,7 @@ class Evento extends CrudObject
     }
 
     // update method
-    function update()
+    public function update()
     {
         // update query
         $query = "UPDATE evento
@@ -368,8 +378,10 @@ class Evento extends CrudObject
 
         // sanitize
         $this->tipo_evento_id = (int) htmlspecialchars(strip_tags($this->tipo_evento_id));
-        $this->dt_inicio = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_inicio))), "Y-m-d");
-        $this->dt_fim = date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim))), "Y-m-d");
+        $this->dt_inicio = 
+        date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_inicio))), "Y-m-d");
+        $this->dt_fim = 
+        date_format(date_create_from_format("Y-m-d", htmlspecialchars(strip_tags($this->dt_fim))), "Y-m-d");
         $this->titulo = htmlspecialchars(strip_tags($this->titulo));
         $this->descricao = (is_null($this->descricao)) ? null : htmlspecialchars(strip_tags($this->descricao));
         $this->uf = (is_null($this->uf)) ? null : strtoupper(htmlspecialchars(strip_tags($this->uf)));
@@ -396,7 +408,7 @@ class Evento extends CrudObject
     }
 
     // delete the product
-    function delete()
+    public function delete()
     {
         // delete query
         $query = "DELETE FROM evento WHERE id = ?";

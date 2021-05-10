@@ -12,13 +12,13 @@ class Instituicao extends CrudObject
     public $dt_criacao;
     public $dt_alteracao;
 
-    public function __constructor()
+    public function constructor()
     {
-        parent::__construct();
+        parent::construct();
     }
 
     // create method
-    function create()
+    public function create()
     {
         // query to insert record
         $query = "INSERT INTO instituicao
@@ -103,7 +103,7 @@ class Instituicao extends CrudObject
     }
 
     // read one product
-    function readOne()
+    public function readOne()
     {
         // query to read single record
         $query = "SELECT
@@ -153,7 +153,7 @@ class Instituicao extends CrudObject
     }
 
     // update method
-    function update()
+    public function update()
     {
         // update query
         $doUpdate = !is_null($this->nome) || !is_null($this->uf) || !is_null($this->logo);
@@ -212,7 +212,7 @@ class Instituicao extends CrudObject
     }
 
     // delete the product
-    function delete()
+    public function delete()
     {
         // delete query
         $query = "DELETE FROM instituicao WHERE id = ?";
