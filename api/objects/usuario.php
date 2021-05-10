@@ -3,6 +3,7 @@ include_once '../objects/crud_object.php';
 include_once '../objects/tipo_usuario.php';
 include_once '../objects/instituicao.php';
 
+
 class Usuario extends CrudObject
 {
     // object properties
@@ -17,12 +18,10 @@ class Usuario extends CrudObject
     public $dt_alteracao;
     public $tipo_usuario;
     public $instituicao;
-    public $b64 = "base64,";
-    public $txData = "data:";
 
-    public function constructor()
+    public function __constructor()
     {
-        parent::construct();
+        parent::__construct();
     }
 
     // create method
@@ -46,17 +45,28 @@ class Usuario extends CrudObject
         $this->nome = (is_null($this->nome)) ? null : htmlspecialchars(strip_tags($this->nome));
         $this->email = (is_null($this->email)) ? null : htmlspecialchars(strip_tags($this->email));
         $this->login = (is_null($this->login)) ? null : htmlspecialchars(strip_tags($this->login));
-        $this->senha =
-            (is_null($this->senha)) ? null : password_hash(htmlspecialchars(strip_tags($this->senha)), PASSWORD_DEFAULT);
-        $this->login_ftd = (is_null($this->login_ftd)) ? null : htmlspecialchars(strip_tags($this->login_ftd));
+
+        if (is_null($this->senha)) {
+            $this->senha = null;
+        } else {
+            $this->senha = password_hash(htmlspecialchars(strip_tags($this->senha)), PASSWORD_DEFAULT);
+        }
+        if (is_null($this->login_ftd)) {
+            $this->login_ftd = null;
+        } else {
+            $this->login_ftd = htmlspecialchars(strip_tags($this->login_ftd));
+        }
         if (is_null($this->senha_ftd)) {
             $this->senha_ftd = null;
         } else {
             $this->senha_ftd = password_hash(htmlspecialchars(strip_tags($this->senha_ftd)), PASSWORD_DEFAULT);
         }
         $this->tipo_usuario->id = (int) htmlspecialchars(strip_tags($this->tipo_usuario->id));
-        $this->instituicao->id =
-            (int) (is_null($this->instituicao->id)) ? null : htmlspecialchars(strip_tags($this->instituicao->id));
+        if (is_null($this->instituicao->id)) {
+            $this->instituicao->id = (int) null;
+        } else {
+            $this->instituicao->id = (int) htmlspecialchars(strip_tags($this->instituicao->id));
+        }
 
 
         // bind values
@@ -68,20 +78,21 @@ class Usuario extends CrudObject
         $stmt->bindParam(":senha_ftd", $this->senha_ftd);
         $stmt->bindParam(":tipo_usuario_id", $this->tipo_usuario->id);
         $stmt->bindParam(":instituicao_id", $this->instituicao->id);
-
-
-        // execute query
+        
+        
+        
         if (!$stmt->execute()) {
+            /* echo "\nPDO::errorInfo():\n";
+            print_r($stmt->errorInfo()); */
             return false;
         } else {
             $this->id = $this->conn->lastInsertId();
-
             return true;
         }
     }
 
     // read all usuarios
-    public function  read()
+    public function read()
     {
         // select all query
         $query = "SELECT
@@ -140,6 +151,7 @@ class Usuario extends CrudObject
                 } else {
                     $usuario->instituicao = new Instituicao();
                     $usuario->instituicao->id = $instituicao_id;
+
                     if (is_null($instituicao_nome)) {
                         $usuario->instituicao->nome = null;
                     } else {
@@ -148,19 +160,19 @@ class Usuario extends CrudObject
                     if (is_null($instituicao_logo)) {
                         $usuario->instituicao->logo = null;
                     } else {
-                        $usuario->instituicao->logo = $b64 .  base64_encode($instituicao_logo);
+                        $usuario->instituicao->logo = "base64," . base64_encode($instituicao_logo);
                     }
                     if (is_null($instituicao_logo_content_type)) {
                         $usuario->instituicao->logo_content_type = null;
                     } else {
-                        $usuario->instituicao->logo_content_type = $txData . $instituicao_logo_content_type . ";";
+                        $usuario->instituicao->logo_content_type = "data:" . $instituicao_logo_content_type . ";";
                     }
                     if (is_null($instituicao_uf)) {
                         $usuario->instituicao->uf = null;
                     } else {
                         $usuario->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
                     }
-                    
+
                     $usuario->instituicao->dt_criacao = $instituicao_dt_criacao;
                     $usuario->instituicao->dt_alteracao = $instituicao_dt_alteracao;
                 }
@@ -234,14 +246,28 @@ class Usuario extends CrudObject
             } else {
                 $this->instituicao = new Instituicao();
                 $this->instituicao->id = $instituicao_id;
-                $this->instituicao->nome =
-                    (is_null($instituicao_nome)) ? null : html_entity_decode($instituicao_nome);
-                $this->instituicao->logo =
-                    (is_null($instituicao_logo)) ? null : $b64 .  base64_encode($instituicao_logo);
-                $this->instituicao->logo_content_type =
-                    (is_null($instituicao_logo_content_type)) ? null : $txData . $instituicao_logo_content_type . ";";
-                $this->instituicao->uf =
-                    (is_null($instituicao_uf)) ? null : strtoupper(html_entity_decode($instituicao_uf));
+
+                if (is_null($instituicao_nome)) {
+                    $this->instituicao->nome = null;
+                } else {
+                    $this->instituicao->nome = html_entity_decode($instituicao_nome);
+                }
+                if (is_null($instituicao_logo)) {
+                    $this->instituicao->logo = null;
+                } else {
+                    $this->instituicao->logo = "base64," . base64_encode($instituicao_logo);
+                }
+                if (is_null($instituicao_logo_content_type)) {
+                    $this->instituicao->logo_content_type = null;
+                } else {
+                    $this->instituicao->logo_content_type = "data:" . $instituicao_logo_content_type . ";";
+                }
+                if (is_null($instituicao_uf)) {
+                    $this->instituicao->uf = null;
+                } else {
+                    $this->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
+                }
+
                 $this->instituicao->dt_criacao = $instituicao_dt_criacao;
                 $this->instituicao->dt_alteracao = $instituicao_dt_alteracao;
             }
@@ -251,7 +277,7 @@ class Usuario extends CrudObject
     }
 
     // read all usuarios
-    public function  readByType($tipo_id)
+    public function readByType($tipo_id)
     {
         // select all query
         $query = "SELECT
@@ -317,14 +343,29 @@ class Usuario extends CrudObject
                 } else {
                     $usuario->instituicao = new Instituicao();
                     $usuario->instituicao->id = $instituicao_id;
-                    $usuario->instituicao->nome =
-                        (is_null($instituicao_nome)) ? null : html_entity_decode($instituicao_nome);
-                    $usuario->instituicao->logo =
-                        (is_null($instituicao_logo)) ? null : $b64 .  base64_encode($instituicao_logo);
-                    $usuario->instituicao->logo_content_type =
-                        (is_null($instituicao_logo_content_type)) ? null : $txData . $instituicao_logo_content_type . ";";
-                    $usuario->instituicao->uf =
-                        (is_null($instituicao_uf)) ? null : strtoupper(html_entity_decode($instituicao_uf));
+
+                    if (is_null($instituicao_nome)) {
+                        $usuario->instituicao->nome = null;
+                    } else {
+                        $usuario->instituicao->nome = html_entity_decode($instituicao_nome);
+                    }
+                    if (is_null($instituicao_logo)) {
+                        $usuario->instituicao->logo = null;
+                    } else {
+                        $usuario->instituicao->logo = "base64," . base64_encode($instituicao_logo);
+                    }
+                    if (is_null($instituicao_logo_content_type)) {
+                        $usuario->instituicao->logo_content_type = null;
+                    } else {
+                        $usuario->instituicao->logo_content_type = "data:" . $instituicao_logo_content_type . ";";
+                    }
+
+                    if (is_null($instituicao_uf)) {
+                        $usuario->instituicao->uf = null;
+                    } else {
+                        $usuario->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
+                    }
+
                     $usuario->instituicao->dt_criacao = $instituicao_dt_criacao;
                     $usuario->instituicao->dt_alteracao = $instituicao_dt_alteracao;
                 }
@@ -357,8 +398,12 @@ class Usuario extends CrudObject
         $this->email = (is_null($this->email)) ? null : htmlspecialchars(strip_tags($this->email));
         $this->id = (int) htmlspecialchars(strip_tags($this->id));
         $this->tipo_usuario->id = (int) htmlspecialchars(strip_tags($this->tipo_usuario->id));
-        $this->instituicao->id =
-            (int) (is_null($this->instituicao->id)) ? null : htmlspecialchars(strip_tags($this->instituicao->id));
+        if (is_null($this->instituicao->id)) {
+            $this->instituicao->id = (int) null;
+        } else {
+            $this->instituicao->id = (int) htmlspecialchars(strip_tags($this->instituicao->id));
+        }
+
 
         // bind new values
         $stmt->bindParam(":nome", $this->nome);
@@ -503,14 +548,28 @@ class Usuario extends CrudObject
             } else {
                 $this->instituicao = new Instituicao();
                 $this->instituicao->id = $instituicao_id;
-                $this->instituicao->nome =
-                    (is_null($instituicao_nome)) ? null : html_entity_decode($instituicao_nome);
-                $this->instituicao->logo =
-                    (is_null($instituicao_logo)) ? null : $b64 .  base64_encode($instituicao_logo);
-                $this->instituicao->logo_content_type =
-                    (is_null($instituicao_logo_content_type)) ? null : $txData . $instituicao_logo_content_type . ";";
-                $this->instituicao->uf =
-                    (is_null($instituicao_uf)) ? null : strtoupper(html_entity_decode($instituicao_uf));
+
+                if (is_null($instituicao_nome)) {
+                    $this->instituicao->nome = null;
+                } else {
+                    $this->instituicao->nome = html_entity_decode($instituicao_nome);
+                }
+                if (is_null($instituicao_logo)) {
+                    $this->instituicao->logo = null;
+                } else {
+                    $this->instituicao->logo = "base64," . base64_encode($instituicao_logo);
+                }
+                if (is_null($instituicao_logo_content_type)) {
+                    $this->instituicao->logo_content_type = null;
+                } else {
+                    $this->instituicao->logo_content_type = "data:" . $instituicao_logo_content_type . ";";
+                }
+                if (is_null($instituicao_uf)) {
+                    $this->instituicao->uf = null;
+                } else {
+                    $this->instituicao->uf = strtoupper(html_entity_decode($instituicao_uf));
+                }
+
                 $this->instituicao->dt_criacao = $instituicao_dt_criacao;
                 $this->instituicao->dt_alteracao = $instituicao_dt_alteracao;
             }

@@ -22,7 +22,7 @@ $data = json_decode(file_get_contents("php://input"));
 $data_incomplete = empty($data->tipo_usuario);
 
 if (empty($data->login) && empty($data->password)) {
-    $data_incomplete = $data_incomplete && (empty($data->login_ftd) && empty($data->login_ftd));
+    $data_incomplete = $data_incomplete && (empty($data->login_ftd) && empty($data->password_ftd));
 }
 
 if ($data_incomplete) {
@@ -44,7 +44,11 @@ if ($data_incomplete) {
     $usuario->login_ftd = empty($data->login_ftd) ? null : $data->login_ftd;
     $usuario->senha_ftd = empty($data->password_ftd) ? null : $data->password_ftd;
     $usuario->tipo_usuario = $data->tipo_usuario;
-    $usuario->instituicao = empty($data->instituicao) || is_null($data->instituicao) ? new Instituicao() : $data->instituicao;
+    if (empty($data->instituicao) || is_null($data->instituicao)) {
+        $usuario->instituicao = new Instituicao();
+    } else {
+        $usuario->instituicao = $data->instituicao;
+    }
 
     // create tipo usuario
     if ($usuario->tipo_usuario->id == null) {
@@ -79,6 +83,9 @@ if ($data_incomplete) {
 
     validateUsername($usuario);
 
+    print_r($usuario);
+    die();
+
     // create the usuario
     if (!$usuario->create()) {
         // set response code - 503 service unavailable
@@ -112,10 +119,6 @@ function validateUsername($usuario)
     }
 
     if (!empty($usuario->login_ftd)) {
-        if (empty($usuario->instituicao->id) || !is_numeric($usuario->instituicao->id)) {
-            //sendMessage(503, array("message" => "Unable to create usuario. Instituicao is required"));
-        }
-
         $user = $usuario->login("SITE", $usuario->login_ftd);
 
         if (!is_null($user)) {

@@ -18,7 +18,9 @@ include_once '../objects/evento.php';
 $data = json_decode(file_get_contents("php://input"));
 
 // make sure data is not empty
-$data_incomplete = empty($data->tipo_evento->id) && empty($data->dt_inicio) && empty($data->dt_fim) && empty($data->titulo) && empty($data->dia_letivo);
+$test1 = empty($data->tipo_evento->id) && empty($data->dt_inicio);
+$test2 = empty($data->dt_fim) && empty($data->titulo) && empty($data->dia_letivo);
+$data_incomplete = $test1 && $test2;
 
 if ($data_incomplete) {
     // set response code - 400 bad request

@@ -7,7 +7,7 @@ abstract class CrudObject
     protected $conn;
 
     // constructor with $db as database connection
-    public function construct()
+    public function __construct()
     {
         $database = new Database();
         $db = $database->getConnection();

@@ -110,7 +110,8 @@ function sendMessage($http_code, $response_data)
 
 function getDataAsArray($dataAsObject)
 {
-    $dataAsArray = array(
+    $logoInst = $dataAsObject->usuario->instituicao->logo_content_type . $dataAsObject->usuario->instituicao->logo;
+    return array(
         "id" => $dataAsObject->id,
         "ano_referencia" => $dataAsObject->ano_referencia,
         "dt_inicio_ano_letivo" => $dataAsObject->dt_inicio_ano_letivo,
@@ -136,7 +137,7 @@ function getDataAsArray($dataAsObject)
             "instituicao" => array(
                 "id" => $dataAsObject->usuario->instituicao->id,
                 "nome" => $dataAsObject->usuario->instituicao->nome,
-                "logo" => $dataAsObject->usuario->instituicao->logo_content_type . $dataAsObject->usuario->instituicao->logo,
+                "logo" => $logoInst,
                 "uf" => $dataAsObject->usuario->instituicao->uf,
                 "dt_criacao" => $dataAsObject->usuario->instituicao->dt_criacao,
                 "dt_alteracao" => $dataAsObject->usuario->instituicao->dt_alteracao
@@ -144,5 +145,4 @@ function getDataAsArray($dataAsObject)
         )
     );
 
-    return $dataAsArray;
 }

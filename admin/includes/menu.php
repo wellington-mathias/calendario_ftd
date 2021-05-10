@@ -16,7 +16,7 @@
             <a href="../admin/eventos.php">Eventos Prof.</a>
         </li>
         <li>
-            <a href="../admin/calendario.php">Calenários</a>
+            <a href="../admin/calendario.php">Calendários</a>
         </li>
         <li>
             <a href="../admin/usuarios.php">Usuários</a>

@@ -1,4 +1,4 @@
-var prod = true;
+var prod = false;
 var scale = 1;
 
 var inicioAno = fimAno = inicioRecesso = fimRecesso = {};
@@ -47,6 +47,7 @@ $(document).ready(function () {
 });
 
 function ajaxLogin(method, url, contentType, data, callback) {
+	//var baseUrl = window.env.IONICA_BASE_URL;
 	var baseUrl = 'https://souionica.tk/api';
 	var head = '';
 	if (data.auth) {
@@ -91,7 +92,7 @@ function validaLoginFtd() {
 		"password": "123"
 	}
 
-	if (prod) {
+	if (prod || tokenIni == "TESTECPC") {
 		if (params.get('token') != null) {
 
 			ajaxLogin('POST', '/login', 'application/json', testLogin, function (data) {
@@ -136,27 +137,17 @@ function validaLoginFtd() {
 	} else {
 		if (params.get('token') != null) {
 
-			var body = { auth: tokenIni };
-			ajaxLogin('GET', '/	users/access-token', 'application/x-www-form-urlencoded', body, function (data) {
+			var body = {
+				"token": tokenIni,
+				"identity_provider": "i2c"
+			}
+			ajaxLogin('POST', '/login-oauth', 'application/json; charset=utf-8', body, function (data) {
 				//console.log(data);
-				if (data && data.status == 'success') {
-					short_token = data.data.token;
+				if (data.status == 'success') {
+					new_token = data.data.token;
 
-					var body = {
-						"token": short_token,
-						"identity_provider": "i2c"
-					}
-					ajaxLogin('POST', '/login-oauth', 'application/json; charset=utf-8', body, function (data) {
-						//console.log(data);
-						if (data.status == 'success') {
-							new_token = data.data.token;
-
-							var body = { auth: new_token };
-							checkUserExist(body);
-						} else {
-							falhaLogin();
-						}
-					})
+					var body = { auth: new_token };
+					checkUserExist(body);
 				} else {
 					falhaLogin();
 				}
@@ -238,6 +229,8 @@ function checkUserExist(body) {
 			userFTD = data.data;
 			console.log(userFTD);
 			login();
+		} else {
+			falhaLogin();
 		}
 	})
 }
@@ -435,7 +428,7 @@ function loadCalendarios() {
 	$('.contCalendarios .bts , .contCalendarios .tit').html('');
 	dispatch('GET', '/api/calendario/read.php?usuario=' + idProf, '', function (data) {
 		if (data.calendarios) {
-			$('.contCalendarios .tit').html('Seus calendarios');
+			$('.contCalendarios .tit').html('Seus calendários');
 			for (var i in data.calendarios) {
 				var obj = $('<div class="btCalendario" >' + formatData1(data.calendarios[i].dt_criacao.split(' ')[0]) + '</div>');
 				obj[0].obj = data.calendarios[i];
@@ -443,7 +436,7 @@ function loadCalendarios() {
 			}
 			if (data.calendarios.length > 0) {
 				//sendDataCalendario( data.calendarios[0] );
-				$('#abertura .iniciar span').html('Editar Calendario');
+				$('#abertura .iniciar span').html('Editar calendário');
 			}
 		}
 		$('.contCalendarios .btCalendario').off().on('click', function () {
@@ -1913,7 +1906,7 @@ function cloneImage(j) {
 	$('#cont2').hide();
 	for (var a = j; a < j + $mesesPage; a++) {
 		$('#calendario .ano .copyMes:eq(' + (a) + ')').clone().appendTo($('#pagePrint .cont'));
-		if($mesesPage == 12 && $('#pagePrint .cont .copyMes:last .infoMes .diaEvento').length <= 5 ){
+		if ($mesesPage == 12 && $('#pagePrint .cont .copyMes:last .infoMes .diaEvento').length <= 5) {
 			$('#pagePrint .cont .copyMes:last .infoMes .diaEvento').addClass('w100');
 		}
 	}
@@ -1939,11 +1932,11 @@ function cloneImage(j) {
 				$pdf.addPage();
 				cloneImage(j);
 			} else {
-				$pdf.save("calendario.pdf");
+				/* $pdf.save("calendario.pdf");
 				$('#loading').addClass('hide');
 				$('#calendario').fadeIn();
 				$('#pagePrint').fadeOut();
-				$('#stage').removeClass('print');
+				$('#stage').removeClass('print'); */
 			}
 		});
 	}, 1000);

@@ -1,28 +1,20 @@
 <?php
-// required headers
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 header("Content-Type: application/json; charset=UTF-8");
-
 if (strtoupper($_SERVER["REQUEST_METHOD"]) !== "POST") {
     sendMessage(405, null);
 }
 
-// includes
 include_once '../objects/instituicao.php';
 include_once '../shared/utilities.php';
 
-// prepare object
 $obj = new Instituicao();
-
-// set instituicao property values
 $obj->nome = empty($_POST["nome"]) ? null : trim($_POST["nome"]);
 $obj->uf = empty($_POST["uf"]) ? null : trim($_POST["uf"]);
-
 $file = validateUpload("logo");
-
 if (is_null($file)) {
     $obj->logo = null;
     $obj->logo_content_type = null;
@@ -31,40 +23,28 @@ if (is_null($file)) {
     $obj->logo_content_type = $file['type'];
 }
 
-// create the object
 if (!$obj->create()) {
-    // set response code - 503 service unavailable
     sendMessage(503, array("message" => "Unable to create Instituicao."));
 } else {
-    // set response code - 201 created
     sendMessage(201, array("id" => $obj->id, "message" => "Instituicao was created."));
 }
-
 function sendMessage($http_code, $response_data)
 {
-    // set response code
     http_response_code($http_code);
-
     if ($response_data != null) {
-        // tell the user
         echo json_encode($response_data);
     }
-
     exit();
 }
-
 function validateUpload($filename)
 {
     $utilities = new Utilities();
-
     if ($utilities->emptyUpload($filename)) {
         return null;
     } else {
         $hasError = false;
         $errorMessage = null;
-
         $file = $_FILES[$filename];
-
         if ($file['error'] == 4) {
             return null;
         } else {
@@ -81,11 +61,9 @@ function validateUpload($filename)
                 $hasError = true;
                 $errorMessage = "Falha ao obter dados do arquivo";
             }
-
             if ($hasError) {
                 sendMessage(400, array("message" => $errorMessage));
             }
-
             return $file;
         }
     }

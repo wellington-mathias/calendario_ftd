@@ -13,9 +13,10 @@ if (strtoupper($_SERVER["REQUEST_METHOD"]) !== "GET") {
 // includes
 include_once '../objects/evento.php';
 
+$s = isset($_GET['tipo_evento']) || isset($_GET['calendario']) || isset($_GET['uf']) || isset($_GET['dia_letivo']);
 if (isset($_GET['id'])) {
     readOne();
-} elseif (isset($_GET['tipo_evento']) || isset($_GET['calendario']) || isset($_GET['uf']) || isset($_GET['dia_letivo'])) {
+} elseif ($s) {
     search();
 } else {
     readAll();
@@ -72,7 +73,11 @@ function search()
     $tipo_evento_id = (!isset($_GET['tipo_evento']) || empty($_GET['tipo_evento'])) ? null : (int) $_GET['tipo_evento'];
     $uf = (!isset($_GET['uf'])) ? null : strtoupper(trim(htmlspecialchars(strip_tags($_GET['uf']))));
     $calendario_id = (!isset($_GET['calendario']) || empty($_GET['calendario'])) ? null : (int) $_GET['calendario'];
-    $dia_letivo = (!isset($_GET['dia_letivo']) || empty($_GET['dia_letivo'])) ? null : filter_var($_GET['dia_letivo'], FILTER_VALIDATE_BOOLEAN);
+    if (!isset($_GET['dia_letivo']) || empty($_GET['dia_letivo'])) {
+        $dia_letivo = null;
+    } else {
+        $dia_letivo = filter_var($_GET['dia_letivo'], FILTER_VALIDATE_BOOLEAN);
+    }
 
     // Retrieve the evento object
     $evento = new Evento();

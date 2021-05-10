@@ -77,6 +77,17 @@ function creatEvents() {
             val = val.substr(0, 5) + '/' + val.substr(5, 1);
         }
 
+
+        var viA = $('.adicionar .inputDate[name="dt_inicio"]').val().split('/');
+        var vfA = $('.adicionar .inputDate[name="dt_fim"]').val().split('/');
+        var dt1 = new Date(viA[2], viA[1] - 1, viA[0] - 1);
+        var dt2 = new Date(vfA[2], vfA[1] - 1, vfA[0] - 1);
+        
+        if(dt2 < dt1){
+            $('.adicionar .inputDate').addClass('erro');
+        } else {
+            $('.adicionar .inputDate').removeClass('erro');
+        }
         $(this).val(val);
     });
 

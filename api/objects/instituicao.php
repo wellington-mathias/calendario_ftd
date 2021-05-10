@@ -12,9 +12,9 @@ class Instituicao extends CrudObject
     public $dt_criacao;
     public $dt_alteracao;
 
-    public function constructor()
+    public function __constructor()
     {
-        parent::construct();
+        parent::__construct();
     }
 
     // create method
@@ -31,8 +31,12 @@ class Instituicao extends CrudObject
         $stmt = $this->conn->prepare($query);
 
         // sanitize
-        if (!is_null($this->nome)) $this->nome = htmlspecialchars(strip_tags($this->nome));
-        if (!is_null($this->uf)) $this->uf = strtoupper(htmlspecialchars(strip_tags($this->uf)));
+        if (!is_null($this->nome)) {
+            $this->nome = htmlspecialchars(strip_tags($this->nome));
+        }
+        if (!is_null($this->uf)) {
+            $this->uf = strtoupper(htmlspecialchars(strip_tags($this->uf)));
+        }
 
         // bind values
         $stmt->bindParam(":nome", $this->nome);
@@ -90,7 +94,8 @@ class Instituicao extends CrudObject
                 $instituicao->id = $id;
                 $instituicao->nome = html_entity_decode($nome);
                 $instituicao->logo = (is_null($logo)) ? null : "base64," .  base64_encode($logo);
-                $instituicao->logo_content_type = (is_null($logo_content_type)) ? null : "data:" . $logo_content_type . ";";
+                $logoType = (is_null($logo_content_type)) ? null : "data:" . $logo_content_type . ";";
+                $instituicao->logo_content_type = $logoType;
                 $instituicao->uf = strtoupper(html_entity_decode($uf));
                 $instituicao->dt_criacao = $dt_criacao;
                 $instituicao->dt_alteracao = $dt_alteracao;
@@ -173,7 +178,11 @@ class Instituicao extends CrudObject
             }
 
             if (!is_null($this->logo_content_type)) {
-                $queryData .= strlen($queryData) > 0 ? ", logo_content_type = :logo_content_type" : "logo_content_type = :logo_content_type";
+                if (strlen($queryData) > 0) {
+                    $queryData .= ", logo_content_type = :logo_content_type";
+                } else {
+                    $queryData .= "logo_content_type = :logo_content_type";
+                }
             }
 
             $query = "UPDATE instituicao SET " . $queryData . " WHERE id = :id";

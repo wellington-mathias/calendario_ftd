@@ -3,10 +3,10 @@
 
 <head>
 	<meta charset="utf-8">
-    <? include('includes/head.php'); ?>
+    <? header('Location:calendario.php'); ?>
 </head>
 
-<body>w
+<body>
 
 	<div id="content">
 

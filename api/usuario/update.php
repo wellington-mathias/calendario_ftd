@@ -42,7 +42,11 @@ if ($data_incomplete) {
     $usuario->email = empty($data->email) ? null : $data->email;
     $usuario->dt_alteracao = date('Y-m-d H:i:s');
     $usuario->tipo_usuario->id = $data->tipo_usuario->id;
-    $usuario->instituicao->id = empty($data->instituicao) || empty($data->instituicao->id)  ? null : $data->instituicao->id;
+    if (empty($data->instituicao) || empty($data->instituicao->id)) {
+        $usuario->instituicao->id =  null;
+    } else {
+        $usuario->instituicao->id =  $data->instituicao->id;
+    }
 
     // update the usuario
     if (!$usuario->update()) {

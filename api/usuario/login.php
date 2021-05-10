@@ -29,7 +29,9 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     // GET DATA FORM REQUEST
     $data = json_decode(file_get_contents("php://input"));
 
-    $data_incomplete = !isset($data->ambiente) || !isset($data->usuario) || !isset($data->senha) || empty(trim($data->ambiente)) || empty(trim($data->usuario)) || empty(trim($data->senha));
+    $test1 = !isset($data->ambiente) || !isset($data->usuario) || !isset($data->senha);
+    $test2 = empty(trim($data->ambiente)) || empty(trim($data->usuario)) || empty(trim($data->senha));
+    $data_incomplete = $test1 || $test2;
 
     if ($data_incomplete) {
         // set response code - 400 bad request
@@ -44,30 +46,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         $ambiente = strtoupper(trim($data->ambiente));
         $login = trim($data->usuario);
         $password = trim($data->senha);
-        /*    
-        // CHECKING THE EMAIL FORMAT (IF INVALID FORMAT)
-        if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            // set response code - 400 bad request
-            http_response_code(422);
-
-            // tell the user
-            echo json_encode(array(
-                "sucess" => false,
-                "message" => 'Invalid Email Address!'
-            ));
-
-        // IF PASSWORD IS LESS THAN 8 THE SHOW THE ERROR
-        } elseif(strlen($password) < 8) {
-            // set response code - 400 bad request
-            http_response_code(422);
-
-            // tell the user
-            echo json_encode(array(
-                "sucess" => false,
-                "message" => 'Your password must be at least 8 characters long!'
-            ));
-        */
-
+        
         // THE USER IS ABLE TO PERFORM THE LOGIN ACTION
 
         $obj = new Usuario();

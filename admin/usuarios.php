@@ -14,7 +14,7 @@
         <div class="cont ">
             <div class="adicionar">
                 <div class="topo">
-                    <h1>Usuarios</h1>
+                    <h1>Usuários</h1>
                     <div class="btVoltarEditar">Voltar </div>
                 </div>
 
@@ -26,35 +26,35 @@
                     <ul class="camposAdicionar">
                         <li>
                             <label for="nome">Nome</label>
-                            <input type="text" value="" name="nome" class=" "  />
+                            <input type="text" value="" name="nome" class=" " />
                         </li>
                         <li>
                             <label for="nome">Email</label>
-                            <input type="text" value="" name="email" class=" "  />
+                            <input type="text" value="" name="email" class=" " />
                         </li>
                         <li>
-                            <label for="senha">Tipo Usuario</label>
-                            <select name="tipo_usuario" class="selectUser" ></select>
+                            <label for="senha">Tipo usuário</label>
+                            <select name="tipo_usuario" class="selectUser"></select>
                         </li>
                         <li class="campos tipo1">
                             <label for="nome">Login Admin</label>
-                            <input type="text" value="" name="login" class=" "  />
+                            <input type="text" value="" name="login" class=" " />
                         </li>
                         <li class="campos tipo1">
                             <label for="senha">Senha Admin</label>
-                            <input type="text" value="" name="password" class=" "/>
+                            <input type="text" value="" name="password" class=" " />
                         </li>
                         <li class="campos tipo2">
-                            <label for="nome">Login Calendario</label>
-                            <input type="text" value="" name="login_ftd" class=" "  />
+                            <label for="nome">Login calendário</label>
+                            <input type="text" value="" name="login_ftd" class=" " />
                         </li>
                         <li class="campos tipo2">
-                            <label for="senha">Senha Calendario</label>
-                            <input type="text" value="" name="password_ftd" class=" "/>
+                            <label for="senha">Senha calendário</label>
+                            <input type="text" value="" name="password_ftd" class=" " />
                         </li>
                         <li>
                             <label for="senha">Nome da instituição</label>
-                            <input type="text" value="" name="nome_instituicao" class=" "/>
+                            <input type="text" value="" name="nome_instituicao" class=" " />
                         </li>
                         <li>
                             <label for="uf">UF</label>
@@ -70,14 +70,14 @@
                 <div class="filter">
                 </div>
                 <div class="topo">
-                    <h1>Usuarios</h1>
+                    <h1>Usuários</h1>
                     <div class="btAdicionar">Adicionar + </div>
                 </div>
 
                 <ul class="lista">
                     <li>
                         <div class="titulo">Titulo</div>
-                        <div >Tipo</div>
+                        <div>Tipo</div>
                         <div class="bts"></div>
                     </li>
                 </ul>
@@ -108,21 +108,22 @@
         if ($('.lista li').length == 1) {
             $('.lista').append('<li> <div>Nenhum usuario cadastrado</div> </li>');
         }
-        
+
         creatEvents();
     }
 
     var dataListar = [];
     var page = 'usuario';
+
     function listar() {
         dataListar = [];
-        dispatch('GET', '/api/'+page+'/read.php', '', complete);
+        dispatch('GET', '/api/' + page + '/read.php', '', complete);
     }
     listar();
 
-    dispatch('GET', '/api/tipo_usuario/read.php', '', function(data){
-        for(var i in data){
-            $('.selectUser').prepend('<option value="'+data[i].id+'" >'+ data[i].descricao +'</option>');
+    dispatch('GET', '/api/tipo_usuario/read.php', '', function(data) {
+        for (var i in data) {
+            $('.selectUser').prepend('<option value="' + data[i].id + '" >' + data[i].descricao + '</option>');
         }
     });
 </script>

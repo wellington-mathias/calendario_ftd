@@ -1,5 +1,4 @@
 <?php
-// required headers
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
@@ -10,14 +9,11 @@ if (strtoupper($_SERVER["REQUEST_METHOD"]) !== "POST") {
     sendMessage(405, null);
 }
 
-// includes
 include_once '../objects/instituicao.php';
 include_once '../shared/utilities.php';
 
-// prepare object
 $obj = new Instituicao();
 
-// set instituicao property values
 $obj->id = empty($_POST["id"]) ? 0 : trim($_POST["id"]);
 
 if ($obj->id == 0) {
@@ -36,23 +32,18 @@ if ($obj->id == 0) {
         $obj->logo_content_type = $file['type'];
     }
 
-    // update the object
     if (!$obj->update()) {
-        // set response code - 503 service unavailable
         sendMessage(503, array("message" => "Unable to update Instituicao."));
     } else {
-        // set response code - 200 ok
         sendMessage(200, array("id" => $obj->id, "message" => "Instituicao was updated."));
     }
 }
 
 function sendMessage($http_code, $response_data)
 {
-    // set response code
     http_response_code($http_code);
 
     if ($response_data != null) {
-        // tell the user
         echo json_encode($response_data);
     }
 

@@ -23,15 +23,15 @@
                     <input type="hidden" name="tipo_evento" value="3" />
                     <ul class="camposAdicionar">
                         <li>
-                            <label for="titulo">Titulo</label>
+                            <label for="titulo">Título</label>
                             <input type="text" value="" name="titulo" class=" obgt"  />
                         </li>
                         <li>
-                            <label for="data">Data inicio</label>
+                            <label for="data">Data de início</label>
                             <input type="text" value="" name="dt_inicio" placeholder="dd/mm/aaaa" class="inputDate obgt" maxlength="10"  />
                         </li>
                         <li>
-                            <label for="data">Data fim</label>
+                            <label for="data">Data final</label>
                             <input type="text" value="" name="dt_fim" placeholder="dd/mm/aaaa" class="inputDate obgt" maxlength="10"  />
                         </li>
                         <li>
@@ -63,8 +63,8 @@
 
                 <ul class="lista">
                     <li>
-                        <div>data</div>
-                        <div class="titulo">Titulo</div>
+                        <div>Data</div>
+                        <div class="titulo">Título</div>
                         <div>UF</div>
                         <div class="bts"></div>
                     </li>
