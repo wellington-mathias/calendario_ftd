@@ -11,6 +11,7 @@ if (strtoupper($_SERVER["REQUEST_METHOD"]) !== "GET") {
 }
 
 // include database and object files
+include_once '../objects/check_tables.php';
 include_once '../config/database.php';
 include_once '../objects/usuario.php';
 

@@ -44,10 +44,21 @@ $(document).ready(function () {
 	logOut();
 	validaLoginFtd();
 
+	$('#loading').off().on('click', function () {
+		checkBanco();
+	})
+
+
 });
 
+function checkBanco() {
+	dispatch('GET', '/api/usuario/read.php', {}, function (e) {
+		console.log(e);
+	});
+}
+
 function ajaxLogin(method, url, contentType, data, callback) {
-	if(window.env && window.env.IONICA_BASE_URL){
+	if (window.env && window.env.IONICA_BASE_URL) {
 		var baseUrl = window.env.IONICA_BASE_URL;
 	} else {
 		var baseUrl = 'https://souionica.tk/api';
@@ -1913,8 +1924,8 @@ function cloneImage(j) {
 	}
 	$('#pagePrint .cont .copyMes .infoMes .diaEvento').each(function (i) {
 		//console.log(i, $('#pagePrint .cont .copyMes:eq('+i+') .infoMes .diaEvento').length );
-		if ($mesesPage == 12 && $('#pagePrint .cont .copyMes:eq('+i+') .infoMes .diaEvento').length <= 5) {
-			$('#pagePrint .cont .copyMes:eq('+i+') .infoMes .diaEvento').addClass('w100');
+		if ($mesesPage == 12 && $('#pagePrint .cont .copyMes:eq(' + i + ') .infoMes .diaEvento').length <= 5) {
+			$('#pagePrint .cont .copyMes:eq(' + i + ') .infoMes .diaEvento').addClass('w100');
 		}
 	})
 
