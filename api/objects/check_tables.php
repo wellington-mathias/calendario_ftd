@@ -1,36 +1,90 @@
 <?php
 include_once '../objects/crud_object.php';
 
-class CheckTables extends CrudObject
-{
+class CheckTables extends CrudObject {
+    private $db_name;
 
-    public function __constructor()
-    {
+    public function __constructor() {
         parent::__construct();
     }
 
-    // create method
-    public function init()
-    {
-        $tbs = ['calendario', 'calendario_evento', 'evento', 'evento_tipo', 'instituicao', 'usuario', 'usuario_tipo'];
-        for ($i = 0, $size = count($tbs); $i < $size; ++$i) {
-            $this->testTb($tbs[$i]);
-        }
-
-        $this->testKeys();
+    public function init() {
+        $this->createStructure();
+        $this->createInitalData();
     }
 
-    private function testTb($tb)
-    {
+    // create db structure
+    private function createStructure() {
+        $this->db_name  = $this->conn->query('SELECT database()')->fetchColumn();
 
+        $tbs = ['calendario', 'calendario_evento', 'evento', 'evento_tipo', 'instituicao', 'usuario', 'usuario_tipo'];
+
+        foreach ($tbs as $tb) {
+            $this->testTables($tb);
+        }
+
+        foreach ($tbs as $tb) {
+            $this->testKeys($tb);
+        }
+
+        foreach ($tbs as $tb) {
+            $this->testAutoincrement($tb);
+        }
+
+        foreach ($tbs as $tb) {
+            $this->testFK($tb);
+        }
+    }
+
+    // create inital data structure
+    private function createInitalData() {
+        $queryInsert = "INSERT INTO evento_tipo (id, descricao) VALUES
+        (1, 'Inicio e fim de aula'),
+        (2, 'Eventos Professor'),
+        (3, 'Feriados'),
+        (4, 'Eventos FTD'),
+        (5, 'Simulado');";
+
+        $stmt = $this->conn->prepare($queryInsert);
+        $stmt->execute();
+
+        $queryInsert = "INSERT INTO usuario_tipo (id, descricao) VALUES
+        (1, 'ADMINISTRADOR'),
+        (2, 'PROFESSOR');";
+
+        $stmt = $this->conn->prepare($queryInsert);
+        $stmt->execute();
+            
+        $queryInsert = "INSERT INTO usuario (id, nome, login, senha, usuario_tipo_id) VALUES
+        (1, 'admin_ftd', 'admin', '". password_hash('admin', PASSWORD_DEFAULT) . "', 1);";
+        
+        $stmt = $this->conn->prepare($queryInsert);
+        $stmt->execute();
+    }
+
+    private function tableExists($tableName) {
+        $query = "SELECT 1 FROM information_schema.tables WHERE table_schema = '" . $this->db_name . "' AND table_name = '" . $tableName . "' LIMIT 1";
+
+        $stmt = $this->conn->prepare($query);
+
+        if ($stmt->execute() === FALSE) {
+            echo "Falha ao verificar se a tabela '" . $tableName . "' existe no DB '" . $this->db_name . "'";
+            die();
+        }
+
+        $num = $stmt->rowCount();
+
+        if ($num == 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function createTable($tb) {
         if ($tb == 'calendario') {
-
-            $query = "select 1 from `calendario` LIMIT 1";
-            $stmt = $this->conn->prepare($query);
-
-            if ($stmt->execute() === FALSE) {
-                $queryCreate = "CREATE TABLE `calendario` (
-                `id` int(10) NOT NULL ,
+            $queryCreate = "CREATE TABLE `calendario` (
+                `id` int(10) NOT NULL,
                 `ano_referencia` smallint(6) NOT NULL,
                 `dt_inicio_ano_letivo` date NOT NULL,
                 `dt_fim_ano_letivo` date NOT NULL,
@@ -43,355 +97,225 @@ class CheckTables extends CrudObject
                 `dt_criacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `dt_alteracao` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
                 `usuario_id` int(10) NOT NULL
-              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
-
-                $stmt = $this->conn->prepare($queryCreate);
-                $stmt->execute();
-            }
+            $stmt = $this->conn->prepare($queryCreate);
+            $stmt->execute();
         } else if ($tb == 'calendario_evento') {
-            $query = "select 1 from `calendario_evento` LIMIT 1";
-            $stmt = $this->conn->prepare($query);
+            $queryCreate = "CREATE TABLE `calendario_evento` (
+                `calendario_id` int(10) NOT NULL,
+                `evento_id` int(10) NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
-            if ($stmt->execute() === FALSE) {
-                $queryCreate = "CREATE TABLE `calendario_evento` (
-                    `calendario_id` int(10) NOT NULL,
-                    `evento_id` int(10) NOT NULL
-                  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-
-
-                $stmt = $this->conn->prepare($queryCreate);
-                $stmt->execute();
-            }
+            $stmt = $this->conn->prepare($queryCreate);
+            $stmt->execute();
         } else if ($tb == 'evento') {
-            $query = "select 1 from `evento` LIMIT 1";
-            $stmt = $this->conn->prepare($query);
-
-            if ($stmt->execute() === FALSE) {
-                $queryCreate = "CREATE TABLE `evento` (
-                    `id` int(11) NOT NULL ,
-                    `dt_inicio` date NOT NULL,
-                    `dt_fim` date NOT NULL,
-                    `titulo` varchar(80) NOT NULL,
-                    `descricao` text,
-                    `uf` char(2) DEFAULT NULL,
-                    `dia_letivo` tinyint(1) NOT NULL,
-                    `dt_criacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                    `dt_alteracao` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-                    `evento_tipo_id` tinyint(4) NOT NULL
-                  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+            $queryCreate = "CREATE TABLE `evento` (
+                `id` int(11) NOT NULL ,
+                `dt_inicio` date NOT NULL,
+                `dt_fim` date NOT NULL,
+                `titulo` varchar(80) NOT NULL,
+                `descricao` text,
+                `uf` char(2) DEFAULT NULL,
+                `dia_letivo` tinyint(1) NOT NULL,
+                `dt_criacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `dt_alteracao` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+                `evento_tipo_id` tinyint(4) NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 
-                $stmt = $this->conn->prepare($queryCreate);
-                $stmt->execute();
-            }
+            $stmt = $this->conn->prepare($queryCreate);
+            $stmt->execute();
         } else if ($tb == 'evento_tipo') {
-            $query = "select 1 from `evento_tipo` LIMIT 1";
-            $stmt = $this->conn->prepare($query);
-
-            if ($stmt->execute() === FALSE) {
-                $queryCreate = "CREATE TABLE `evento_tipo` (
-                    `id` tinyint(4) NOT NULL ,
-                    `descricao` varchar(30) NOT NULL
-                  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+            $queryCreate = "CREATE TABLE `evento_tipo` (
+                `id` tinyint(4) NOT NULL ,
+                `descricao` varchar(30) NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 
-                $stmt = $this->conn->prepare($queryCreate);
-                $stmt->execute();
-
-                $queryInsert = "INSERT INTO `evento_tipo` (`id`, `descricao`) VALUES
-                (1, 'Inicio e fim de aula'),
-                (2, 'Eventos Professor'),
-                (3, 'Feriados'),
-                (4, 'Eventos FTD'),
-                (5, 'Simulado');";
-
-
-                $stmt = $this->conn->prepare($queryInsert);
-                $stmt->execute();
-            }
+            $stmt = $this->conn->prepare($queryCreate);
+            $stmt->execute();
         } else if ($tb == 'instituicao') {
-            $query = "select 1 from `instituicao` LIMIT 1";
-            $stmt = $this->conn->prepare($query);
-
-            if ($stmt->execute() === FALSE) {
-                $queryCreate = "CREATE TABLE `instituicao` (
-                    `id` int(10) NOT NULL ,
-                    `nome` varchar(80) DEFAULT NULL,
-                    `logo` mediumblob,
-                    `logo_content_type` varchar(30) DEFAULT NULL,
-                    `uf` char(2) DEFAULT NULL,
-                    `dt_criacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                    `dt_alteracao` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-                  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+            $queryCreate = "CREATE TABLE `instituicao` (
+                `id` int(10) NOT NULL ,
+                `nome` varchar(80) DEFAULT NULL,
+                `logo` mediumblob,
+                `logo_content_type` varchar(30) DEFAULT NULL,
+                `uf` char(2) DEFAULT NULL,
+                `dt_criacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `dt_alteracao` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 
-                $stmt = $this->conn->prepare($queryCreate);
-                $stmt->execute();
-            }
+            $stmt = $this->conn->prepare($queryCreate);
+            $stmt->execute();
         } else if ($tb == 'usuario') {
-            $query = "select 1 from `usuario` LIMIT 1";
-            $stmt = $this->conn->prepare($query);
-
-            if ($stmt->execute() === FALSE) {
-                $queryCreate = "CREATE TABLE `usuario` (
-                    `id` int(10) NOT NULL ,
-                    `nome` varchar(60) DEFAULT NULL,
-                    `email` varchar(150) DEFAULT NULL,
-                    `login` varchar(255) DEFAULT NULL,
-                    `senha` varchar(255) DEFAULT NULL,
-                    `login_ftd` varchar(255) DEFAULT NULL,
-                    `senha_ftd` varchar(255) DEFAULT NULL,
-                    `dt_criacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                    `dt_alteracao` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-                    `usuario_tipo_id` tinyint(4) NOT NULL,
-                    `instituicao_id` int(10) DEFAULT NULL
-                  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+            $queryCreate = "CREATE TABLE `usuario` (
+                `id` int(10) NOT NULL ,
+                `nome` varchar(60) DEFAULT NULL,
+                `email` varchar(150) DEFAULT NULL,
+                `login` varchar(255) DEFAULT NULL,
+                `senha` varchar(255) DEFAULT NULL,
+                `login_ftd` varchar(255) DEFAULT NULL,
+                `senha_ftd` varchar(255) DEFAULT NULL,
+                `dt_criacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `dt_alteracao` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+                `usuario_tipo_id` tinyint(4) NOT NULL,
+                `instituicao_id` int(10) DEFAULT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 
-                $stmt = $this->conn->prepare($queryCreate);
-                $stmt->execute();
-
-
-                $queryInsert = "INSERT INTO `usuario` (`id`, `nome`, `email`, `login`, `senha`, `login_ftd`, `senha_ftd`, `dt_criacao`, `dt_alteracao`, `usuario_tipo_id`, `instituicao_id`) VALUES
-                (1, 'admin_ftd', NULL, 'admin', '$2y$10$WU1eKY9rC3MY4xwMlRBMSeHcLbFLzu9o6foKKGHVPkb214jfamz..', '', NULL, '2020-12-06 16:28:08', '2021-03-23 17:57:06', 1, NULL);";
-
-                $stmt = $this->conn->prepare($queryInsert);
-                $stmt->execute();
-            }
+            $stmt = $this->conn->prepare($queryCreate);
+            $stmt->execute();
         } else if ($tb == 'usuario_tipo') {
-            $query = "select 1 from `usuario_tipo` LIMIT 1";
-            $stmt = $this->conn->prepare($query);
+            $queryCreate = "CREATE TABLE `usuario_tipo` (
+                `id` tinyint(4) NOT NULL ,
+                `descricao` varchar(30) NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+                ";
 
-            if ($stmt->execute() === FALSE) {
-                $queryCreate = "CREATE TABLE `usuario_tipo` (
-                    `id` tinyint(4) NOT NULL ,
-                    `descricao` varchar(30) NOT NULL
-                  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-                  ";
-
-                $stmt = $this->conn->prepare($queryCreate);
-                $stmt->execute();
-
-
-
-                $queryInsert = "INSERT INTO `usuario_tipo` (`id`, `descricao`) VALUES
-                (1, 'ADMINISTRADOR'),
-                (2, 'PROFESSOR');";
-
-                $stmt = $this->conn->prepare($queryInsert);
-                $stmt->execute();
-            }
+            $stmt = $this->conn->prepare($queryCreate);
+            $stmt->execute();
         }
     }
 
+    private function indexExists($tableName, $indexName) {
+        $query = "SHOW KEYS FROM " . $tableName . " WHERE Key_name = '" . $indexName . "'";
 
-    private function testKeys()
-    { 
-
-
-
-        ////////calendario
-        $query = "SHOW KEYS FROM calendario WHERE Key_name = 'PRIMARY'";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-
+        
         if ($stmt->rowCount() == 0) {
-            $query = "ALTER TABLE `calendario`
-            ADD PRIMARY KEY (`id`),
-            ADD KEY `calendario_usuario_id` (`usuario_id`);";
-            $stmt = $this->conn->prepare($query);
-            $stmt->execute();
+            return false;
         }
 
+        return true;
+    }
 
-        ////////calendario_evento
-        $query = "SHOW KEYS FROM calendario_evento WHERE Key_name = 'calendario_evento' ";
+    private function createPrimaryKey($tableName, $colunmName) {
+        $query = "ALTER TABLE " . $tableName . " ADD PRIMARY KEY (" . $colunmName . ") USING BTREE";
+
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
+    }
 
+    private function createKey($tableName, $indexName, $colunmName) {
+        $query = "ALTER TABLE " . $tableName . " ADD KEY " . $indexName . " (" . $colunmName . ") USING BTREE";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+    }
+
+    private function createUniqueKey($tableName, $indexName, $colunmNames) {
+        $query = "ALTER TABLE " . $tableName . " ADD UNIQUE KEY " . $indexName . " (" . implode(", ", $colunmNames) . ") USING BTREE";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+    }
+
+    private function foreignkeyExists($tableName, $indexName) {
+        $query = "SELECT 1 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = '" . $this->db_name . "' AND TABLE_NAME = '" . $tableName . "' AND CONSTRAINT_NAME = '$indexName'";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        
         if ($stmt->rowCount() == 0) {
-            echo 'zero';
-            $query = "ALTER TABLE `calendario_evento`
-             ADD UNIQUE KEY `calendario_evento` (`calendario_id`,`evento_id`) USING BTREE,
-             ADD KEY `calendario_id` (`calendario_id`) USING BTREE,
-             ADD KEY `evento_id` (`evento_id`);";
-            $stmt = $this->conn->prepare($query);
-            $stmt->execute();
+            return false;
         }
 
+        return true;
+    }
 
-        ////////evento
-        $query = "SHOW KEYS FROM evento WHERE Key_name = 'evento_tipo_id' ";
+    private function createForeignKey($tableName, $tableIndex, $foreignKeyName, $foreignTableName, $foreignTableIndex, $onDeleteCascade, $onUpdateCascade) {
+        $query = "ALTER TABLE " . $tableName . " ADD CONSTRAINT " . $tableIndex . " FOREIGN KEY (" . $foreignKeyName . ") REFERENCES " . $foreignTableName . " (" . $foreignTableIndex . ")";
+
+        if ($onDeleteCascade) $query .= " ON DELETE CASCADE";
+        if ($onUpdateCascade)$query .= " ON UPDATE CASCADE";
+        
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
+    }
 
+    function autoIncrementExists($tableName, $colunmName) {
+        $query = "SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" . $this->db_name . "' AND TABLE_NAME = '" . $tableName . "' AND COLUMN_NAME = '" . $colunmName . "' AND EXTRA like '%auto_increment%'";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        
         if ($stmt->rowCount() == 0) {
-            $query = "ALTER TABLE `evento`
-            ADD PRIMARY KEY (`id`),
-            ADD KEY `evento_tipo_id` (`evento_tipo_id`);";
-            $stmt = $this->conn->prepare($query);
-            $stmt->execute();
+            return false;
         }
 
-        ////////evento_tipo
-        $query = "SHOW KEYS FROM evento_tipo WHERE Key_name = 'PRIMARY' ";
+        return true;
+    }
+
+    private function createAutoiIncrement($tableName, $colunmName, $colunmType, $colunmSize) {
+        $query = "ALTER TABLE " . $tableName . " MODIFY " . $colunmName . " " . $colunmType . "(" . $colunmSize . ") NOT NULL AUTO_INCREMENT";
+        
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
+    }
 
-        if ($stmt->rowCount() == 0) {
-            $query = "ALTER TABLE `evento_tipo`
-            ADD PRIMARY KEY (`id`);";
-            $stmt = $this->conn->prepare($query);
-            $stmt->execute();
+    private function testTables($tableName) {
+        if (!$this->tableExists($tableName)) $this->createTable($tableName);
+    }
+
+    private function testKeys($tableName) {
+        if ($tableName == 'calendario') {
+            if (!$this->indexExists($tableName, "PRIMARY")) $this->createPrimaryKey($tableName, "id");
+            if (!$this->indexExists($tableName, "calendario_usuario_id")) $this->createKey($tableName, "calendario_usuario_id", "usuario_id");
+        } else if ($tableName == 'calendario_evento') {
+            if (!$this->indexExists($tableName, "calendario_evento")) $this->createUniqueKey($tableName, "calendario_evento", array("calendario_id", "evento_id"));
+            if (!$this->indexExists($tableName, "calendario_id")) $this->createKey($tableName, "calendario_id", "calendario_id");
+            if (!$this->indexExists($tableName, "evento_id")) $this->createKey($tableName, "evento_id", "evento_id");
+        } else if ($tableName == 'evento') {
+            if (!$this->indexExists($tableName, "PRIMARY")) $this->createPrimaryKey($tableName, "id");
+            if (!$this->indexExists($tableName, "evento_tipo_id")) $this->createKey($tableName, "evento_tipo_id", "evento_tipo_id");
+        } else if ($tableName == 'evento_tipo') {
+            if (!$this->indexExists($tableName, "PRIMARY")) $this->createPrimaryKey($tableName, "id");
+        } else if ($tableName == 'instituicao') {
+            if (!$this->indexExists($tableName, "PRIMARY")) $this->createPrimaryKey($tableName, "id");
+        } else if ($tableName == 'usuario') {
+            if (!$this->indexExists($tableName, "PRIMARY")) $this->createPrimaryKey($tableName, "id");
+            if (!$this->indexExists($tableName, "login")) $this->createUniqueKey($tableName, "login", array("login", "usuario_tipo_id"));
+            if (!$this->indexExists($tableName, "login_ftd")) $this->createUniqueKey($tableName, "login_ftd", array("login_ftd", "usuario_tipo_id"));
+            if (!$this->indexExists($tableName, "usuario_tipo_id")) $this->createKey($tableName, "usuario_tipo_id", "usuario_tipo_id");
+            if (!$this->indexExists($tableName, "usuario_instituicao_id")) $this->createKey($tableName, "usuario_instituicao_id", "instituicao_id");
+        } else if ($tableName == 'usuario_tipo') {
+            if (!$this->indexExists($tableName, "PRIMARY")) $this->createPrimaryKey($tableName, "id");
         }
+    }
 
-
-        ////////instituicao
-        $query = "SHOW KEYS FROM instituicao WHERE Key_name = 'PRIMARY' ";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-
-        if ($stmt->rowCount() == 0) {
-            $query = "ALTER TABLE `instituicao`
-            ADD PRIMARY KEY (`id`);";
-            $stmt = $this->conn->prepare($query);
-            $stmt->execute();
+    private function testFK($tableName) {
+        if ($tableName == 'calendario') {
+            if (!$this->foreignkeyExists($tableName, "calendario_usuario_id")) $this->createForeignKey($tableName, "calendario_usuario_id", "usuario_id", "usuario", "id", true, true);
+        } if ($tableName == 'calendario_evento') {
+            if (!$this->foreignkeyExists($tableName, "calendario_id")) $this->createForeignKey($tableName, "calendario_id", "calendario_id", "calendario", "id", true, true);
+            if (!$this->foreignkeyExists($tableName, "evento_id")) $this->createForeignKey($tableName, "evento_id", "evento_id", "evento", "id", true, true);
+        } if ($tableName == 'evento') {
+            if (!$this->foreignkeyExists($tableName, "evento_tipo_id")) $this->createForeignKey($tableName, "evento_tipo_id", "evento_tipo_id", "evento_tipo", "id", false, true);
+        } if ($tableName == 'usuario') {
+            if (!$this->foreignkeyExists($tableName, "usuario_instituicao_id")) $this->createForeignKey($tableName, "usuario_instituicao_id", "instituicao_id", "instituicao", "id", false, true);
+            if (!$this->foreignkeyExists($tableName, "usuario_tipo_id")) $this->createForeignKey($tableName, "usuario_tipo_id", "usuario_tipo_id", "usuario_tipo", "id", false, true);
         }
+    }
 
-
-        ////////usuario
-        $query = "SHOW KEYS FROM usuario WHERE Key_name = 'PRIMARY' ";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-
-        if ($stmt->rowCount() == 0) {
-            $query = "ALTER TABLE `usuario`
-            ADD PRIMARY KEY (`id`),
-            ADD UNIQUE KEY `login` (`login`,`usuario_tipo_id`) USING BTREE,
-            ADD UNIQUE KEY `login_ftd` (`login_ftd`,`usuario_tipo_id`) USING BTREE,
-            ADD KEY `usuario_tipo_id` (`usuario_tipo_id`),
-            ADD KEY `usuario_instituicao_id` (`instituicao_id`);";
-            $stmt = $this->conn->prepare($query);
-            $stmt->execute();
+    private function testAutoincrement($tableName) {
+        if ($tableName == 'calendario') {
+            if (!$this->autoIncrementExists($tableName, "id")) $this->createAutoiIncrement($tableName, "id", "int", "10");
+        } if ($tableName == 'evento') {
+            if (!$this->autoIncrementExists($tableName, "id")) $this->createAutoiIncrement($tableName, "id", "int", "11");
+        } if ($tableName == 'evento_tipo') {
+            if (!$this->autoIncrementExists($tableName, "id")) $this->createAutoiIncrement($tableName, "id", "tinyint", "4");
+        } if ($tableName == 'instituicao') {
+            if (!$this->autoIncrementExists($tableName, "id")) $this->createAutoiIncrement($tableName, "id", "int", "10");
+        } if ($tableName == 'usuario') {
+            if (!$this->autoIncrementExists($tableName, "id")) $this->createAutoiIncrement($tableName, "id", "int", "10");
+        } if ($tableName == 'usuario_tipo') {
+            if (!$this->autoIncrementExists($tableName, "id")) $this->createAutoiIncrement($tableName, "id", "tinyint", "4");
         }
-
-
-        ////////usuario_tipo
-        $query = "SHOW KEYS FROM usuario_tipo WHERE Key_name = 'PRIMARY' ";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-
-        if ($stmt->rowCount() == 0) {
-            $query = "ALTER TABLE `usuario_tipo`
-            ADD PRIMARY KEY (`id`);";
-            $stmt = $this->conn->prepare($query);
-            $stmt->execute();
-        }
-
-        
-
-        ////CONSTRAINT
-
-        $query = "ALTER TABLE `calendario`
-        ADD CONSTRAINT `calendario_usuario_id` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        
-        $query = "ALTER TABLE `calendario_evento`
-        ADD CONSTRAINT `calendario_id` FOREIGN KEY (`calendario_id`) REFERENCES `calendario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-        ADD CONSTRAINT `evento_id` FOREIGN KEY (`evento_id`) REFERENCES `evento` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-
-        $query = "ALTER TABLE `evento`
-        ADD CONSTRAINT `evento_tipo_id` FOREIGN KEY (`evento_tipo_id`) REFERENCES `evento_tipo` (`id`) ON UPDATE CASCADE;";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        
-        $query = "ALTER TABLE `usuario`
-        ADD CONSTRAINT `usuario_instituicao_id` FOREIGN KEY (`instituicao_id`) REFERENCES `instituicao` (`id`) ON UPDATE CASCADE,
-        ADD CONSTRAINT `usuario_tipo_id` FOREIGN KEY (`usuario_tipo_id`) REFERENCES `usuario_tipo` (`id`) ON UPDATE CASCADE;
-      COMMIT";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        
-        
-        $query = "ALTER TABLE `calendario`
-        MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        echo "\nPDO::errorInfo():\n";
-        print_r($stmt->errorInfo());
-        /* 
-        $query = "ALTER TABLE `evento`
-        MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        echo "\nPDO::errorInfo():\n";
-        print_r($stmt->errorInfo());
-        
-        $query = "ALTER TABLE `evento_tipo`
-        MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        echo "\nPDO::errorInfo():\n";
-        print_r($stmt->errorInfo());
-        
-        $query = "ALTER TABLE `instituicao`
-        MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        
-        $query = "ALTER TABLE `usuario`
-        MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        echo "\nPDO::errorInfo():\n";
-        print_r($stmt->errorInfo());
-        
-        $query = "ALTER TABLE `usuario_tipo`
-        MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        echo "\nPDO::errorInfo():\n";
-        print_r($stmt->errorInfo()); */
-
-
-
-        $query = "DROP TABLE usuario";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        
-        $query = "DROP TABLE calendario";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        
-        $query = "DROP TABLE evento";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        
-        $query = "DROP TABLE evento_tipo";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        
-        $query = "DROP TABLE instituicao";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        
-        $query = "DROP TABLE usuario_tipo";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        
-
-        
     }
 }
-
-
-
-/* $query = "IF OBJECT_ID('dbo.[CK_ConstraintName]', 'C') IS NULL 
-        ALTER TABLE dbo.[tablename] DROP CONSTRAINT CK_ConstraintName"; */
 
 $tables = new CheckTables();
 $tables->init();
